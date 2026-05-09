@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Users, Receipt, FilePlus, PoundSterling } from "lucide-react";
 import { fmtMoney, fmtDate } from "@/lib/format";
 import { Badge } from "@/components/ui/badge";
+import { EarningsPanel } from "@/components/EarningsPanel";
 
 export const Route = createFileRoute("/_app/")({
   component: Dashboard,
