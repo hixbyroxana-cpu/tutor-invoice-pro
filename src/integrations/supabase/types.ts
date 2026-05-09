@@ -29,6 +29,7 @@ export type Database = {
           sort_code: string | null
           tutor_name: string | null
           updated_at: string
+          user_id: string
         }
         Insert: {
           account_holder?: string | null
@@ -44,6 +45,7 @@ export type Database = {
           sort_code?: string | null
           tutor_name?: string | null
           updated_at?: string
+          user_id: string
         }
         Update: {
           account_holder?: string | null
@@ -59,21 +61,22 @@ export type Database = {
           sort_code?: string | null
           tutor_name?: string | null
           updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
       invoice_counter: {
         Row: {
-          id: number
           next_number: number
+          user_id: string
         }
         Insert: {
-          id?: number
           next_number?: number
+          user_id: string
         }
         Update: {
-          id?: number
           next_number?: number
+          user_id?: string
         }
         Relationships: []
       }
@@ -89,6 +92,7 @@ export type Database = {
           lesson_date: string
           notes: string | null
           position: number
+          user_id: string
         }
         Insert: {
           amount?: number
@@ -101,6 +105,7 @@ export type Database = {
           lesson_date: string
           notes?: string | null
           position?: number
+          user_id: string
         }
         Update: {
           amount?: number
@@ -113,6 +118,7 @@ export type Database = {
           lesson_date?: string
           notes?: string | null
           position?: number
+          user_id?: string
         }
         Relationships: [
           {
@@ -143,6 +149,7 @@ export type Database = {
           student_id: string | null
           total: number
           updated_at: string
+          user_id: string
         }
         Insert: {
           client_address?: string | null
@@ -162,6 +169,7 @@ export type Database = {
           student_id?: string | null
           total?: number
           updated_at?: string
+          user_id: string
         }
         Update: {
           client_address?: string | null
@@ -181,6 +189,7 @@ export type Database = {
           student_id?: string | null
           total?: number
           updated_at?: string
+          user_id?: string
         }
         Relationships: [
           {
@@ -206,6 +215,7 @@ export type Database = {
           parent_name: string | null
           phone: string | null
           updated_at: string
+          user_id: string
         }
         Insert: {
           archived?: boolean
@@ -220,6 +230,7 @@ export type Database = {
           parent_name?: string | null
           phone?: string | null
           updated_at?: string
+          user_id: string
         }
         Update: {
           archived?: boolean
@@ -234,6 +245,7 @@ export type Database = {
           parent_name?: string | null
           phone?: string | null
           updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
