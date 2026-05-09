@@ -8,10 +8,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, Trash2, Download, ArrowLeft, Save } from "lucide-react";
+import { Plus, Trash2, Download, ArrowLeft, Save, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import { fmtMoney } from "@/lib/format";
 import { generateInvoicePdf } from "@/lib/pdf";
+import { InvoicePreview } from "@/components/InvoicePreview";
 
 export const Route = createFileRoute("/_app/invoices/$id")({
   component: InvoiceEditPage,
@@ -48,6 +49,7 @@ function InvoiceEditPage() {
 
   const [inv, setInv] = useState<Record<string, unknown> | null>(null);
   const [items, setItems] = useState<Item[]>([]);
+  const [showPreview, setShowPreview] = useState(true);
 
   useEffect(() => {
     if (data) {
@@ -173,6 +175,9 @@ function InvoiceEditPage() {
           </div>
         </div>
         <div className="flex gap-2">
+          <Button variant="outline" onClick={() => setShowPreview(s => !s)}>
+            {showPreview ? <><EyeOff className="h-4 w-4 mr-2" />Hide preview</> : <><Eye className="h-4 w-4 mr-2" />Show preview</>}
+          </Button>
           <Button variant="outline" onClick={exportPdf}><Download className="h-4 w-4 mr-2" />Export PDF</Button>
           <Button onClick={() => save.mutate()} disabled={save.isPending}><Save className="h-4 w-4 mr-2" />Save</Button>
         </div>
@@ -259,6 +264,40 @@ function InvoiceEditPage() {
           <Textarea rows={3} value={i.notes ?? ""} onChange={(e) => setField("notes", e.target.value)} />
         </CardContent>
       </Card>
+
+      {showPreview && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Preview</CardTitle>
+            <p className="text-xs text-muted-foreground">How the invoice will look when exported as PDF. Unsaved edits are reflected here.</p>
+          </CardHeader>
+          <CardContent className="bg-muted/40 p-4 sm:p-6 rounded-b-md">
+            <InvoicePreview
+              invoice={{
+                invoice_number: i.invoice_number,
+                invoice_title: i.invoice_title,
+                invoice_date: i.invoice_date,
+                payment_deadline: i.payment_deadline,
+                client_name: i.client_name,
+                client_parent_name: i.client_parent_name,
+                client_email: i.client_email,
+                client_phone: i.client_phone,
+                client_address: i.client_address,
+                notes: i.notes,
+                total: +items.reduce((s, it) => s + Number(it.duration) * Number(it.hourly_rate), 0).toFixed(2),
+                items: items.map(it => ({
+                  lesson_date: it.lesson_date,
+                  description: it.description,
+                  duration: Number(it.duration),
+                  hourly_rate: Number(it.hourly_rate),
+                  amount: +(Number(it.duration) * Number(it.hourly_rate)).toFixed(2),
+                })),
+              }}
+              settings={(data?.settings ?? {}) as Partial<Parameters<typeof generateInvoicePdf>[1]>}
+            />
+          </CardContent>
+        </Card>
+      )}
 
       <div className="flex justify-end gap-2 sticky bottom-4">
         <Button variant="outline" onClick={() => navigate({ to: "/invoices" })}>Back</Button>
