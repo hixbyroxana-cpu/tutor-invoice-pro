@@ -261,9 +261,46 @@ function InvoiceEditPage() {
       <Card>
         <CardHeader><CardTitle className="text-base">Notes</CardTitle></CardHeader>
         <CardContent>
+      <Card>
+        <CardHeader><CardTitle className="text-base">Notes</CardTitle></CardHeader>
+        <CardContent>
           <Textarea rows={3} value={i.notes ?? ""} onChange={(e) => setField("notes", e.target.value)} />
         </CardContent>
       </Card>
+
+      {showPreview && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Preview</CardTitle>
+            <p className="text-xs text-muted-foreground">How the invoice will look when exported as PDF. Unsaved edits are reflected here.</p>
+          </CardHeader>
+          <CardContent className="bg-muted/40 p-4 sm:p-6 rounded-b-md">
+            <InvoicePreview
+              invoice={{
+                invoice_number: i.invoice_number,
+                invoice_title: i.invoice_title,
+                invoice_date: i.invoice_date,
+                payment_deadline: i.payment_deadline,
+                client_name: i.client_name,
+                client_parent_name: i.client_parent_name,
+                client_email: i.client_email,
+                client_phone: i.client_phone,
+                client_address: i.client_address,
+                notes: i.notes,
+                total: +items.reduce((s, it) => s + Number(it.duration) * Number(it.hourly_rate), 0).toFixed(2),
+                items: items.map(it => ({
+                  lesson_date: it.lesson_date,
+                  description: it.description,
+                  duration: Number(it.duration),
+                  hourly_rate: Number(it.hourly_rate),
+                  amount: +(Number(it.duration) * Number(it.hourly_rate)).toFixed(2),
+                })),
+              }}
+              settings={(data?.settings ?? {}) as Partial<Parameters<typeof generateInvoicePdf>[1]>}
+            />
+          </CardContent>
+        </Card>
+      )}
 
       <div className="flex justify-end gap-2 sticky bottom-4">
         <Button variant="outline" onClick={() => navigate({ to: "/invoices" })}>Back</Button>
