@@ -17,7 +17,7 @@ import {
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-export const Route = createFileRoute("/_app/invoices")({
+export const Route = createFileRoute("/_app/invoices/")({
   component: InvoicesPage,
 });
 
