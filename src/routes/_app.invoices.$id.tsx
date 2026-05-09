@@ -261,9 +261,6 @@ function InvoiceEditPage() {
       <Card>
         <CardHeader><CardTitle className="text-base">Notes</CardTitle></CardHeader>
         <CardContent>
-      <Card>
-        <CardHeader><CardTitle className="text-base">Notes</CardTitle></CardHeader>
-        <CardContent>
           <Textarea rows={3} value={i.notes ?? ""} onChange={(e) => setField("notes", e.target.value)} />
         </CardContent>
       </Card>
