@@ -20,6 +20,7 @@ const RANGES = [
 export function EarningsPanel() {
   const [range, setRange] = useState("3");
   const [mode, setMode] = useState<"paid" | "billed">("paid");
+  const [studentId, setStudentId] = useState<string>("all");
 
   const sinceISO = useMemo(() => {
     if (range === "all") return null;
@@ -28,15 +29,29 @@ export function EarningsPanel() {
     return d.toISOString().slice(0, 10);
   }, [range]);
 
+  const { data: students } = useQuery({
+    queryKey: ["students-active"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("students")
+        .select("id, full_name")
+        .eq("archived", false)
+        .order("full_name");
+      return data || [];
+    },
+  });
+
   const { data, isLoading } = useQuery({
-    queryKey: ["earnings", range, mode],
+    queryKey: ["earnings", range, mode, studentId],
     queryFn: async () => {
       let q = supabase
         .from("invoices")
         .select("id, total, status, invoice_date, client_name, student_id");
       if (sinceISO) q = q.gte("invoice_date", sinceISO);
+      if (studentId !== "all") q = q.eq("student_id", studentId);
       const { data: invoices } = await q;
       const list = (invoices || []).filter(i => mode === "billed" ? true : i.status === "paid");
+
 
       const byStudent = new Map<string, { name: string; total: number; count: number }>();
       const byMonth = new Map<string, number>();
@@ -98,7 +113,16 @@ export function EarningsPanel() {
             {mode === "paid" ? "Total received from paid invoices" : "Total billed across all invoices"}
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
+          <Select value={studentId} onValueChange={setStudentId}>
+            <SelectTrigger className="h-9 w-[170px]"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All students</SelectItem>
+              {students?.map(s => (
+                <SelectItem key={s.id} value={s.id}>{s.full_name}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           <Select value={mode} onValueChange={(v) => setMode(v as "paid" | "billed")}>
             <SelectTrigger className="h-9 w-[110px]"><SelectValue /></SelectTrigger>
             <SelectContent>
@@ -113,6 +137,7 @@ export function EarningsPanel() {
             </SelectContent>
           </Select>
         </div>
+
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex items-end justify-between gap-3">
