@@ -39,6 +39,7 @@ export function EarningsPanel() {
       const list = (invoices || []).filter(i => mode === "billed" ? true : i.status === "paid");
 
       const byStudent = new Map<string, { name: string; total: number; count: number }>();
+      const byMonth = new Map<string, number>();
       let total = 0;
       for (const inv of list) {
         const amt = Number(inv.total);
@@ -48,9 +49,39 @@ export function EarningsPanel() {
         existing.total += amt;
         existing.count += 1;
         byStudent.set(key, existing);
+        const mk = (inv.invoice_date || "").slice(0, 7);
+        if (mk) byMonth.set(mk, (byMonth.get(mk) || 0) + amt);
       }
       const breakdown = Array.from(byStudent.values()).sort((a, b) => b.total - a.total);
-      return { total, count: list.length, breakdown };
+
+      // Build full month series across the selected range
+      const months: { month: string; label: string; total: number }[] = [];
+      const end = new Date();
+      const start = new Date();
+      if (range === "all") {
+        const keys = Array.from(byMonth.keys()).sort();
+        if (keys.length) {
+          const [y, m] = keys[0].split("-").map(Number);
+          start.setFullYear(y, m - 1, 1);
+        } else {
+          start.setMonth(start.getMonth() - 2);
+        }
+      } else {
+        start.setMonth(start.getMonth() - (Number(range) - 1));
+      }
+      start.setDate(1);
+      const cursor = new Date(start.getFullYear(), start.getMonth(), 1);
+      while (cursor <= end) {
+        const mk = `${cursor.getFullYear()}-${String(cursor.getMonth() + 1).padStart(2, "0")}`;
+        months.push({
+          month: mk,
+          label: cursor.toLocaleDateString("en-GB", { month: "short", year: "2-digit" }),
+          total: byMonth.get(mk) || 0,
+        });
+        cursor.setMonth(cursor.getMonth() + 1);
+      }
+
+      return { total, count: list.length, breakdown, months };
     },
   });
 
