@@ -175,6 +175,9 @@ function InvoiceEditPage() {
           </div>
         </div>
         <div className="flex gap-2">
+          <Button variant="outline" onClick={() => setShowPreview(s => !s)}>
+            {showPreview ? <><EyeOff className="h-4 w-4 mr-2" />Hide preview</> : <><Eye className="h-4 w-4 mr-2" />Show preview</>}
+          </Button>
           <Button variant="outline" onClick={exportPdf}><Download className="h-4 w-4 mr-2" />Export PDF</Button>
           <Button onClick={() => save.mutate()} disabled={save.isPending}><Save className="h-4 w-4 mr-2" />Save</Button>
         </div>
