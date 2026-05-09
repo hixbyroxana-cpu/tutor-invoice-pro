@@ -267,11 +267,16 @@ function DictateForm({ students, onCreated }: { students: Student[]; onCreated: 
     if (!transcript) { setError("Say something first — e.g. \"Invoice for John Smith for May 6, May 13 and May 20\"."); return; }
     setError(""); setParsing(true); setParsed(null);
     try {
+      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+      if (sessionError) throw sessionError;
+      const accessToken = sessionData.session?.access_token;
+      if (!accessToken) throw new Error("Please sign in again before using dictation.");
+
       const resp = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/parse-dictation`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
           transcript,
