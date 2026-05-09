@@ -5,6 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { fmtMoney } from "@/lib/format";
 import { TrendingUp } from "lucide-react";
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid } from "recharts";
 
 const RANGES = [
   { value: "1", label: "Last month" },
@@ -37,6 +39,7 @@ export function EarningsPanel() {
       const list = (invoices || []).filter(i => mode === "billed" ? true : i.status === "paid");
 
       const byStudent = new Map<string, { name: string; total: number; count: number }>();
+      const byMonth = new Map<string, number>();
       let total = 0;
       for (const inv of list) {
         const amt = Number(inv.total);
@@ -46,9 +49,39 @@ export function EarningsPanel() {
         existing.total += amt;
         existing.count += 1;
         byStudent.set(key, existing);
+        const mk = (inv.invoice_date || "").slice(0, 7);
+        if (mk) byMonth.set(mk, (byMonth.get(mk) || 0) + amt);
       }
       const breakdown = Array.from(byStudent.values()).sort((a, b) => b.total - a.total);
-      return { total, count: list.length, breakdown };
+
+      // Build full month series across the selected range
+      const months: { month: string; label: string; total: number }[] = [];
+      const end = new Date();
+      const start = new Date();
+      if (range === "all") {
+        const keys = Array.from(byMonth.keys()).sort();
+        if (keys.length) {
+          const [y, m] = keys[0].split("-").map(Number);
+          start.setFullYear(y, m - 1, 1);
+        } else {
+          start.setMonth(start.getMonth() - 2);
+        }
+      } else {
+        start.setMonth(start.getMonth() - (Number(range) - 1));
+      }
+      start.setDate(1);
+      const cursor = new Date(start.getFullYear(), start.getMonth(), 1);
+      while (cursor <= end) {
+        const mk = `${cursor.getFullYear()}-${String(cursor.getMonth() + 1).padStart(2, "0")}`;
+        months.push({
+          month: mk,
+          label: cursor.toLocaleDateString("en-GB", { month: "short", year: "2-digit" }),
+          total: byMonth.get(mk) || 0,
+        });
+        cursor.setMonth(cursor.getMonth() + 1);
+      }
+
+      return { total, count: list.length, breakdown, months };
     },
   });
 
@@ -90,6 +123,25 @@ export function EarningsPanel() {
             {data?.count ?? 0} invoice{data?.count === 1 ? "" : "s"}
           </div>
         </div>
+
+        {data && data.months.length > 0 && (
+          <div className="space-y-2">
+            <div className="text-xs uppercase tracking-wide text-muted-foreground">By month</div>
+            <ChartContainer
+              config={{ total: { label: "Earnings", color: "hsl(var(--primary))" } }}
+              className="aspect-[16/6] w-full"
+            >
+              <LineChart data={data.months} margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
+                <CartesianGrid vertical={false} strokeDasharray="3 3" />
+                <XAxis dataKey="label" tickLine={false} axisLine={false} tickMargin={8} fontSize={11} />
+                <YAxis tickLine={false} axisLine={false} tickMargin={8} fontSize={11} width={50}
+                  tickFormatter={(v) => fmtMoney(Number(v)).replace(/\.00$/, "")} />
+                <ChartTooltip content={<ChartTooltipContent formatter={(v) => fmtMoney(Number(v))} />} />
+                <Line type="monotone" dataKey="total" stroke="var(--color-total)" strokeWidth={2} dot={{ r: 3 }} activeDot={{ r: 5 }} />
+              </LineChart>
+            </ChartContainer>
+          </div>
+        )}
 
         {data && data.breakdown.length > 0 ? (
           <div className="space-y-2">
