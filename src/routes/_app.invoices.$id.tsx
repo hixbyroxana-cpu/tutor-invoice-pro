@@ -115,9 +115,12 @@ function InvoiceEditPage() {
       // Delete & re-insert items (simplest)
       const { error: dErr } = await supabase.from("invoice_items").delete().eq("invoice_id", id);
       if (dErr) throw dErr;
+      const { data: u } = await supabase.auth.getUser();
+      if (!u.user) throw new Error("Not signed in");
       const { error: iErr } = await supabase.from("invoice_items").insert(
         items.map((it, idx) => ({
           invoice_id: id,
+          user_id: u.user!.id,
           lesson_date: it.lesson_date,
           description: it.description?.trim() || "Tutoring lesson",
           duration: Number(it.duration),

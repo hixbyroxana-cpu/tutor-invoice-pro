@@ -44,8 +44,10 @@ function SettingsPage() {
 
   const save = useMutation({
     mutationFn: async () => {
-      if (!data?.id) throw new Error("Settings row missing");
-      const { error } = await supabase.from("business_settings").update({
+      const { data: u } = await supabase.auth.getUser();
+      if (!u.user) throw new Error("Not signed in");
+      const payload = {
+        user_id: u.user.id,
         tutor_name: form.tutor_name ?? null,
         business_name: form.business_name ?? null,
         address: form.address ?? null,
@@ -57,7 +59,9 @@ function SettingsPage() {
         account_number: form.account_number ?? null,
         payment_notes: form.payment_notes ?? null,
         invoice_prefix: (form.invoice_prefix || "ROX").toUpperCase().slice(0, 6),
-      }).eq("id", data.id);
+      };
+      const { error } = await supabase.from("business_settings")
+        .upsert(payload, { onConflict: "user_id" });
       if (error) throw error;
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: ["settings"] }); toast.success("Settings saved"); },

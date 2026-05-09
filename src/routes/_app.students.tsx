@@ -193,7 +193,9 @@ function StudentDialog({ open, onOpenChange, editing }: { open: boolean; onOpenC
         const { error } = await supabase.from("students").update(payload).eq("id", editing.id);
         if (error) throw error;
       } else {
-        const { error } = await supabase.from("students").insert(payload);
+        const { data: u } = await supabase.auth.getUser();
+        if (!u.user) throw new Error("Not signed in");
+        const { error } = await supabase.from("students").insert({ ...payload, user_id: u.user.id });
         if (error) throw error;
       }
     },
