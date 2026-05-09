@@ -49,6 +49,7 @@ function InvoiceEditPage() {
 
   const [inv, setInv] = useState<Record<string, unknown> | null>(null);
   const [items, setItems] = useState<Item[]>([]);
+  const [showPreview, setShowPreview] = useState(true);
 
   useEffect(() => {
     if (data) {
