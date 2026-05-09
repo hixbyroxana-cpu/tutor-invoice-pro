@@ -113,7 +113,16 @@ export function EarningsPanel() {
             {mode === "paid" ? "Total received from paid invoices" : "Total billed across all invoices"}
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
+          <Select value={studentId} onValueChange={setStudentId}>
+            <SelectTrigger className="h-9 w-[170px]"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All students</SelectItem>
+              {students?.map(s => (
+                <SelectItem key={s.id} value={s.id}>{s.full_name}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           <Select value={mode} onValueChange={(v) => setMode(v as "paid" | "billed")}>
             <SelectTrigger className="h-9 w-[110px]"><SelectValue /></SelectTrigger>
             <SelectContent>
@@ -128,6 +137,7 @@ export function EarningsPanel() {
             </SelectContent>
           </Select>
         </div>
+
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex items-end justify-between gap-3">
