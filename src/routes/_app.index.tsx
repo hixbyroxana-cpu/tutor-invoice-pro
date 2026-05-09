@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Users, Receipt, FilePlus, PoundSterling } from "lucide-react";
 import { fmtMoney, fmtDate } from "@/lib/format";
 import { Badge } from "@/components/ui/badge";
+import { EarningsPanel } from "@/components/EarningsPanel";
 
 export const Route = createFileRoute("/_app/")({
   component: Dashboard,
@@ -50,6 +51,8 @@ function Dashboard() {
         <StatCard icon={<PoundSterling className="h-4 w-4" />} label="Outstanding" value={stats ? fmtMoney(stats.outstanding) : "—"} accent="warning" />
         <StatCard icon={<PoundSterling className="h-4 w-4" />} label="Paid (lifetime)" value={stats ? fmtMoney(stats.paid) : "—"} accent="success" />
       </div>
+
+      <EarningsPanel />
 
       <Card>
         <CardHeader>
