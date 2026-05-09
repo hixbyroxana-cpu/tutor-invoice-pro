@@ -52,16 +52,20 @@ function NewInvoicePage() {
           Add a student first. <Link to="/students" className="underline">Go to Students</Link>.
         </CardContent></Card>
       ) : (
-        <Tabs defaultValue="manual">
+        <Tabs defaultValue="dictate">
           <TabsList>
-            <TabsTrigger value="manual">Manual entry</TabsTrigger>
+            <TabsTrigger value="dictate"><Mic className="h-3.5 w-3.5 mr-1" />Dictate</TabsTrigger>
             <TabsTrigger value="quick"><Sparkles className="h-3.5 w-3.5 mr-1" />Quick create</TabsTrigger>
+            <TabsTrigger value="manual">Manual entry</TabsTrigger>
           </TabsList>
-          <TabsContent value="manual" className="mt-4">
-            <ManualForm students={students} onCreated={(id) => navigate({ to: "/invoices/$id", params: { id } })} />
+          <TabsContent value="dictate" className="mt-4">
+            <DictateForm students={students} onCreated={(id) => navigate({ to: "/invoices/$id", params: { id } })} />
           </TabsContent>
           <TabsContent value="quick" className="mt-4">
             <QuickForm students={students} onCreated={(id) => navigate({ to: "/invoices/$id", params: { id } })} />
+          </TabsContent>
+          <TabsContent value="manual" className="mt-4">
+            <ManualForm students={students} onCreated={(id) => navigate({ to: "/invoices/$id", params: { id } })} />
           </TabsContent>
         </Tabs>
       )}
