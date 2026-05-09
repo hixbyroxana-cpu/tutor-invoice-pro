@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -257,11 +257,10 @@ function DictateForm({ students, onCreated }: { students: Student[]; onCreated: 
     sr.start();
   }
 
-  // Mirror finalized speech into our editable text buffer
-  if (sr.transcript && sr.transcript !== text && !sr.interim) {
-    // sync once when interim is empty (a finalized chunk just landed)
-    queueMicrotask(() => setText(sr.transcript));
-  }
+  // Sync finalized speech into our editable text buffer
+  useEffect(() => {
+    if (sr.transcript) setText(sr.transcript);
+  }, [sr.transcript]);
 
   async function parseNow() {
     const transcript = liveText.trim();
