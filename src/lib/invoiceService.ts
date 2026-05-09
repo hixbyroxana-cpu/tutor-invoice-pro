@@ -1,5 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import { padNum, slug } from "./format";
+import { requireUserId } from "./auth";
 
 export type LessonInput = {
   lesson_date: string; // YYYY-MM-DD
@@ -15,6 +16,7 @@ export async function createInvoice(opts: {
   notes?: string;
   paymentDeadlineDays?: number | null;
 }) {
+  const userId = await requireUserId();
   const { data: student, error: sErr } = await supabase
     .from("students").select("*").eq("id", opts.studentId).single();
   if (sErr || !student) throw new Error("Student not found");
@@ -47,6 +49,7 @@ export async function createInvoice(opts: {
     : null;
 
   const { data: inv, error: iErr } = await supabase.from("invoices").insert({
+    user_id: userId,
     invoice_number: invoiceNumber,
     invoice_title: invoiceTitle,
     student_id: student.id,
@@ -65,7 +68,7 @@ export async function createInvoice(opts: {
   if (iErr) throw iErr;
 
   const { error: itErr } = await supabase.from("invoice_items").insert(
-    items.map(it => ({ ...it, invoice_id: inv.id }))
+    items.map(it => ({ ...it, invoice_id: inv.id, user_id: userId }))
   );
   if (itErr) throw itErr;
 
