@@ -94,17 +94,29 @@ function SettingsPage() {
       </Card>
 
       <Card>
-        <CardHeader><CardTitle className="text-base">Payment details</CardTitle></CardHeader>
+        <CardHeader>
+          <CardTitle className="text-base">Payment methods</CardTitle>
+          <p className="text-sm text-muted-foreground">
+            Add the ways clients can pay you. These details appear on every invoice.
+          </p>
+        </CardHeader>
         <CardContent className="grid gap-3">
           <div className="grid sm:grid-cols-2 gap-3">
             <Field label="Bank name"><Input value={form.bank_name ?? ""} onChange={(e) => setForm({ ...form, bank_name: e.target.value })} /></Field>
             <Field label="Account holder"><Input value={form.account_holder ?? ""} onChange={(e) => setForm({ ...form, account_holder: e.target.value })} /></Field>
           </div>
           <div className="grid sm:grid-cols-2 gap-3">
-            <Field label="Sort code"><Input value={form.sort_code ?? ""} onChange={(e) => setForm({ ...form, sort_code: e.target.value })} /></Field>
-            <Field label="Account number"><Input value={form.account_number ?? ""} onChange={(e) => setForm({ ...form, account_number: e.target.value })} /></Field>
+            <Field label="Sort code / routing number"><Input value={form.sort_code ?? ""} onChange={(e) => setForm({ ...form, sort_code: e.target.value })} /></Field>
+            <Field label="Account number / IBAN"><Input value={form.account_number ?? ""} onChange={(e) => setForm({ ...form, account_number: e.target.value })} /></Field>
           </div>
-          <Field label="Payment notes"><Textarea rows={2} placeholder="e.g. Please reference the invoice number when paying." value={form.payment_notes ?? ""} onChange={(e) => setForm({ ...form, payment_notes: e.target.value })} /></Field>
+          <Field label="Other payment methods">
+            <Textarea
+              rows={4}
+              placeholder={`PayPal: name@example.com\nRevolut: @yourname\nCash accepted in person\nPlease reference the invoice number when paying.`}
+              value={form.payment_notes ?? ""}
+              onChange={(e) => setForm({ ...form, payment_notes: e.target.value })}
+            />
+          </Field>
         </CardContent>
       </Card>
 

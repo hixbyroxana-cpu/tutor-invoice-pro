@@ -95,17 +95,22 @@ export function InvoicePreview({
         </div>
       </div>
 
-      {/* Payment details */}
+      {/* Payment methods */}
       <div className="mt-6">
-        <div className="font-semibold text-slate-800 mb-1">Payment details</div>
+        <div className="font-semibold text-slate-800 mb-1">Ways to pay</div>
         <div className="text-xs text-slate-600 space-y-0.5">
+          {(s.bank_name || s.account_holder || s.sort_code || s.account_number) && (
+            <div className="font-medium text-slate-700">Bank transfer</div>
+          )}
           {s.bank_name && <div>Bank: {s.bank_name}</div>}
           {s.account_holder && <div>Account holder: {s.account_holder}</div>}
-          {s.sort_code && <div>Sort code: {s.sort_code}</div>}
-          {s.account_number && <div>Account number: {s.account_number}</div>}
-          {s.payment_notes && <div>{s.payment_notes}</div>}
+          {s.sort_code && <div>Sort code / routing number: {s.sort_code}</div>}
+          {s.account_number && <div>Account number / IBAN: {s.account_number}</div>}
+          {s.payment_notes?.split("\n").filter(Boolean).map((line, i) => (
+            <div key={i}>{line}</div>
+          ))}
           {!s.bank_name && !s.account_holder && !s.sort_code && !s.account_number && !s.payment_notes && (
-            <div className="italic text-slate-400">(Add your payment details in Settings)</div>
+            <div className="italic text-slate-400">(Add payment methods in Settings)</div>
           )}
         </div>
       </div>

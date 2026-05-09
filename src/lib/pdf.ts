@@ -146,22 +146,27 @@ export function generateInvoicePdf(invoice: InvoiceForPdf, settings: Settings) {
   doc.text("No VAT charged — not VAT registered.", pageW - margin, y, { align: "right" });
   y += 24;
 
-  // Payment details
+  // Payment methods
   doc.setFont("helvetica", "bold");
   doc.setFontSize(11);
   doc.setTextColor(30);
-  doc.text("Payment details", margin, y);
+  doc.text("Ways to pay", margin, y);
   y += 14;
   doc.setFont("helvetica", "normal");
   doc.setFontSize(10);
   doc.setTextColor(60);
   const pay: string[] = [];
+  if (settings.bank_name || settings.account_holder || settings.sort_code || settings.account_number) {
+    pay.push("Bank transfer");
+  }
   if (settings.bank_name) pay.push(`Bank: ${settings.bank_name}`);
   if (settings.account_holder) pay.push(`Account holder: ${settings.account_holder}`);
-  if (settings.sort_code) pay.push(`Sort code: ${settings.sort_code}`);
-  if (settings.account_number) pay.push(`Account number: ${settings.account_number}`);
-  if (settings.payment_notes) pay.push(settings.payment_notes);
-  if (pay.length === 0) pay.push("(Add your payment details in Settings)");
+  if (settings.sort_code) pay.push(`Sort code / routing number: ${settings.sort_code}`);
+  if (settings.account_number) pay.push(`Account number / IBAN: ${settings.account_number}`);
+  if (settings.payment_notes) {
+    pay.push(...settings.payment_notes.split("\n").filter(Boolean));
+  }
+  if (pay.length === 0) pay.push("(Add payment methods in Settings)");
   pay.forEach((l, i) => doc.text(l, margin, y + i * 12));
   y += pay.length * 12 + 18;
 
