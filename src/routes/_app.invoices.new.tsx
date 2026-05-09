@@ -234,3 +234,159 @@ function QuickForm({ students, onCreated }: { students: Student[]; onCreated: (i
     </Card>
   );
 }
+
+type Parsed = {
+  student: Student;
+  lessons: { date: string; duration_hours?: number }[];
+  notes?: string;
+};
+
+function DictateForm({ students, onCreated }: { students: Student[]; onCreated: (id: string) => void }) {
+  const sr = useSpeechRecognition("en-GB");
+  const [text, setText] = useState("");
+  const [parsed, setParsed] = useState<Parsed | null>(null);
+  const [error, setError] = useState("");
+  const [parsing, setParsing] = useState(false);
+
+  const liveText = (text + (sr.interim ? " " + sr.interim : "")).trim();
+
+  function toggleMic() {
+    if (sr.listening) { sr.stop(); return; }
+    if (!sr.supported) { setError("Voice input isn't supported in this browser. Try Chrome or Safari, or use Quick create."); return; }
+    setError(""); setParsed(null); setText("");
+    sr.start();
+  }
+
+  // Mirror finalized speech into our editable text buffer
+  if (sr.transcript && sr.transcript !== text && !sr.interim) {
+    // sync once when interim is empty (a finalized chunk just landed)
+    queueMicrotask(() => setText(sr.transcript));
+  }
+
+  async function parseNow() {
+    const transcript = liveText.trim();
+    if (!transcript) { setError("Say something first — e.g. \"Invoice for John Smith for May 6, May 13 and May 20\"."); return; }
+    setError(""); setParsing(true); setParsed(null);
+    try {
+      const resp = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/parse-dictation`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        },
+        body: JSON.stringify({
+          transcript,
+          students: students.map(s => ({ full_name: s.full_name })),
+          today: new Date().toISOString().slice(0, 10),
+        }),
+      });
+      const data = await resp.json();
+      if (!resp.ok) throw new Error(data?.error || "Parsing failed");
+      const match = students.find(s => s.full_name === data.student_full_name);
+      if (!match) throw new Error(`Couldn't match a student. Heard: "${transcript}"`);
+      if (!Array.isArray(data.lessons) || data.lessons.length === 0) throw new Error("No lesson dates detected.");
+      setParsed({ student: match, lessons: data.lessons, notes: data.notes });
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Parsing failed");
+    } finally {
+      setParsing(false);
+    }
+  }
+
+  const create = useMutation({
+    mutationFn: async () => {
+      if (!parsed) throw new Error("Parse first");
+      const lessons: LessonInput[] = parsed.lessons.map(l => ({
+        lesson_date: l.date,
+        duration: Number(l.duration_hours ?? parsed.student.default_duration),
+        hourly_rate: Number(parsed.student.hourly_fee),
+        description: "Tutoring lesson",
+      }));
+      const inv = await createInvoice({
+        studentId: parsed.student.id,
+        lessons,
+        notes: parsed.notes,
+        paymentDeadlineDays: 14,
+      });
+      return inv.id as string;
+    },
+    onSuccess: (id) => { toast.success("Invoice created"); onCreated(id); },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const previewTotal = parsed
+    ? parsed.lessons.reduce((s, l) => s + Number(l.duration_hours ?? parsed.student.default_duration) * Number(parsed.student.hourly_fee), 0)
+    : 0;
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-base">Dictate an invoice</CardTitle>
+        <p className="text-xs text-muted-foreground">
+          Tap the mic and say something like: <span className="italic">"Invoice for John Smith for May 6, May 13 and May 20."</span>
+          You can mention duration too — e.g. <span className="italic">"a two hour lesson on May 27"</span>.
+        </p>
+      </CardHeader>
+      <CardContent className="grid gap-3">
+        <div className="flex items-center gap-2">
+          <Button
+            type="button"
+            variant={sr.listening ? "destructive" : "default"}
+            onClick={toggleMic}
+            className="gap-2"
+          >
+            {sr.listening ? <><MicOff className="h-4 w-4" />Stop</> : <><Mic className="h-4 w-4" />{liveText ? "Record again" : "Start dictation"}</>}
+          </Button>
+          {sr.listening && (
+            <span className="text-xs text-muted-foreground inline-flex items-center gap-1.5">
+              <span className="h-2 w-2 rounded-full bg-destructive animate-pulse" />
+              Listening…
+            </span>
+          )}
+        </div>
+
+        <div className="grid gap-1.5">
+          <Label className="text-xs">Transcript (you can edit before parsing)</Label>
+          <Textarea
+            rows={3}
+            value={liveText}
+            onChange={(e) => { setText(e.target.value); }}
+            placeholder="Your spoken words will appear here…"
+          />
+        </div>
+
+        {error && <p className="text-sm text-destructive">{error}</p>}
+
+        {parsed && (
+          <div className="rounded-md border p-3 text-sm space-y-2">
+            <div><span className="text-muted-foreground">Student:</span> <span className="font-medium">{parsed.student.full_name}</span></div>
+            <div className="text-muted-foreground">Lessons:</div>
+            <ul className="text-xs space-y-1">
+              {parsed.lessons.map((l, i) => (
+                <li key={i} className="flex justify-between gap-3 border-b last:border-0 pb-1">
+                  <span>{fmtDate(l.date)}</span>
+                  <span className="tabular-nums text-muted-foreground">
+                    {Number(l.duration_hours ?? parsed.student.default_duration)}h × {fmtMoney(Number(parsed.student.hourly_fee))}
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <div className="flex justify-between pt-1 border-t">
+              <span className="text-muted-foreground">Total</span>
+              <span className="font-semibold tabular-nums">{fmtMoney(previewTotal)}</span>
+            </div>
+          </div>
+        )}
+
+        <div className="flex justify-end gap-2">
+          <Button variant="outline" onClick={parseNow} disabled={parsing || !liveText}>
+            {parsing ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Parsing</> : "Parse"}
+          </Button>
+          <Button onClick={() => create.mutate()} disabled={!parsed || create.isPending}>
+            Create invoice
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
