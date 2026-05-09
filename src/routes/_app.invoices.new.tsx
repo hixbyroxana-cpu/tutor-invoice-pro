@@ -52,7 +52,7 @@ function NewInvoicePage() {
           Add a student first. <Link to="/students" className="underline">Go to Students</Link>.
         </CardContent></Card>
       ) : (
-        <Tabs defaultValue="dictate">
+        <Tabs defaultValue="quick">
           <TabsList>
             <TabsTrigger value="dictate"><Mic className="h-3.5 w-3.5 mr-1" />Dictate</TabsTrigger>
             <TabsTrigger value="quick"><Sparkles className="h-3.5 w-3.5 mr-1" />Quick create</TabsTrigger>
@@ -327,11 +327,17 @@ function DictateForm({ students, onCreated }: { students: Student[]; onCreated: 
         </p>
       </CardHeader>
       <CardContent className="grid gap-3">
+        {!sr.supported && (
+          <div className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+            Voice input is not available in this browser. Open the live app in Chrome or Safari, or use Quick create.
+          </div>
+        )}
         <div className="flex items-center gap-2">
           <Button
             type="button"
             variant={sr.listening ? "destructive" : "default"}
             onClick={toggleMic}
+            disabled={!sr.supported}
             className="gap-2"
           >
             {sr.listening ? <><MicOff className="h-4 w-4" />Stop</> : <><Mic className="h-4 w-4" />{liveText ? "Record again" : "Start dictation"}</>}
