@@ -124,6 +124,25 @@ export function EarningsPanel() {
           </div>
         </div>
 
+        {data && data.months.length > 0 && (
+          <div className="space-y-2">
+            <div className="text-xs uppercase tracking-wide text-muted-foreground">By month</div>
+            <ChartContainer
+              config={{ total: { label: "Earnings", color: "hsl(var(--primary))" } }}
+              className="aspect-[16/6] w-full"
+            >
+              <LineChart data={data.months} margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
+                <CartesianGrid vertical={false} strokeDasharray="3 3" />
+                <XAxis dataKey="label" tickLine={false} axisLine={false} tickMargin={8} fontSize={11} />
+                <YAxis tickLine={false} axisLine={false} tickMargin={8} fontSize={11} width={50}
+                  tickFormatter={(v) => fmtMoney(Number(v)).replace(/\.00$/, "")} />
+                <ChartTooltip content={<ChartTooltipContent formatter={(v) => fmtMoney(Number(v))} />} />
+                <Line type="monotone" dataKey="total" stroke="var(--color-total)" strokeWidth={2} dot={{ r: 3 }} activeDot={{ r: 5 }} />
+              </LineChart>
+            </ChartContainer>
+          </div>
+        )}
+
         {data && data.breakdown.length > 0 ? (
           <div className="space-y-2">
             <div className="text-xs uppercase tracking-wide text-muted-foreground">By student</div>
