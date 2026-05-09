@@ -14,13 +14,235 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      business_settings: {
+        Row: {
+          account_holder: string | null
+          account_number: string | null
+          address: string | null
+          bank_name: string | null
+          business_name: string | null
+          email: string | null
+          id: string
+          invoice_prefix: string
+          payment_notes: string | null
+          phone: string | null
+          sort_code: string | null
+          tutor_name: string | null
+          updated_at: string
+        }
+        Insert: {
+          account_holder?: string | null
+          account_number?: string | null
+          address?: string | null
+          bank_name?: string | null
+          business_name?: string | null
+          email?: string | null
+          id?: string
+          invoice_prefix?: string
+          payment_notes?: string | null
+          phone?: string | null
+          sort_code?: string | null
+          tutor_name?: string | null
+          updated_at?: string
+        }
+        Update: {
+          account_holder?: string | null
+          account_number?: string | null
+          address?: string | null
+          bank_name?: string | null
+          business_name?: string | null
+          email?: string | null
+          id?: string
+          invoice_prefix?: string
+          payment_notes?: string | null
+          phone?: string | null
+          sort_code?: string | null
+          tutor_name?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      invoice_counter: {
+        Row: {
+          id: number
+          next_number: number
+        }
+        Insert: {
+          id?: number
+          next_number?: number
+        }
+        Update: {
+          id?: number
+          next_number?: number
+        }
+        Relationships: []
+      }
+      invoice_items: {
+        Row: {
+          amount: number
+          created_at: string
+          description: string
+          duration: number
+          hourly_rate: number
+          id: string
+          invoice_id: string
+          lesson_date: string
+          notes: string | null
+          position: number
+        }
+        Insert: {
+          amount?: number
+          created_at?: string
+          description?: string
+          duration?: number
+          hourly_rate?: number
+          id?: string
+          invoice_id: string
+          lesson_date: string
+          notes?: string | null
+          position?: number
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          description?: string
+          duration?: number
+          hourly_rate?: number
+          id?: string
+          invoice_id?: string
+          lesson_date?: string
+          notes?: string | null
+          position?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoice_items_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      invoices: {
+        Row: {
+          client_address: string | null
+          client_email: string | null
+          client_name: string
+          client_parent_name: string | null
+          client_phone: string | null
+          created_at: string
+          hourly_rate: number
+          id: string
+          invoice_date: string
+          invoice_number: string
+          invoice_title: string
+          notes: string | null
+          payment_deadline: string | null
+          status: string
+          student_id: string | null
+          total: number
+          updated_at: string
+        }
+        Insert: {
+          client_address?: string | null
+          client_email?: string | null
+          client_name: string
+          client_parent_name?: string | null
+          client_phone?: string | null
+          created_at?: string
+          hourly_rate?: number
+          id?: string
+          invoice_date?: string
+          invoice_number: string
+          invoice_title: string
+          notes?: string | null
+          payment_deadline?: string | null
+          status?: string
+          student_id?: string | null
+          total?: number
+          updated_at?: string
+        }
+        Update: {
+          client_address?: string | null
+          client_email?: string | null
+          client_name?: string
+          client_parent_name?: string | null
+          client_phone?: string | null
+          created_at?: string
+          hourly_rate?: number
+          id?: string
+          invoice_date?: string
+          invoice_number?: string
+          invoice_title?: string
+          notes?: string | null
+          payment_deadline?: string | null
+          status?: string
+          student_id?: string | null
+          total?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoices_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      students: {
+        Row: {
+          archived: boolean
+          billing_address: string | null
+          created_at: string
+          default_duration: number
+          email: string | null
+          full_name: string
+          hourly_fee: number
+          id: string
+          notes: string | null
+          parent_name: string | null
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          archived?: boolean
+          billing_address?: string | null
+          created_at?: string
+          default_duration?: number
+          email?: string | null
+          full_name: string
+          hourly_fee?: number
+          id?: string
+          notes?: string | null
+          parent_name?: string | null
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          archived?: boolean
+          billing_address?: string | null
+          created_at?: string
+          default_duration?: number
+          email?: string | null
+          full_name?: string
+          hourly_fee?: number
+          id?: string
+          notes?: string | null
+          parent_name?: string | null
+          phone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      next_invoice_number: { Args: never; Returns: number }
     }
     Enums: {
       [_ in never]: never
