@@ -52,6 +52,8 @@ function Dashboard() {
         <StatCard icon={<PoundSterling className="h-4 w-4" />} label="Paid (lifetime)" value={stats ? fmtMoney(stats.paid) : "—"} accent="success" />
       </div>
 
+      <EarningsPanel />
+
       <Card>
         <CardHeader>
           <CardTitle className="text-base">Recent invoices</CardTitle>
