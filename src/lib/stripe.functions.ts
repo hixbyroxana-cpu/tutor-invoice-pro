@@ -2,14 +2,11 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
-function originFromRequest(): string {
+async function originFromRequest(): Promise<string> {
   // Build a return URL from the incoming request headers.
   // Falls back to the published URL when not in a request.
   try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { getRequestHeader } = require("@tanstack/react-start/server") as {
-      getRequestHeader: (name: string) => string | undefined;
-    };
+    const { getRequestHeader } = await import("@tanstack/react-start/server");
     const proto = getRequestHeader("x-forwarded-proto") || "https";
     const host = getRequestHeader("x-forwarded-host") || getRequestHeader("host");
     if (host) return `${proto}://${host}`;
@@ -18,6 +15,7 @@ function originFromRequest(): string {
   }
   return "https://tutor-invoice-pro.lovable.app";
 }
+
 
 /**
  * Create (or reuse) a Stripe Connect Express account for the tutor and return an onboarding link.
@@ -62,7 +60,7 @@ export const createConnectOnboardingLink = createServerFn({ method: "POST" })
       if (uErr) throw new Error(uErr.message);
     }
 
-    const origin = originFromRequest();
+    const origin = await originFromRequest();
     const link = await stripe.accountLinks.create({
       account: accountId,
       refresh_url: `${origin}/settings?stripe=refresh`,
@@ -145,7 +143,7 @@ export const createInvoiceCheckout = createServerFn({ method: "POST" })
     const totalPence = Math.round(Number(invoice.total) * 100);
     if (totalPence <= 0) throw new Error("Invoice total must be greater than zero.");
 
-    const origin = originFromRequest();
+    const origin = await originFromRequest();
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
@@ -186,4 +184,21 @@ export const createInvoiceCheckout = createServerFn({ method: "POST" })
     if (uErr) throw new Error(uErr.message);
 
     return { url: session.url, sessionId: session.id };
+  });
+
+/**
+ * Expose the configured Stripe environment so the UI can show Test/Live mode.
+ * Does not reveal the secret key.
+ */
+export const getStripeMode = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async () => {
+    const key = process.env.STRIPE_SECRET_KEY;
+    const webhook = process.env.STRIPE_WEBHOOK_SECRET;
+    let mode: "test" | "live" | "unset" = "unset";
+    if (key) {
+      if (key.startsWith("sk_test_")) mode = "test";
+      else if (key.startsWith("sk_live_")) mode = "live";
+    }
+    return { mode, webhookConfigured: Boolean(webhook) };
   });

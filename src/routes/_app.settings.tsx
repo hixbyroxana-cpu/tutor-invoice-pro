@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { CreditCard, CheckCircle2, AlertCircle, ExternalLink, RefreshCw } from "lucide-react";
-import { createConnectOnboardingLink, refreshStripeStatus } from "@/lib/stripe.functions";
+import { createConnectOnboardingLink, refreshStripeStatus, getStripeMode } from "@/lib/stripe.functions";
 
 export const Route = createFileRoute("/_app/settings")({
   component: SettingsPage,
@@ -51,6 +51,11 @@ function SettingsPage() {
 
   // Auto-refresh Stripe status when returning from onboarding
   const refreshStatus = useServerFn(refreshStripeStatus);
+  const stripeMode = useServerFn(getStripeMode);
+  const { data: modeData } = useQuery({
+    queryKey: ["stripe-mode"],
+    queryFn: async () => stripeMode(),
+  });
   useEffect(() => {
     const url = new URL(window.location.href);
     if (url.searchParams.get("stripe") === "return" || url.searchParams.get("stripe") === "refresh") {
@@ -113,14 +118,39 @@ function SettingsPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base flex items-center gap-2">
-            <CreditCard className="h-4 w-4" /> Card payments (Stripe)
-          </CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-base flex items-center gap-2">
+              <CreditCard className="h-4 w-4" /> Card payments (Stripe)
+            </CardTitle>
+            {modeData && (
+              <Badge variant={modeData.mode === "test" ? "secondary" : modeData.mode === "live" ? "destructive" : "outline"}>
+                {modeData.mode === "test" ? "Test mode" : modeData.mode === "live" ? "Live mode" : "Not configured"}
+              </Badge>
+            )}
+          </div>
           <p className="text-sm text-muted-foreground">
             Connect Stripe so parents can pay invoices by card. A 1% platform fee is applied automatically; the rest goes straight to your bank.
           </p>
         </CardHeader>
         <CardContent className="space-y-3">
+          {modeData?.mode === "test" && (
+            <div className="text-sm rounded-md border border-green-200 bg-green-50 text-green-900 p-3 space-y-1">
+              <p className="font-medium">Test mode is on</p>
+              <p>All onboarding and payments are simulated — no real money moves.</p>
+              <p className="text-xs text-muted-foreground">Webhook URL for Stripe test dashboard:</p>
+              <code className="block bg-white/60 rounded px-2 py-1 break-all text-xs">https://tutor-invoice-pro.lovable.app/api/public/webhooks/stripe</code>
+            </div>
+          )}
+          {modeData?.mode === "live" && (
+            <div className="text-sm rounded-md border border-red-200 bg-red-50 text-red-900 p-3">
+              Live mode is on. Real charges will be made to parent cards.
+            </div>
+          )}
+          {modeData?.mode === "unset" && (
+            <div className="text-sm rounded-md border border-amber-200 bg-amber-50 text-amber-900 p-3">
+              Stripe is not configured yet. Save a Stripe secret key first.
+            </div>
+          )}
           {!stripeConnected && (
             <Button onClick={() => startOnboarding.mutate()} disabled={startOnboarding.isPending}>
               {startOnboarding.isPending ? "Opening Stripe…" : "Connect Stripe"}
