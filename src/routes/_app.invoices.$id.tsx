@@ -98,6 +98,14 @@ function InvoiceEditPage() {
         invoice_date: string; client_name: string; client_parent_name: string | null; client_email: string | null;
         client_phone: string | null; client_address: string | null; hourly_rate: number;
       };
+
+      if (locked) {
+        // Locked invoices: only status changes are persisted.
+        const { error: sErr } = await supabase.from("invoices").update({ status: i.status }).eq("id", id);
+        if (sErr) throw sErr;
+        return;
+      }
+
       const newTotal = +items.reduce((s, it) => s + Number(it.duration) * Number(it.hourly_rate), 0).toFixed(2);
       const { error: uErr } = await supabase.from("invoices").update({
         invoice_title: i.invoice_title,
@@ -138,6 +146,57 @@ function InvoiceEditPage() {
     onSuccess: () => { qc.invalidateQueries({ queryKey: ["invoice", id] }); qc.invalidateQueries({ queryKey: ["invoices"] }); toast.success("Saved"); },
     onError: (e: Error) => toast.error(e.message),
   });
+
+  const duplicate = useMutation({
+    mutationFn: async () => {
+      const { data: u } = await supabase.auth.getUser();
+      if (!u.user) throw new Error("Not signed in");
+      const { data: numRes, error: nErr } = await supabase.rpc("next_invoice_number");
+      if (nErr) throw nErr;
+      const settings = data?.settings as { invoice_prefix?: string } | null;
+      const prefix = settings?.invoice_prefix || "INV";
+      const src = inv as Record<string, unknown>;
+      const { data: newInv, error: cErr } = await supabase.from("invoices").insert({
+        user_id: u.user.id,
+        invoice_number: `${prefix}-${String(numRes).padStart(4, "0")}`,
+        invoice_title: `${src.invoice_title} (copy)`,
+        student_id: src.student_id as string | null,
+        client_name: src.client_name as string,
+        client_parent_name: src.client_parent_name as string | null,
+        client_email: src.client_email as string | null,
+        client_phone: src.client_phone as string | null,
+        client_address: src.client_address as string | null,
+        hourly_rate: src.hourly_rate as number,
+        invoice_date: new Date().toISOString().slice(0, 10),
+        status: "draft",
+        notes: src.notes as string | null,
+        total: 0,
+      }).select().single();
+      if (cErr) throw cErr;
+      if (items.length) {
+        const { error: itErr } = await supabase.from("invoice_items").insert(
+          items.map((it, idx) => ({
+            invoice_id: newInv.id,
+            user_id: u.user!.id,
+            lesson_date: it.lesson_date,
+            description: it.description,
+            duration: Number(it.duration),
+            hourly_rate: Number(it.hourly_rate),
+            amount: +(Number(it.duration) * Number(it.hourly_rate)).toFixed(2),
+            notes: it.notes,
+            position: idx,
+          })),
+        );
+        if (itErr) throw itErr;
+        const newTotal = +items.reduce((s, it) => s + Number(it.duration) * Number(it.hourly_rate), 0).toFixed(2);
+        await supabase.from("invoices").update({ total: newTotal }).eq("id", newInv.id);
+      }
+      return newInv.id as string;
+    },
+    onSuccess: (newId) => { toast.success("Duplicated as new draft"); navigate({ to: "/invoices/$id", params: { id: newId } }); },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
 
   function exportPdf() {
     const i = inv as Record<string, unknown>;
