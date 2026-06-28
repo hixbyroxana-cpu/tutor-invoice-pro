@@ -15,9 +15,7 @@ export const Route = createFileRoute("/api/public/webhooks/stripe")({
         const rawBody = await request.text();
 
         const Stripe = (await import("stripe")).default;
-        const stripe = new Stripe(apiKey, {
-          apiVersion: "2025-09-30.clover" as unknown as Stripe.LatestApiVersion,
-        });
+        const stripe = new Stripe(apiKey);
 
         let event: import("stripe").Stripe.Event;
         try {
