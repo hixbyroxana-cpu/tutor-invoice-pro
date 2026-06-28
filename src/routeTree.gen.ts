@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TryRouteImport } from './routes/try'
+import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as FeaturesRouteImport } from './routes/features'
@@ -25,6 +26,11 @@ import { Route as AppInvoicesIdRouteImport } from './routes/_app.invoices.$id'
 const TryRoute = TryRouteImport.update({
   id: '/try',
   path: '/try',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -87,6 +93,7 @@ export interface FileRoutesByFullPath {
   '/features': typeof FeaturesRoute
   '/how-it-works': typeof HowItWorksRoute
   '/login': typeof LoginRoute
+  '/pricing': typeof PricingRoute
   '/try': typeof TryRoute
   '/dashboard': typeof AppDashboardRoute
   '/settings': typeof AppSettingsRoute
@@ -100,6 +107,7 @@ export interface FileRoutesByTo {
   '/features': typeof FeaturesRoute
   '/how-it-works': typeof HowItWorksRoute
   '/login': typeof LoginRoute
+  '/pricing': typeof PricingRoute
   '/try': typeof TryRoute
   '/dashboard': typeof AppDashboardRoute
   '/settings': typeof AppSettingsRoute
@@ -115,6 +123,7 @@ export interface FileRoutesById {
   '/features': typeof FeaturesRoute
   '/how-it-works': typeof HowItWorksRoute
   '/login': typeof LoginRoute
+  '/pricing': typeof PricingRoute
   '/try': typeof TryRoute
   '/_app/dashboard': typeof AppDashboardRoute
   '/_app/settings': typeof AppSettingsRoute
@@ -130,6 +139,7 @@ export interface FileRouteTypes {
     | '/features'
     | '/how-it-works'
     | '/login'
+    | '/pricing'
     | '/try'
     | '/dashboard'
     | '/settings'
@@ -143,6 +153,7 @@ export interface FileRouteTypes {
     | '/features'
     | '/how-it-works'
     | '/login'
+    | '/pricing'
     | '/try'
     | '/dashboard'
     | '/settings'
@@ -157,6 +168,7 @@ export interface FileRouteTypes {
     | '/features'
     | '/how-it-works'
     | '/login'
+    | '/pricing'
     | '/try'
     | '/_app/dashboard'
     | '/_app/settings'
@@ -172,6 +184,7 @@ export interface RootRouteChildren {
   FeaturesRoute: typeof FeaturesRoute
   HowItWorksRoute: typeof HowItWorksRoute
   LoginRoute: typeof LoginRoute
+  PricingRoute: typeof PricingRoute
   TryRoute: typeof TryRoute
 }
 
@@ -182,6 +195,13 @@ declare module '@tanstack/react-router' {
       path: '/try'
       fullPath: '/try'
       preLoaderRoute: typeof TryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -290,6 +310,7 @@ const rootRouteChildren: RootRouteChildren = {
   FeaturesRoute: FeaturesRoute,
   HowItWorksRoute: HowItWorksRoute,
   LoginRoute: LoginRoute,
+  PricingRoute: PricingRoute,
   TryRoute: TryRoute,
 }
 export const routeTree = rootRouteImport
