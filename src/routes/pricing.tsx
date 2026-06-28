@@ -59,20 +59,20 @@ const plans: Plan[] = [
     ],
   },
   {
-    name: "Tutor Studio",
-    price: "£14",
-    period: "/month",
-    blurb: "For tutors running a small team.",
-    cta: "Contact us",
+    name: "Pro — Yearly",
+    price: "£60",
+    period: "/year",
+    blurb: "Save £12 vs monthly. Everything in Pro.",
+    cta: "Start free trial",
     to: "/login",
     features: [
       "Everything in Pro",
-      "Multiple tutor accounts",
-      "Shared student database",
-      "Priority email support",
+      "2 months free vs monthly billing",
+      "Best value for full-time tutors",
     ],
   },
 ];
+
 
 function PricingPage() {
   return (
