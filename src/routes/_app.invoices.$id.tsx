@@ -232,9 +232,12 @@ function InvoiceEditPage() {
     payment_deadline: string | null; client_name: string; client_parent_name: string | null;
     client_email: string | null; client_phone: string | null; client_address: string | null;
     hourly_rate: number; notes: string | null;
+    stripe_checkout_url: string | null; stripe_session_id: string | null;
+    paid_at: string | null; sent_to_parent_at: string | null;
   };
 
-  return (
+  const payOrigin = typeof window !== "undefined" ? window.location.origin : "";
+  const payUrl = `${payOrigin}/pay/${id}`;
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3 min-w-0">
