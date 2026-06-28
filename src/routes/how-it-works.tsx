@@ -51,7 +51,7 @@ function HowItWorks() {
 
         <div className="mt-10 flex flex-wrap items-center gap-3">
           <Link to="/try"><Button size="lg" className="gap-2">Try it free <ArrowRight className="h-4 w-4" /></Button></Link>
-          <Link to="/pricing"><Button size="lg" variant="outline">See pricing</Button></Link>
+          <Link to="/features"><Button size="lg" variant="outline">See features</Button></Link>
         </div>
       </section>
     </MarketingShell>

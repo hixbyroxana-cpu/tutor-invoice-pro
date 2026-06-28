@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, Trash2, Download, ArrowLeft, Save, Eye, EyeOff, Lock, Copy } from "lucide-react";
+import { Plus, Trash2, Download, ArrowLeft, Save, Eye, EyeOff, Copy } from "lucide-react";
 import { toast } from "sonner";
 import { fmtMoney } from "@/lib/format";
 import { generateInvoicePdf } from "@/lib/pdf";
@@ -66,7 +66,7 @@ function InvoiceEditPage() {
 
   if (isLoading || !inv) return <p className="text-sm text-muted-foreground">Loading…</p>;
 
-  const locked = Boolean((inv as { pdf_exported_at?: string | null }).pdf_exported_at);
+  const locked = false;
   const total = items.reduce((s, it) => s + Number(it.duration) * Number(it.hourly_rate), 0);
 
   function setField<K extends string>(field: K, value: unknown) {
@@ -221,16 +221,6 @@ function InvoiceEditPage() {
       })),
     }, (data?.settings ?? {}) as Parameters<typeof generateInvoicePdf>[1]);
 
-    if (!locked) {
-      const stamp = new Date().toISOString();
-      const { error } = await supabase.from("invoices").update({ pdf_exported_at: stamp }).eq("id", id);
-      if (!error) {
-        setInv((p) => p ? { ...p, pdf_exported_at: stamp } : p);
-        qc.invalidateQueries({ queryKey: ["invoice", id] });
-        qc.invalidateQueries({ queryKey: ["invoices"] });
-        toast.message("Invoice locked", { description: "On the free plan, invoices become read-only after the PDF is exported. Duplicate it to make changes." });
-      }
-    }
   }
 
 
@@ -267,18 +257,6 @@ function InvoiceEditPage() {
         </div>
       </div>
 
-      {locked && (
-        <div className="flex items-start gap-3 rounded-md border border-amber-300/60 bg-amber-50 dark:bg-amber-950/30 p-3 text-sm">
-          <Lock className="h-4 w-4 mt-0.5 text-amber-700 dark:text-amber-300 shrink-0" />
-          <div className="flex-1">
-            <p className="font-medium text-amber-900 dark:text-amber-100">Invoice locked</p>
-            <p className="text-amber-800/90 dark:text-amber-200/90 text-xs mt-0.5">
-              On the free plan, an invoice becomes read-only after the PDF is exported. You can still change its status (Sent / Paid / Overdue) or duplicate it as a new editable draft.{" "}
-              <Link to="/pricing" className="underline">Upgrade</Link> for unlimited edits after export.
-            </p>
-          </div>
-        </div>
-      )}
 
       <Card>
         <CardHeader><CardTitle className="text-base">Invoice details</CardTitle></CardHeader>
