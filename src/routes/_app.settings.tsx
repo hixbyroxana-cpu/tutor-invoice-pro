@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { CreditCard, CheckCircle2, AlertCircle, ExternalLink, RefreshCw } from "lucide-react";
-import { createConnectOnboardingLink, refreshStripeStatus } from "@/lib/stripe.functions";
+import { createConnectOnboardingLink, refreshStripeStatus, getStripeMode } from "@/lib/stripe.functions";
 
 export const Route = createFileRoute("/_app/settings")({
   component: SettingsPage,
