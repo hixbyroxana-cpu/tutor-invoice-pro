@@ -14,7 +14,6 @@ export function MarketingShell({ children }: { children: ReactNode }) {
           <nav className="hidden md:flex items-center gap-1 text-sm">
             <Link to="/features" className="px-3 py-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent/60">Features</Link>
             <Link to="/how-it-works" className="px-3 py-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent/60">How it works</Link>
-            <Link to="/pricing" className="px-3 py-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent/60">Pricing</Link>
             <Link to="/try" className="px-3 py-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent/60">Try it free</Link>
           </nav>
           <div className="flex items-center gap-2">
