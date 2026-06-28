@@ -221,16 +221,6 @@ function InvoiceEditPage() {
       })),
     }, (data?.settings ?? {}) as Parameters<typeof generateInvoicePdf>[1]);
 
-    if (!locked) {
-      const stamp = new Date().toISOString();
-      const { error } = await supabase.from("invoices").update({ pdf_exported_at: stamp }).eq("id", id);
-      if (!error) {
-        setInv((p) => p ? { ...p, pdf_exported_at: stamp } : p);
-        qc.invalidateQueries({ queryKey: ["invoice", id] });
-        qc.invalidateQueries({ queryKey: ["invoices"] });
-        toast.message("Invoice locked", { description: "On the free plan, invoices become read-only after the PDF is exported. Duplicate it to make changes." });
-      }
-    }
   }
 
 
