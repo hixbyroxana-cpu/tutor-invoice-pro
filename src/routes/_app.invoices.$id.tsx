@@ -8,11 +8,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, Trash2, Download, ArrowLeft, Save, Eye, EyeOff } from "lucide-react";
+import { Plus, Trash2, Download, ArrowLeft, Save, Eye, EyeOff, Lock, Copy } from "lucide-react";
 import { toast } from "sonner";
 import { fmtMoney } from "@/lib/format";
 import { generateInvoicePdf } from "@/lib/pdf";
 import { InvoicePreview } from "@/components/InvoicePreview";
+
 
 export const Route = createFileRoute("/_app/invoices/$id")({
   component: InvoiceEditPage,
