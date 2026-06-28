@@ -278,6 +278,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_public_invoice_for_payment: {
+        Args: { _invoice_id: string }
+        Returns: {
+          client_name: string
+          id: string
+          invoice_number: string
+          status: string
+          stripe_checkout_url: string
+          total: number
+        }[]
+      }
       next_invoice_number: { Args: never; Returns: number }
     }
     Enums: {

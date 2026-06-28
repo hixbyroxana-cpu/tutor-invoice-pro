@@ -39,9 +39,7 @@ function PayPage() {
       { auth: { storage: undefined, persistSession: false, autoRefreshToken: false } },
     );
     supabasePublic
-      .from("invoices")
-      .select("id, invoice_number, client_name, total, status, stripe_checkout_url")
-      .eq("id", invoiceId)
+      .rpc("get_public_invoice_for_payment", { _invoice_id: invoiceId })
       .maybeSingle()
       .then(({ data, error }) => {
         if (error) setError(error.message);
