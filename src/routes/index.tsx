@@ -53,13 +53,14 @@ function Landing() {
               First invoice on us — no card required
             </div>
             <h1 className="mt-5 text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.05]">
-              Tutoring invoices,<br />
-              <span className="text-primary">sorted in seconds.</span>
+              The invoice app<br />
+              <span className="text-primary">built for tutors.</span>
             </h1>
             <p className="mt-5 text-lg text-muted-foreground max-w-2xl">
-              Built for private tutors. Track students, log lessons by voice, and send
-              clean PDF invoices that parents actually pay on time.
+              Manage students, log lessons by voice, and send clean PDF invoices
+              that parents actually pay on time.
             </p>
+
             <div className="mt-7 flex flex-wrap items-center gap-3">
               <Link to="/login">
                 <Button size="lg" className="gap-2">
