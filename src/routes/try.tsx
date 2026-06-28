@@ -189,8 +189,8 @@ function TryPage() {
     }
     if (!authed) {
       window.sessionStorage.setItem(PENDING_KEY, "1");
-      toast.message("Create a free account to download your invoice.", {
-        description: "Your invoice is saved — you'll get it as soon as you sign up.",
+      toast.message("Create a free account to send your first invoice.", {
+        description: "Your details are saved — after signup you'll only need to pick the rate and dates.",
       });
       navigate({ to: "/login" });
       return;
@@ -309,9 +309,9 @@ function TryPage() {
             <div className="rounded-lg border bg-accent/40 p-4 text-sm flex items-start gap-3">
               <Lock className="h-4 w-4 mt-0.5 text-primary shrink-0" />
               <div>
-                <p className="font-medium">Free to try — sign up to download.</p>
+                <p className="font-medium">Free to try — create an account to send.</p>
                 <p className="text-muted-foreground text-xs mt-0.5">
-                  Your details are saved in this browser. Create a free account when you're ready to export the PDF and unlock student management, earnings tracking and more.
+                  Your invoice details are saved in your account. After your first invoice, you'll only need to enter the hourly rate and the lesson dates.
                 </p>
               </div>
             </div>
