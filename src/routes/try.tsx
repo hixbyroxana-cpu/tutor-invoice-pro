@@ -18,7 +18,7 @@ export const Route = createFileRoute("/try")({
   head: () => ({
     meta: [
       { title: "Try TutorBook free — Create your first tutor invoice" },
-      { name: "description", content: "Build a professional tutoring invoice in seconds. No signup required to try — only create a free account when you're ready to download the PDF." },
+      { name: "description", content: "Build a professional tutoring invoice in seconds. No signup required to try — create a free account before sending your first invoice. Your tutor and student details are saved, so future invoices are just rate and dates." },
     ],
   }),
 });
