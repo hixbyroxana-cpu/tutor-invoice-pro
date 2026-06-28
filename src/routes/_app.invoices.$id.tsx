@@ -248,6 +248,8 @@ function InvoiceEditPage() {
   }
 
 
+  if (isLoading || !inv) return <p className="text-sm text-muted-foreground">Loading…</p>;
+
   const i = inv as {
     invoice_number: string; invoice_title: string; status: string; invoice_date: string;
     payment_deadline: string | null; client_name: string; client_parent_name: string | null;
