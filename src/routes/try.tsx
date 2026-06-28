@@ -37,7 +37,6 @@ type TryState = {
   account_holder: string;
   sort_code: string;
   account_number: string;
-  payment_notes: string;
   client_name: string;
   client_parent_name: string;
   client_email: string;
@@ -63,7 +62,6 @@ const DEFAULT_STATE: TryState = {
   account_holder: "",
   sort_code: "",
   account_number: "",
-  payment_notes: "",
   client_name: "",
   client_parent_name: "",
   client_email: "",
@@ -125,7 +123,6 @@ function buildSettings(s: TryState): Settings {
     account_holder: s.account_holder || null,
     sort_code: s.sort_code || null,
     account_number: s.account_number || null,
-    payment_notes: s.payment_notes || null,
   };
 }
 
@@ -301,7 +298,6 @@ function TryPage() {
                 <Field label="Account holder"><Input value={state.account_holder} onChange={(e) => patch({ account_holder: e.target.value })} /></Field>
                 <Field label="Sort code / routing"><Input value={state.sort_code} onChange={(e) => patch({ sort_code: e.target.value })} /></Field>
                 <Field label="Account no. / IBAN"><Input value={state.account_number} onChange={(e) => patch({ account_number: e.target.value })} /></Field>
-                <div className="sm:col-span-2"><Field label="Payment notes"><Textarea rows={2} value={state.payment_notes} onChange={(e) => patch({ payment_notes: e.target.value })} /></Field></div>
                 <div className="sm:col-span-2"><Field label="Invoice notes"><Textarea rows={2} value={state.notes} onChange={(e) => patch({ notes: e.target.value })} /></Field></div>
               </CardContent>
             </Card>

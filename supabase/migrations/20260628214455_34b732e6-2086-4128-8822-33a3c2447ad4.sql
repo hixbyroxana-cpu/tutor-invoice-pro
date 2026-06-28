@@ -1,0 +1,1 @@
+ALTER TABLE public.business_settings DROP COLUMN IF EXISTS payment_notes;

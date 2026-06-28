@@ -28,7 +28,6 @@ type Settings = {
   account_holder: string | null;
   sort_code: string | null;
   account_number: string | null;
-  payment_notes: string | null;
   invoice_prefix: string;
   stripe_account_id: string | null;
   stripe_charges_enabled: boolean;
@@ -82,7 +81,6 @@ function SettingsPage() {
         account_holder: form.account_holder ?? null,
         sort_code: form.sort_code ?? null,
         account_number: form.account_number ?? null,
-        payment_notes: form.payment_notes ?? null,
         invoice_prefix: (form.invoice_prefix || "ROX").toUpperCase().slice(0, 6),
       };
       const { error } = await supabase.from("business_settings")
@@ -223,14 +221,6 @@ function SettingsPage() {
             <Field label="Sort code / routing number"><Input value={form.sort_code ?? ""} onChange={(e) => setForm({ ...form, sort_code: e.target.value })} /></Field>
             <Field label="Account number / IBAN"><Input value={form.account_number ?? ""} onChange={(e) => setForm({ ...form, account_number: e.target.value })} /></Field>
           </div>
-          <Field label="Other payment methods">
-            <Textarea
-              rows={4}
-              placeholder={`PayPal: name@example.com\nRevolut: @yourname\nCash accepted in person\nPlease reference the invoice number when paying.`}
-              value={form.payment_notes ?? ""}
-              onChange={(e) => setForm({ ...form, payment_notes: e.target.value })}
-            />
-          </Field>
         </CardContent>
       </Card>
 

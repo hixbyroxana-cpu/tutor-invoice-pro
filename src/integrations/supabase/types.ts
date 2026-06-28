@@ -24,7 +24,6 @@ export type Database = {
           email: string | null
           id: string
           invoice_prefix: string
-          payment_notes: string | null
           phone: string | null
           sort_code: string | null
           stripe_account_id: string | null
@@ -43,7 +42,6 @@ export type Database = {
           email?: string | null
           id?: string
           invoice_prefix?: string
-          payment_notes?: string | null
           phone?: string | null
           sort_code?: string | null
           stripe_account_id?: string | null
@@ -62,7 +60,6 @@ export type Database = {
           email?: string | null
           id?: string
           invoice_prefix?: string
-          payment_notes?: string | null
           phone?: string | null
           sort_code?: string | null
           stripe_account_id?: string | null
