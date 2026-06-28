@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Plus, Trash2, Download, Lock, ArrowLeft } from "lucide-react";
+import { Plus, Trash2, Download, Lock, ArrowLeft, Info } from "lucide-react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { InvoicePreview } from "@/components/InvoicePreview";
@@ -18,7 +18,7 @@ export const Route = createFileRoute("/try")({
   head: () => ({
     meta: [
       { title: "Try TutorBook free — Create your first tutor invoice" },
-      { name: "description", content: "Build a professional tutoring invoice in seconds. No signup required to try — only create a free account when you're ready to download the PDF." },
+      { name: "description", content: "Build a professional tutoring invoice in seconds. No signup required to try — create a free account before sending your first invoice. Your tutor and student details are saved, so future invoices are just rate and dates." },
     ],
   }),
 });
@@ -189,8 +189,8 @@ function TryPage() {
     }
     if (!authed) {
       window.sessionStorage.setItem(PENDING_KEY, "1");
-      toast.message("Create a free account to download your invoice.", {
-        description: "Your invoice is saved — you'll get it as soon as you sign up.",
+      toast.message("Create a free account to send your first invoice.", {
+        description: "Your details are saved — after signup you'll only need to pick the rate and dates.",
       });
       navigate({ to: "/login" });
       return;
@@ -222,15 +222,25 @@ function TryPage() {
         </Link>
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">Try TutorBook — build a free invoice</h1>
+            <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">Try TutorBook — build your first invoice</h1>
             <p className="text-sm text-muted-foreground mt-1">
-              Fill in the details and preview your invoice live. No account needed until you download.
+              Fill in the details and preview your invoice live. Create a free account before sending it.
             </p>
           </div>
           <Button onClick={handleDownload} className="gap-2">
             {authed ? <Download className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
             {authed ? "Download PDF" : "Sign up & download"}
           </Button>
+        </div>
+
+        <div className="rounded-lg border bg-accent/40 p-4 text-sm flex items-start gap-3 mt-4">
+          <Info className="h-4 w-4 mt-0.5 text-primary shrink-0" />
+          <div>
+            <p className="font-medium">Create an account before sending your first invoice.</p>
+            <p className="text-muted-foreground text-xs mt-0.5">
+              When you sign up, your tutor and student details are saved securely. After that, every invoice is just: pick the hourly rate and add the tutoring dates.
+            </p>
+          </div>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-6 mt-6">
@@ -299,9 +309,9 @@ function TryPage() {
             <div className="rounded-lg border bg-accent/40 p-4 text-sm flex items-start gap-3">
               <Lock className="h-4 w-4 mt-0.5 text-primary shrink-0" />
               <div>
-                <p className="font-medium">Free to try — sign up to download.</p>
+                <p className="font-medium">Free to try — create an account to send.</p>
                 <p className="text-muted-foreground text-xs mt-0.5">
-                  Your details are saved in this browser. Create a free account when you're ready to export the PDF and unlock student management, earnings tracking and more.
+                  Your invoice details are saved in your account. After your first invoice, you'll only need to enter the hourly rate and the lesson dates.
                 </p>
               </div>
             </div>
