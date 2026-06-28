@@ -9,9 +9,9 @@ import { nitro } from "nitro/vite";
 
 // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
 export default defineConfig({
-  cloudflare: false,
   plugins: [nitro()],
   tanstackStart: {
     server: { entry: "server" },
   },
 });
+
