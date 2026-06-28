@@ -36,10 +36,10 @@ function Landing() {
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-3 py-1 text-xs font-medium text-muted-foreground">
               <Sparkles className="h-3.5 w-3.5 text-primary" />
-              First invoice on us — no card required
+              100% free for tutors — no subscriptions
             </div>
             <h1 className="mt-5 text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.05]">
-              The invoice app<br />
+              The free invoice app<br />
               <span className="text-primary">built for tutors.</span>
             </h1>
             <p className="mt-5 text-lg text-muted-foreground max-w-2xl">
@@ -57,10 +57,10 @@ function Landing() {
                 <Button size="lg" variant="outline">See how it works</Button>
               </Link>
             </div>
-            <p className="mt-3 text-xs text-muted-foreground">No signup needed to try — only when you download.</p>
+            <p className="mt-3 text-xs text-muted-foreground">Free to sign up. Free to send invoices. No card required.</p>
             <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
-              <li className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-success" /> No credit card</li>
-              <li className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-success" /> Cancel anytime</li>
+              <li className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-success" /> No subscription</li>
+              <li className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-success" /> Unlimited invoices</li>
               <li className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-success" /> Ready in 60 seconds</li>
             </ul>
           </div>
