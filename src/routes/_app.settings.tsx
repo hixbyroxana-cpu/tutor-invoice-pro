@@ -133,6 +133,21 @@ function SettingsPage() {
           </p>
         </CardHeader>
         <CardContent className="space-y-3">
+          {modeData?.mode === "test" && (
+            <div className="text-sm rounded-md border border-green-200 bg-green-50 text-green-900 p-3">
+              Test mode is on. All onboarding and payments are simulated — no real money moves.
+            </div>
+          )}
+          {modeData?.mode === "live" && (
+            <div className="text-sm rounded-md border border-red-200 bg-red-50 text-red-900 p-3">
+              Live mode is on. Real charges will be made to parent cards.
+            </div>
+          )}
+          {modeData?.mode === "unset" && (
+            <div className="text-sm rounded-md border border-amber-200 bg-amber-50 text-amber-900 p-3">
+              Stripe is not configured yet. Save a Stripe secret key first.
+            </div>
+          )}
           {!stripeConnected && (
             <Button onClick={() => startOnboarding.mutate()} disabled={startOnboarding.isPending}>
               {startOnboarding.isPending ? "Opening Stripe…" : "Connect Stripe"}
