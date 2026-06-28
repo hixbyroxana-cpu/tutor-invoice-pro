@@ -371,6 +371,70 @@ function InvoiceEditPage() {
         </CardContent>
       </Card>
 
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base flex items-center gap-2">
+            <CreditCard className="h-4 w-4" /> Card payment & send to parent
+          </CardTitle>
+          <p className="text-sm text-muted-foreground">
+            Generate a Pay Now link, then email the invoice to the parent. They pay by card; 1% goes to the platform, the rest reaches you.
+          </p>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          {i.status === "paid" && (
+            <Badge variant="secondary" className="gap-1.5">Paid{i.paid_at ? ` on ${new Date(i.paid_at).toLocaleDateString()}` : ""}</Badge>
+          )}
+          {!i.stripe_checkout_url ? (
+            <Button onClick={() => generatePayLink.mutate()} disabled={generatePayLink.isPending}>
+              <CreditCard className="h-4 w-4 mr-2" />
+              {generatePayLink.isPending ? "Generating…" : "Generate Pay Now link"}
+            </Button>
+          ) : (
+            <div className="space-y-3">
+              <div className="flex gap-2 items-center">
+                <Input readOnly value={payUrl} className="font-mono text-xs" />
+                <Button variant="outline" size="icon" onClick={() => { navigator.clipboard.writeText(payUrl); toast.success("Link copied"); }}>
+                  <Copy className="h-4 w-4" />
+                </Button>
+                <Button variant="outline" size="icon" asChild>
+                  <a href={payUrl} target="_blank" rel="noopener noreferrer"><ExternalLink className="h-4 w-4" /></a>
+                </Button>
+              </div>
+              <div className="flex gap-2 flex-wrap">
+                <Button
+                  onClick={() => {
+                    if (!i.client_email) { toast.error("Add the parent's email on this invoice first."); return; }
+                    const subject = encodeURIComponent(`Invoice ${i.invoice_number} from ${(data?.settings as { tutor_name?: string } | null)?.tutor_name || "your tutor"}`);
+                    const body = encodeURIComponent(
+                      `Hi${i.client_parent_name ? ` ${i.client_parent_name}` : ""},\n\n` +
+                      `Please find attached invoice ${i.invoice_number} for ${i.client_name} — total ${fmtMoney(total)}.\n\n` +
+                      `You can pay securely by card here:\n${payUrl}\n\n` +
+                      `Thank you!`
+                    );
+                    window.location.href = `mailto:${i.client_email}?subject=${subject}&body=${body}`;
+                    markSent.mutate();
+                  }}
+                  disabled={!i.client_email}
+                >
+                  <Send className="h-4 w-4 mr-2" />Send to parent
+                </Button>
+                <Button variant="outline" onClick={() => generatePayLink.mutate()} disabled={generatePayLink.isPending}>
+                  <RefreshCw className="h-3.5 w-3.5 mr-1.5" />Regenerate link
+                </Button>
+              </div>
+              {!i.client_email && (
+                <p className="text-xs text-amber-700">Add the parent's email above to enable "Send to parent".</p>
+              )}
+              {i.sent_to_parent_at && (
+                <p className="text-xs text-muted-foreground">Last sent {new Date(i.sent_to_parent_at).toLocaleString()}</p>
+              )}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+
+
 
       {showPreview && (
         <Card>
