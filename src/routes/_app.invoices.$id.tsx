@@ -200,6 +200,29 @@ function InvoiceEditPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const checkoutFn = useServerFn(createInvoiceCheckout);
+  const generatePayLink = useMutation({
+    mutationFn: async () => checkoutFn({ data: { invoiceId: id } }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["invoice", id] });
+      toast.success("Pay Now link ready");
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const markSent = useMutation({
+    mutationFn: async () => {
+      const { error } = await supabase.from("invoices").update({
+        status: "sent",
+        sent_to_parent_at: new Date().toISOString(),
+      }).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ["invoice", id] }); toast.success("Marked as sent"); },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+
 
   async function exportPdf() {
     const i = inv as Record<string, unknown>;
