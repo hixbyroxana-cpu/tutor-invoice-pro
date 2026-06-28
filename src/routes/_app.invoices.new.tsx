@@ -44,7 +44,7 @@ function NewInvoicePage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">New invoice</h1>
-        <p className="text-sm text-muted-foreground mt-1">Generate an invoice in seconds.</p>
+        <p className="text-sm text-muted-foreground mt-1">Generate an invoice in seconds. Your student details are saved, so just pick a student and the lesson dates.</p>
       </div>
 
       {students.length === 0 ? (

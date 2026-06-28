@@ -58,6 +58,9 @@ function Landing() {
               </Link>
             </div>
             <p className="mt-3 text-xs text-muted-foreground">Free to sign up. Free to send invoices. No card required.</p>
+            <p className="mt-3 text-xs text-muted-foreground max-w-xl">
+              Create a free account before sending your first invoice. Once signed up, your tutor and student details are saved — so every invoice after that is just the hourly rate and the tutoring dates.
+            </p>
             <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
               <li className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-success" /> No subscription</li>
               <li className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-success" /> Unlimited invoices</li>

@@ -60,10 +60,10 @@ function FeaturesPage() {
 
         <div className="mt-10 rounded-2xl border border-border bg-secondary/40 p-6 sm:p-8 text-center">
           <h2 className="text-xl sm:text-2xl font-semibold tracking-tight">Try the invoice builder — no account needed</h2>
-          <p className="text-sm text-muted-foreground mt-2">Only sign up when you're ready to download.</p>
+          <p className="text-sm text-muted-foreground mt-2">Create a free account before sending your first invoice.</p>
           <ul className="mt-4 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
             <li className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-success" /> No credit card</li>
-            <li className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-success" /> First invoice free</li>
+            <li className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-success" /> Free forever</li>
           </ul>
           <div className="mt-5">
             <Link to="/try"><Button className="gap-2">Try it free <ArrowRight className="h-4 w-4" /></Button></Link>
