@@ -134,8 +134,11 @@ function SettingsPage() {
         </CardHeader>
         <CardContent className="space-y-3">
           {modeData?.mode === "test" && (
-            <div className="text-sm rounded-md border border-green-200 bg-green-50 text-green-900 p-3">
-              Test mode is on. All onboarding and payments are simulated — no real money moves.
+            <div className="text-sm rounded-md border border-green-200 bg-green-50 text-green-900 p-3 space-y-1">
+              <p className="font-medium">Test mode is on</p>
+              <p>All onboarding and payments are simulated — no real money moves.</p>
+              <p className="text-xs text-muted-foreground">Webhook URL for Stripe test dashboard:</p>
+              <code className="block bg-white/60 rounded px-2 py-1 break-all text-xs">https://tutor-invoice-pro.lovable.app/api/public/webhooks/stripe</code>
             </div>
           )}
           {modeData?.mode === "live" && (
