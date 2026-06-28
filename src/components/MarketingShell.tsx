@@ -37,7 +37,6 @@ export function MarketingShell({ children }: { children: ReactNode }) {
           <FooterCol title="Product" items={[
             { label: "Features", to: "/features" },
             { label: "How it works", to: "/how-it-works" },
-            { label: "Pricing", to: "/pricing" },
             { label: "Try free", to: "/try" },
           ]} />
           <FooterCol title="Account" items={[
