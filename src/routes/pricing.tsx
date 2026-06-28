@@ -37,8 +37,6 @@ const plans: Plan[] = [
     to: "/try",
     features: [
       "Your first invoice free",
-      "Up to 3 students",
-      "Manual invoice creation",
       "PDF download",
       "Live invoice preview",
     ],
