@@ -185,3 +185,20 @@ export const createInvoiceCheckout = createServerFn({ method: "POST" })
 
     return { url: session.url, sessionId: session.id };
   });
+
+/**
+ * Expose the configured Stripe environment so the UI can show Test/Live mode.
+ * Does not reveal the secret key.
+ */
+export const getStripeMode = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async () => {
+    const key = process.env.STRIPE_SECRET_KEY;
+    const webhook = process.env.STRIPE_WEBHOOK_SECRET;
+    let mode: "test" | "live" | "unset" = "unset";
+    if (key) {
+      if (key.startsWith("sk_test_")) mode = "test";
+      else if (key.startsWith("sk_live_")) mode = "live";
+    }
+    return { mode, webhookConfigured: Boolean(webhook) };
+  });
