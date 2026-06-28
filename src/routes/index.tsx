@@ -5,37 +5,23 @@ import {
   Sparkles, Users, FileText, PoundSterling, Clock, ShieldCheck,
   Mic, CheckCircle2, ArrowRight,
 } from "lucide-react";
+import { MarketingShell } from "@/components/MarketingShell";
 
 export const Route = createFileRoute("/")({
   component: Landing,
   head: () => ({
     meta: [
       { title: "TutorBook — Invoice app for tutors. First invoice free." },
-      { name: "description", content: "TutorBook is the simple invoice app for tutors. Manage students, track earnings, and send professional PDF invoices in seconds. Sign up and create your first invoice free." },
+      { name: "description", content: "TutorBook is the simple invoice app for tutors. Manage students, track earnings, and send professional PDF invoices in seconds. Try free — no signup needed." },
       { property: "og:title", content: "TutorBook — Invoice app for tutors" },
       { property: "og:description", content: "The simple invoice app for tutors. Manage students, track earnings and send beautiful invoices. Your first invoice is on us." },
-
     ],
   }),
 });
 
 function Landing() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      {/* Nav */}
-      <header className="border-b border-border/60 bg-background/80 backdrop-blur sticky top-0 z-10">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="h-7 w-7 rounded-md bg-primary text-primary-foreground grid place-items-center font-semibold">T</div>
-            <span className="font-semibold tracking-tight">TutorBook</span>
-          </div>
-          <nav className="flex items-center gap-2">
-            <Link to="/login"><Button variant="ghost" size="sm">Sign in</Button></Link>
-            <Link to="/login"><Button size="sm">Get started</Button></Link>
-          </nav>
-        </div>
-      </header>
-
+    <MarketingShell>
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div
@@ -64,11 +50,11 @@ function Landing() {
             <div className="mt-7 flex flex-wrap items-center gap-3">
               <Link to="/try">
                 <Button size="lg" className="gap-2">
-                  Create your free invoice <ArrowRight className="h-4 w-4" />
+                  Try it free <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
-              <Link to="/login">
-                <Button size="lg" variant="outline">Sign in</Button>
+              <Link to="/how-it-works">
+                <Button size="lg" variant="outline">See how it works</Button>
               </Link>
             </div>
             <p className="mt-3 text-xs text-muted-foreground">No signup needed to try — only when you download.</p>
@@ -82,7 +68,13 @@ function Landing() {
       </section>
 
       {/* Features */}
-      <section className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pb-20">
+      <section className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pb-16">
+        <div className="mb-8">
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Everything you need, nothing you don't</h2>
+          <p className="text-muted-foreground mt-2 max-w-2xl">
+            TutorBook is purpose-built for self-employed tutors — not generic accounting software.
+          </p>
+        </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {[
             { icon: Users, title: "Student CRM", body: "Keep rates, contacts and notes for every student in one tidy place." },
@@ -103,10 +95,68 @@ function Landing() {
             </Card>
           ))}
         </div>
+        <div className="mt-6">
+          <Link to="/features" className="text-sm text-primary hover:underline inline-flex items-center gap-1">
+            See all features <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section className="bg-secondary/40 border-y border-border/60">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-16">
+          <div className="mb-8">
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">From lesson to paid in three steps</h2>
+          </div>
+          <div className="grid gap-4 md:grid-cols-3">
+            {[
+              { n: "1", title: "Add your students", body: "Save names, rates, and parent contact details once." },
+              { n: "2", title: "Log lessons", body: "Type or dictate dates — totals calculate automatically." },
+              { n: "3", title: "Send the PDF", body: "Email a clean branded invoice and track when it's paid." },
+            ].map((s) => (
+              <div key={s.n} className="rounded-xl border border-border bg-card p-5">
+                <div className="h-8 w-8 rounded-full bg-primary text-primary-foreground grid place-items-center font-semibold text-sm">{s.n}</div>
+                <h3 className="font-semibold mt-3">{s.title}</h3>
+                <p className="text-sm text-muted-foreground mt-1">{s.body}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-6">
+            <Link to="/how-it-works" className="text-sm text-primary hover:underline inline-flex items-center gap-1">
+              Walk through it in detail <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing teaser */}
+      <section className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid md:grid-cols-2 gap-6 items-center">
+          <div>
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Simple, tutor-friendly pricing</h2>
+            <p className="text-muted-foreground mt-2">
+              Start free, upgrade when your tutoring grows. No per-invoice fees, no hidden charges.
+            </p>
+            <div className="mt-5">
+              <Link to="/pricing"><Button variant="outline" className="gap-2">View pricing <ArrowRight className="h-4 w-4" /></Button></Link>
+            </div>
+          </div>
+          <Card className="border-border/60">
+            <CardContent className="p-6">
+              <div className="text-sm text-muted-foreground">Starter</div>
+              <div className="mt-1 text-3xl font-semibold">£0<span className="text-base font-normal text-muted-foreground">/mo</span></div>
+              <ul className="mt-4 space-y-2 text-sm">
+                <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-success mt-0.5" /> Your first invoice free</li>
+                <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-success mt-0.5" /> Student database</li>
+                <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-success mt-0.5" /> Live PDF preview</li>
+              </ul>
+            </CardContent>
+          </Card>
+        </div>
       </section>
 
       {/* Offer */}
-      <section className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pb-24">
+      <section className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pb-20">
         <div className="rounded-2xl border border-border bg-gradient-to-br from-card to-secondary p-8 sm:p-12 text-center">
           <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 text-primary px-3 py-1 text-xs font-semibold">
             <Sparkles className="h-3.5 w-3.5" /> Launch offer
@@ -115,25 +165,17 @@ function Landing() {
             Your first invoice is free.
           </h2>
           <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
-            Sign up, add a student, and send your first professional invoice — completely free,
-            no payment details required.
+            Try TutorBook now — no signup needed. Only create an account when you're ready to download the PDF.
           </p>
           <div className="mt-6">
             <Link to="/try">
               <Button size="lg" className="gap-2">
-                Claim my free invoice <ArrowRight className="h-4 w-4" />
+                Try it free <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
           </div>
         </div>
       </section>
-
-      <footer className="border-t border-border/60">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-6 flex flex-wrap items-center justify-between gap-2 text-xs text-muted-foreground">
-          <p>© {new Date().getFullYear()} TutorBook. Made for tutors.</p>
-          <Link to="/login" className="hover:text-foreground">Sign in</Link>
-        </div>
-      </footer>
-    </div>
+    </MarketingShell>
   );
 }
