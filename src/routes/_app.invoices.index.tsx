@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Search, FilePlus, Download, Copy, CheckCircle2, Trash2 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { fmtDate, fmtMoney } from "@/lib/format";
-import { StatusBadge } from "./_app.index";
+import { StatusBadge } from "./_app.dashboard";
 import { toast } from "sonner";
 import { generateInvoicePdf } from "@/lib/pdf";
 import { createInvoice } from "@/lib/invoiceService";
