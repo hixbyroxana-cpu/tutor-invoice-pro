@@ -238,6 +238,8 @@ function InvoiceEditPage() {
 
   const payOrigin = typeof window !== "undefined" ? window.location.origin : "";
   const payUrl = `${payOrigin}/pay/${id}`;
+
+  return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3 min-w-0">
