@@ -10,7 +10,7 @@ export const Route = createFileRoute("/_app")({
 });
 
 const navItems = [
-  { to: "/" as const, label: "Dashboard", icon: LayoutDashboard, exact: true },
+  { to: "/dashboard" as const, label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/students" as const, label: "Students", icon: Users, exact: false },
   { to: "/invoices/new" as const, label: "New Invoice", icon: FilePlus, exact: false },
   { to: "/invoices" as const, label: "Invoices", icon: Receipt, exact: true },
@@ -35,7 +35,7 @@ function AppLayout() {
   }, []);
 
   useEffect(() => {
-    if (status === "out") navigate({ to: "/login" });
+    if (status === "out") navigate({ to: "/login" as string });
   }, [status, navigate]);
 
   if (status !== "in") {

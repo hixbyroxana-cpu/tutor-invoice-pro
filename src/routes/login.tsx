@@ -22,10 +22,10 @@ function LoginPage() {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: "/" });
+      if (data.session) navigate({ to: "/dashboard" });
     });
     const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
-      if (session) navigate({ to: "/" });
+      if (session) navigate({ to: "/dashboard" });
     });
     return () => sub.subscription.unsubscribe();
   }, [navigate]);
@@ -83,7 +83,7 @@ function LoginPage() {
             </TabsContent>
           </Tabs>
           <p className="text-xs text-muted-foreground mt-4 text-center">
-            <Link to="/" className="underline">Back to app</Link>
+            <Link to="/" className="underline">Back to home</Link>
           </p>
         </CardContent>
       </Card>
