@@ -222,15 +222,25 @@ function TryPage() {
         </Link>
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">Try TutorBook — build a free invoice</h1>
+            <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">Try TutorBook — build your first invoice</h1>
             <p className="text-sm text-muted-foreground mt-1">
-              Fill in the details and preview your invoice live. No account needed until you download.
+              Fill in the details and preview your invoice live. Create a free account before sending it.
             </p>
           </div>
           <Button onClick={handleDownload} className="gap-2">
             {authed ? <Download className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
             {authed ? "Download PDF" : "Sign up & download"}
           </Button>
+        </div>
+
+        <div className="rounded-lg border bg-accent/40 p-4 text-sm flex items-start gap-3 mt-4">
+          <Info className="h-4 w-4 mt-0.5 text-primary shrink-0" />
+          <div>
+            <p className="font-medium">Create an account before sending your first invoice.</p>
+            <p className="text-muted-foreground text-xs mt-0.5">
+              When you sign up, your tutor and student details are saved securely. After that, every invoice is just: pick the hourly rate and add the tutoring dates.
+            </p>
+          </div>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-6 mt-6">
