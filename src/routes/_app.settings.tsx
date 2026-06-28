@@ -1,13 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { CreditCard, CheckCircle2, AlertCircle, ExternalLink, RefreshCw } from "lucide-react";
+import { createConnectOnboardingLink, refreshStripeStatus } from "@/lib/stripe.functions";
 
 export const Route = createFileRoute("/_app/settings")({
   component: SettingsPage,
@@ -26,6 +30,9 @@ type Settings = {
   account_number: string | null;
   payment_notes: string | null;
   invoice_prefix: string;
+  stripe_account_id: string | null;
+  stripe_charges_enabled: boolean;
+  stripe_onboarded_at: string | null;
 };
 
 function SettingsPage() {
@@ -41,6 +48,19 @@ function SettingsPage() {
 
   const [form, setForm] = useState<Partial<Settings>>({});
   useEffect(() => { if (data) setForm(data); }, [data]);
+
+  // Auto-refresh Stripe status when returning from onboarding
+  const refreshStatus = useServerFn(refreshStripeStatus);
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    if (url.searchParams.get("stripe") === "return" || url.searchParams.get("stripe") === "refresh") {
+      refreshStatus().then(() => {
+        qc.invalidateQueries({ queryKey: ["settings"] });
+        url.searchParams.delete("stripe");
+        window.history.replaceState({}, "", url.pathname + url.search);
+      }).catch(() => {/* ignore */});
+    }
+  }, [refreshStatus, qc]);
 
   const save = useMutation({
     mutationFn: async () => {
@@ -68,12 +88,76 @@ function SettingsPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const onboard = useServerFn(createConnectOnboardingLink);
+  const startOnboarding = useMutation({
+    mutationFn: async () => onboard(),
+    onSuccess: (res) => { window.location.href = res.url; },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const refresh = useMutation({
+    mutationFn: async () => refreshStatus(),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ["settings"] }); toast.success("Stripe status refreshed"); },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const stripeConnected = Boolean(data?.stripe_account_id);
+  const stripeReady = Boolean(data?.stripe_charges_enabled);
+
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Settings</h1>
         <p className="text-sm text-muted-foreground mt-1">Your details appear automatically on every invoice.</p>
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base flex items-center gap-2">
+            <CreditCard className="h-4 w-4" /> Card payments (Stripe)
+          </CardTitle>
+          <p className="text-sm text-muted-foreground">
+            Connect Stripe so parents can pay invoices by card. A 1% platform fee is applied automatically; the rest goes straight to your bank.
+          </p>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          {!stripeConnected && (
+            <Button onClick={() => startOnboarding.mutate()} disabled={startOnboarding.isPending}>
+              {startOnboarding.isPending ? "Opening Stripe…" : "Connect Stripe"}
+              <ExternalLink className="h-4 w-4 ml-2" />
+            </Button>
+          )}
+          {stripeConnected && stripeReady && (
+            <div className="flex flex-wrap items-center gap-3">
+              <Badge variant="secondary" className="gap-1.5">
+                <CheckCircle2 className="h-3.5 w-3.5 text-green-600" /> Connected & ready
+              </Badge>
+              <Button variant="outline" size="sm" onClick={() => refresh.mutate()} disabled={refresh.isPending}>
+                <RefreshCw className="h-3.5 w-3.5 mr-1.5" /> Refresh status
+              </Button>
+              <Button variant="outline" size="sm" onClick={() => startOnboarding.mutate()} disabled={startOnboarding.isPending}>
+                Manage on Stripe <ExternalLink className="h-3.5 w-3.5 ml-1.5" />
+              </Button>
+            </div>
+          )}
+          {stripeConnected && !stripeReady && (
+            <div className="space-y-3">
+              <div className="flex items-start gap-2 text-sm rounded-md border border-amber-200 bg-amber-50 text-amber-900 p-3">
+                <AlertCircle className="h-4 w-4 mt-0.5" />
+                <span>Onboarding not complete. Finish providing your details on Stripe to start accepting payments.</span>
+              </div>
+              <div className="flex gap-2">
+                <Button onClick={() => startOnboarding.mutate()} disabled={startOnboarding.isPending}>
+                  Continue onboarding <ExternalLink className="h-4 w-4 ml-2" />
+                </Button>
+                <Button variant="outline" onClick={() => refresh.mutate()} disabled={refresh.isPending}>
+                  <RefreshCw className="h-3.5 w-3.5 mr-1.5" /> Refresh status
+                </Button>
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader><CardTitle className="text-base">Business details</CardTitle></CardHeader>
@@ -95,9 +179,9 @@ function SettingsPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Payment methods</CardTitle>
+          <CardTitle className="text-base">Bank transfer details</CardTitle>
           <p className="text-sm text-muted-foreground">
-            Add the ways clients can pay you. These details appear on every invoice.
+            Shown on the invoice as an alternative to card payment.
           </p>
         </CardHeader>
         <CardContent className="grid gap-3">
