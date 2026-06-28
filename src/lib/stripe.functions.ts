@@ -2,14 +2,11 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
-function originFromRequest(): string {
+async function originFromRequest(): Promise<string> {
   // Build a return URL from the incoming request headers.
   // Falls back to the published URL when not in a request.
   try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { getRequestHeader } = require("@tanstack/react-start/server") as {
-      getRequestHeader: (name: string) => string | undefined;
-    };
+    const { getRequestHeader } = await import("@tanstack/react-start/server");
     const proto = getRequestHeader("x-forwarded-proto") || "https";
     const host = getRequestHeader("x-forwarded-host") || getRequestHeader("host");
     if (host) return `${proto}://${host}`;
@@ -18,6 +15,7 @@ function originFromRequest(): string {
   }
   return "https://tutor-invoice-pro.lovable.app";
 }
+
 
 /**
  * Create (or reuse) a Stripe Connect Express account for the tutor and return an onboarding link.
