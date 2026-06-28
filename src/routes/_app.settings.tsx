@@ -51,6 +51,11 @@ function SettingsPage() {
 
   // Auto-refresh Stripe status when returning from onboarding
   const refreshStatus = useServerFn(refreshStripeStatus);
+  const stripeMode = useServerFn(getStripeMode);
+  const { data: modeData } = useQuery({
+    queryKey: ["stripe-mode"],
+    queryFn: async () => stripeMode(),
+  });
   useEffect(() => {
     const url = new URL(window.location.href);
     if (url.searchParams.get("stripe") === "return" || url.searchParams.get("stripe") === "refresh") {
