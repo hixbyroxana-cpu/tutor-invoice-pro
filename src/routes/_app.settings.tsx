@@ -118,9 +118,16 @@ function SettingsPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base flex items-center gap-2">
-            <CreditCard className="h-4 w-4" /> Card payments (Stripe)
-          </CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-base flex items-center gap-2">
+              <CreditCard className="h-4 w-4" /> Card payments (Stripe)
+            </CardTitle>
+            {modeData && (
+              <Badge variant={modeData.mode === "test" ? "secondary" : modeData.mode === "live" ? "destructive" : "outline"}>
+                {modeData.mode === "test" ? "Test mode" : modeData.mode === "live" ? "Live mode" : "Not configured"}
+              </Badge>
+            )}
+          </div>
           <p className="text-sm text-muted-foreground">
             Connect Stripe so parents can pay invoices by card. A 1% platform fee is applied automatically; the rest goes straight to your bank.
           </p>
