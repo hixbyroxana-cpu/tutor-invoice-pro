@@ -251,20 +251,40 @@ function InvoiceEditPage() {
             <p className="text-xs text-muted-foreground font-mono">{i.invoice_number}</p>
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <Button variant="outline" onClick={() => setShowPreview(s => !s)}>
             {showPreview ? <><EyeOff className="h-4 w-4 mr-2" />Hide preview</> : <><Eye className="h-4 w-4 mr-2" />Show preview</>}
           </Button>
-          <Button variant="outline" onClick={exportPdf}><Download className="h-4 w-4 mr-2" />Export PDF</Button>
-          <Button onClick={() => save.mutate()} disabled={save.isPending}><Save className="h-4 w-4 mr-2" />Save</Button>
+          <Button variant="outline" onClick={exportPdf}><Download className="h-4 w-4 mr-2" />{locked ? "Re-download PDF" : "Export PDF"}</Button>
+          {locked && (
+            <Button variant="outline" onClick={() => duplicate.mutate()} disabled={duplicate.isPending}>
+              <Copy className="h-4 w-4 mr-2" />Duplicate to edit
+            </Button>
+          )}
+          <Button onClick={() => save.mutate()} disabled={save.isPending}>
+            <Save className="h-4 w-4 mr-2" />{locked ? "Save status" : "Save"}
+          </Button>
         </div>
       </div>
+
+      {locked && (
+        <div className="flex items-start gap-3 rounded-md border border-amber-300/60 bg-amber-50 dark:bg-amber-950/30 p-3 text-sm">
+          <Lock className="h-4 w-4 mt-0.5 text-amber-700 dark:text-amber-300 shrink-0" />
+          <div className="flex-1">
+            <p className="font-medium text-amber-900 dark:text-amber-100">Invoice locked</p>
+            <p className="text-amber-800/90 dark:text-amber-200/90 text-xs mt-0.5">
+              On the free plan, an invoice becomes read-only after the PDF is exported. You can still change its status (Sent / Paid / Overdue) or duplicate it as a new editable draft.{" "}
+              <Link to="/pricing" className="underline">Upgrade</Link> for unlimited edits after export.
+            </p>
+          </div>
+        </div>
+      )}
 
       <Card>
         <CardHeader><CardTitle className="text-base">Invoice details</CardTitle></CardHeader>
         <CardContent className="grid gap-3">
           <div className="grid sm:grid-cols-2 gap-3">
-            <Field label="Invoice title"><Input value={i.invoice_title} onChange={(e) => setField("invoice_title", e.target.value)} /></Field>
+            <Field label="Invoice title"><Input disabled={locked} value={i.invoice_title} onChange={(e) => setField("invoice_title", e.target.value)} /></Field>
             <Field label="Status">
               <Select value={i.status} onValueChange={(v) => setField("status", v)}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
@@ -278,9 +298,9 @@ function InvoiceEditPage() {
             </Field>
           </div>
           <div className="grid sm:grid-cols-3 gap-3">
-            <Field label="Invoice date"><Input type="date" value={i.invoice_date} onChange={(e) => setField("invoice_date", e.target.value)} /></Field>
-            <Field label="Payment deadline"><Input type="date" value={i.payment_deadline ?? ""} onChange={(e) => setField("payment_deadline", e.target.value)} /></Field>
-            <Field label="Default hourly rate"><Input type="number" step="0.01" value={i.hourly_rate} onChange={(e) => setField("hourly_rate", Number(e.target.value))} /></Field>
+            <Field label="Invoice date"><Input disabled={locked} type="date" value={i.invoice_date} onChange={(e) => setField("invoice_date", e.target.value)} /></Field>
+            <Field label="Payment deadline"><Input disabled={locked} type="date" value={i.payment_deadline ?? ""} onChange={(e) => setField("payment_deadline", e.target.value)} /></Field>
+            <Field label="Default hourly rate"><Input disabled={locked} type="number" step="0.01" value={i.hourly_rate} onChange={(e) => setField("hourly_rate", Number(e.target.value))} /></Field>
           </div>
         </CardContent>
       </Card>
@@ -289,43 +309,43 @@ function InvoiceEditPage() {
         <CardHeader><CardTitle className="text-base">Client (this invoice only)</CardTitle></CardHeader>
         <CardContent className="grid gap-3">
           <div className="grid sm:grid-cols-2 gap-3">
-            <Field label="Student / client name"><Input value={i.client_name} onChange={(e) => setField("client_name", e.target.value)} /></Field>
-            <Field label="Parent name"><Input value={i.client_parent_name ?? ""} onChange={(e) => setField("client_parent_name", e.target.value)} /></Field>
+            <Field label="Student / client name"><Input disabled={locked} value={i.client_name} onChange={(e) => setField("client_name", e.target.value)} /></Field>
+            <Field label="Parent name"><Input disabled={locked} value={i.client_parent_name ?? ""} onChange={(e) => setField("client_parent_name", e.target.value)} /></Field>
           </div>
           <div className="grid sm:grid-cols-2 gap-3">
-            <Field label="Email"><Input value={i.client_email ?? ""} onChange={(e) => setField("client_email", e.target.value)} /></Field>
-            <Field label="Phone"><Input value={i.client_phone ?? ""} onChange={(e) => setField("client_phone", e.target.value)} /></Field>
+            <Field label="Email"><Input disabled={locked} value={i.client_email ?? ""} onChange={(e) => setField("client_email", e.target.value)} /></Field>
+            <Field label="Phone"><Input disabled={locked} value={i.client_phone ?? ""} onChange={(e) => setField("client_phone", e.target.value)} /></Field>
           </div>
-          <Field label="Billing address"><Textarea rows={2} value={i.client_address ?? ""} onChange={(e) => setField("client_address", e.target.value)} /></Field>
+          <Field label="Billing address"><Textarea disabled={locked} rows={2} value={i.client_address ?? ""} onChange={(e) => setField("client_address", e.target.value)} /></Field>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-base">Lessons</CardTitle>
-          <Button size="sm" variant="outline" onClick={addLesson}><Plus className="h-3.5 w-3.5 mr-1" />Add lesson</Button>
+          {!locked && <Button size="sm" variant="outline" onClick={addLesson}><Plus className="h-3.5 w-3.5 mr-1" />Add lesson</Button>}
         </CardHeader>
         <CardContent className="space-y-2">
           {items.map((it, idx) => (
             <div key={idx} className="grid grid-cols-12 gap-2 items-end p-3 rounded-md border bg-card">
               <div className="col-span-12 sm:col-span-3">
                 <Label className="text-xs">Date</Label>
-                <Input type="date" value={it.lesson_date} onChange={(e) => updItem(idx, { lesson_date: e.target.value })} />
+                <Input disabled={locked} type="date" value={it.lesson_date} onChange={(e) => updItem(idx, { lesson_date: e.target.value })} />
               </div>
               <div className="col-span-6 sm:col-span-4">
                 <Label className="text-xs">Description</Label>
-                <Input value={it.description} onChange={(e) => updItem(idx, { description: e.target.value })} />
+                <Input disabled={locked} value={it.description} onChange={(e) => updItem(idx, { description: e.target.value })} />
               </div>
               <div className="col-span-3 sm:col-span-2">
                 <Label className="text-xs">Hours</Label>
-                <Input type="number" step="0.25" value={it.duration} onChange={(e) => updItem(idx, { duration: Number(e.target.value) })} />
+                <Input disabled={locked} type="number" step="0.25" value={it.duration} onChange={(e) => updItem(idx, { duration: Number(e.target.value) })} />
               </div>
               <div className="col-span-3 sm:col-span-2">
                 <Label className="text-xs">Rate</Label>
-                <Input type="number" step="0.01" value={it.hourly_rate} onChange={(e) => updItem(idx, { hourly_rate: Number(e.target.value) })} />
+                <Input disabled={locked} type="number" step="0.01" value={it.hourly_rate} onChange={(e) => updItem(idx, { hourly_rate: Number(e.target.value) })} />
               </div>
               <div className="col-span-12 sm:col-span-1 flex justify-end">
-                <Button size="icon" variant="ghost" onClick={() => removeItem(idx)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                {!locked && <Button size="icon" variant="ghost" onClick={() => removeItem(idx)}><Trash2 className="h-4 w-4 text-destructive" /></Button>}
               </div>
             </div>
           ))}
@@ -338,9 +358,10 @@ function InvoiceEditPage() {
       <Card>
         <CardHeader><CardTitle className="text-base">Notes</CardTitle></CardHeader>
         <CardContent>
-          <Textarea rows={3} value={i.notes ?? ""} onChange={(e) => setField("notes", e.target.value)} />
+          <Textarea disabled={locked} rows={3} value={i.notes ?? ""} onChange={(e) => setField("notes", e.target.value)} />
         </CardContent>
       </Card>
+
 
       {showPreview && (
         <Card>
