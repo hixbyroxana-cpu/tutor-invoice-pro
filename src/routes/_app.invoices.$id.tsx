@@ -399,7 +399,7 @@ function InvoiceEditPage() {
 
       <div className="flex justify-end gap-2 sticky bottom-4">
         <Button variant="outline" onClick={() => navigate({ to: "/invoices" })}>Back</Button>
-        <Button onClick={() => save.mutate()} disabled={save.isPending}>Save changes</Button>
+        <Button onClick={() => save.mutate()} disabled={save.isPending}>{locked ? "Save status" : "Save changes"}</Button>
       </div>
     </div>
   );
