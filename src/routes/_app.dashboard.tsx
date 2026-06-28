@@ -8,7 +8,7 @@ import { fmtMoney, fmtDate } from "@/lib/format";
 import { Badge } from "@/components/ui/badge";
 import { EarningsPanel } from "@/components/EarningsPanel";
 
-export const Route = createFileRoute("/_app/")({
+export const Route = createFileRoute("/_app/dashboard")({
   component: Dashboard,
 });
 
