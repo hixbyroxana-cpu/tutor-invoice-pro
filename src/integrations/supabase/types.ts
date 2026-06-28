@@ -145,6 +145,7 @@ export type Database = {
           invoice_title: string
           notes: string | null
           payment_deadline: string | null
+          pdf_exported_at: string | null
           status: string
           student_id: string | null
           total: number
@@ -165,6 +166,7 @@ export type Database = {
           invoice_title: string
           notes?: string | null
           payment_deadline?: string | null
+          pdf_exported_at?: string | null
           status?: string
           student_id?: string | null
           total?: number
@@ -185,6 +187,7 @@ export type Database = {
           invoice_title?: string
           notes?: string | null
           payment_deadline?: string | null
+          pdf_exported_at?: string | null
           status?: string
           student_id?: string | null
           total?: number
