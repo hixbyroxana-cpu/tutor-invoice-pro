@@ -10,10 +10,11 @@ export const Route = createFileRoute("/")({
   component: Landing,
   head: () => ({
     meta: [
-      { title: "TutorBook — Tutoring invoices in seconds. First invoice free." },
-      { name: "description", content: "TutorBook helps private tutors manage students, track earnings and send professional invoices in seconds. Sign up and create your first invoice free." },
-      { property: "og:title", content: "TutorBook — Tutoring invoices in seconds" },
-      { property: "og:description", content: "Manage students, track earnings and send beautiful invoices. Your first invoice is on us." },
+      { title: "TutorBook — Invoice app for tutors. First invoice free." },
+      { name: "description", content: "TutorBook is the simple invoice app for tutors. Manage students, track earnings, and send professional PDF invoices in seconds. Sign up and create your first invoice free." },
+      { property: "og:title", content: "TutorBook — Invoice app for tutors" },
+      { property: "og:description", content: "The simple invoice app for tutors. Manage students, track earnings and send beautiful invoices. Your first invoice is on us." },
+
     ],
   }),
 });
