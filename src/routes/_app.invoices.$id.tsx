@@ -66,7 +66,7 @@ function InvoiceEditPage() {
 
   if (isLoading || !inv) return <p className="text-sm text-muted-foreground">Loading…</p>;
 
-  const locked = Boolean((inv as { pdf_exported_at?: string | null }).pdf_exported_at);
+  const locked = false;
   const total = items.reduce((s, it) => s + Number(it.duration) * Number(it.hourly_rate), 0);
 
   function setField<K extends string>(field: K, value: unknown) {
