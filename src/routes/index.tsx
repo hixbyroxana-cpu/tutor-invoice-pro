@@ -62,7 +62,7 @@ function Landing() {
             </p>
 
             <div className="mt-7 flex flex-wrap items-center gap-3">
-              <Link to="/login">
+              <Link to="/try">
                 <Button size="lg" className="gap-2">
                   Create your free invoice <ArrowRight className="h-4 w-4" />
                 </Button>
@@ -71,6 +71,7 @@ function Landing() {
                 <Button size="lg" variant="outline">Sign in</Button>
               </Link>
             </div>
+            <p className="mt-3 text-xs text-muted-foreground">No signup needed to try — only when you download.</p>
             <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
               <li className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-success" /> No credit card</li>
               <li className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-success" /> Cancel anytime</li>
@@ -118,7 +119,7 @@ function Landing() {
             no payment details required.
           </p>
           <div className="mt-6">
-            <Link to="/login">
+            <Link to="/try">
               <Button size="lg" className="gap-2">
                 Claim my free invoice <ArrowRight className="h-4 w-4" />
               </Button>
