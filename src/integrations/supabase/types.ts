@@ -27,6 +27,9 @@ export type Database = {
           payment_notes: string | null
           phone: string | null
           sort_code: string | null
+          stripe_account_id: string | null
+          stripe_charges_enabled: boolean
+          stripe_onboarded_at: string | null
           tutor_name: string | null
           updated_at: string
           user_id: string
@@ -43,6 +46,9 @@ export type Database = {
           payment_notes?: string | null
           phone?: string | null
           sort_code?: string | null
+          stripe_account_id?: string | null
+          stripe_charges_enabled?: boolean
+          stripe_onboarded_at?: string | null
           tutor_name?: string | null
           updated_at?: string
           user_id: string
@@ -59,6 +65,9 @@ export type Database = {
           payment_notes?: string | null
           phone?: string | null
           sort_code?: string | null
+          stripe_account_id?: string | null
+          stripe_charges_enabled?: boolean
+          stripe_onboarded_at?: string | null
           tutor_name?: string | null
           updated_at?: string
           user_id?: string
@@ -144,9 +153,13 @@ export type Database = {
           invoice_number: string
           invoice_title: string
           notes: string | null
+          paid_at: string | null
           payment_deadline: string | null
           pdf_exported_at: string | null
+          sent_to_parent_at: string | null
           status: string
+          stripe_checkout_url: string | null
+          stripe_session_id: string | null
           student_id: string | null
           total: number
           updated_at: string
@@ -165,9 +178,13 @@ export type Database = {
           invoice_number: string
           invoice_title: string
           notes?: string | null
+          paid_at?: string | null
           payment_deadline?: string | null
           pdf_exported_at?: string | null
+          sent_to_parent_at?: string | null
           status?: string
+          stripe_checkout_url?: string | null
+          stripe_session_id?: string | null
           student_id?: string | null
           total?: number
           updated_at?: string
@@ -186,9 +203,13 @@ export type Database = {
           invoice_number?: string
           invoice_title?: string
           notes?: string | null
+          paid_at?: string | null
           payment_deadline?: string | null
           pdf_exported_at?: string | null
+          sent_to_parent_at?: string | null
           status?: string
+          stripe_checkout_url?: string | null
+          stripe_session_id?: string | null
           student_id?: string | null
           total?: number
           updated_at?: string
