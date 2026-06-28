@@ -267,18 +267,6 @@ function InvoiceEditPage() {
         </div>
       </div>
 
-      {locked && (
-        <div className="flex items-start gap-3 rounded-md border border-amber-300/60 bg-amber-50 dark:bg-amber-950/30 p-3 text-sm">
-          <Lock className="h-4 w-4 mt-0.5 text-amber-700 dark:text-amber-300 shrink-0" />
-          <div className="flex-1">
-            <p className="font-medium text-amber-900 dark:text-amber-100">Invoice locked</p>
-            <p className="text-amber-800/90 dark:text-amber-200/90 text-xs mt-0.5">
-              On the free plan, an invoice becomes read-only after the PDF is exported. You can still change its status (Sent / Paid / Overdue) or duplicate it as a new editable draft.{" "}
-              <Link to="/pricing" className="underline">Upgrade</Link> for unlimited edits after export.
-            </p>
-          </div>
-        </div>
-      )}
 
       <Card>
         <CardHeader><CardTitle className="text-base">Invoice details</CardTitle></CardHeader>
