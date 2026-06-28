@@ -106,10 +106,7 @@ export function InvoicePreview({
           {s.account_holder && <div>Account holder: {s.account_holder}</div>}
           {s.sort_code && <div>Sort code / routing number: {s.sort_code}</div>}
           {s.account_number && <div>Account number / IBAN: {s.account_number}</div>}
-          {s.payment_notes?.split("\n").filter(Boolean).map((line, i) => (
-            <div key={i}>{line}</div>
-          ))}
-          {!s.bank_name && !s.account_holder && !s.sort_code && !s.account_number && !s.payment_notes && (
+          {!s.bank_name && !s.account_holder && !s.sort_code && !s.account_number && (
             <div className="italic text-slate-400">(Add payment methods in Settings)</div>
           )}
         </div>

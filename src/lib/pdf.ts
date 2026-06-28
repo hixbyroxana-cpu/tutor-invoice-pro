@@ -12,7 +12,6 @@ export type Settings = {
   account_holder: string | null;
   sort_code: string | null;
   account_number: string | null;
-  payment_notes: string | null;
 };
 
 export type InvoiceForPdf = {
@@ -163,9 +162,6 @@ export function generateInvoicePdf(invoice: InvoiceForPdf, settings: Settings) {
   if (settings.account_holder) pay.push(`Account holder: ${settings.account_holder}`);
   if (settings.sort_code) pay.push(`Sort code / routing number: ${settings.sort_code}`);
   if (settings.account_number) pay.push(`Account number / IBAN: ${settings.account_number}`);
-  if (settings.payment_notes) {
-    pay.push(...settings.payment_notes.split("\n").filter(Boolean));
-  }
   if (pay.length === 0) pay.push("(Add payment methods in Settings)");
   pay.forEach((l, i) => doc.text(l, margin, y + i * 12));
   y += pay.length * 12 + 18;
