@@ -198,7 +198,7 @@ function InvoiceEditPage() {
   });
 
 
-  function exportPdf() {
+  async function exportPdf() {
     const i = inv as Record<string, unknown>;
     generateInvoicePdf({
       invoice_number: String(i.invoice_number),
@@ -220,7 +220,19 @@ function InvoiceEditPage() {
         amount: +(Number(it.duration) * Number(it.hourly_rate)).toFixed(2),
       })),
     }, (data?.settings ?? {}) as Parameters<typeof generateInvoicePdf>[1]);
+
+    if (!locked) {
+      const stamp = new Date().toISOString();
+      const { error } = await supabase.from("invoices").update({ pdf_exported_at: stamp }).eq("id", id);
+      if (!error) {
+        setInv((p) => p ? { ...p, pdf_exported_at: stamp } : p);
+        qc.invalidateQueries({ queryKey: ["invoice", id] });
+        qc.invalidateQueries({ queryKey: ["invoices"] });
+        toast.message("Invoice locked", { description: "On the free plan, invoices become read-only after the PDF is exported. Duplicate it to make changes." });
+      }
+    }
   }
+
 
   const i = inv as {
     invoice_number: string; invoice_title: string; status: string; invoice_date: string;
