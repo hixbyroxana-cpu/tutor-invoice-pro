@@ -60,7 +60,7 @@ export const createConnectOnboardingLink = createServerFn({ method: "POST" })
       if (uErr) throw new Error(uErr.message);
     }
 
-    const origin = originFromRequest();
+    const origin = await originFromRequest();
     const link = await stripe.accountLinks.create({
       account: accountId,
       refresh_url: `${origin}/settings?stripe=refresh`,
