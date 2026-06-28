@@ -10,10 +10,11 @@ export const Route = createFileRoute("/")({
   component: Landing,
   head: () => ({
     meta: [
-      { title: "TutorBook — Tutoring invoices in seconds. First invoice free." },
-      { name: "description", content: "TutorBook helps private tutors manage students, track earnings and send professional invoices in seconds. Sign up and create your first invoice free." },
-      { property: "og:title", content: "TutorBook — Tutoring invoices in seconds" },
-      { property: "og:description", content: "Manage students, track earnings and send beautiful invoices. Your first invoice is on us." },
+      { title: "TutorBook — Invoice app for tutors. First invoice free." },
+      { name: "description", content: "TutorBook is the simple invoice app for tutors. Manage students, track earnings, and send professional PDF invoices in seconds. Sign up and create your first invoice free." },
+      { property: "og:title", content: "TutorBook — Invoice app for tutors" },
+      { property: "og:description", content: "The simple invoice app for tutors. Manage students, track earnings and send beautiful invoices. Your first invoice is on us." },
+
     ],
   }),
 });
@@ -52,13 +53,14 @@ function Landing() {
               First invoice on us — no card required
             </div>
             <h1 className="mt-5 text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.05]">
-              Tutoring invoices,<br />
-              <span className="text-primary">sorted in seconds.</span>
+              The invoice app<br />
+              <span className="text-primary">built for tutors.</span>
             </h1>
             <p className="mt-5 text-lg text-muted-foreground max-w-2xl">
-              Built for private tutors. Track students, log lessons by voice, and send
-              clean PDF invoices that parents actually pay on time.
+              Manage students, log lessons by voice, and send clean PDF invoices
+              that parents actually pay on time.
             </p>
+
             <div className="mt-7 flex flex-wrap items-center gap-3">
               <Link to="/login">
                 <Button size="lg" className="gap-2">
