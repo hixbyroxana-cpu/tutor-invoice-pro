@@ -67,8 +67,6 @@ function InvoiceEditPage() {
     }
   }, [data]);
 
-  if (isLoading || !inv) return <p className="text-sm text-muted-foreground">Loading…</p>;
-
   const locked = false;
   const total = items.reduce((s, it) => s + Number(it.duration) * Number(it.hourly_rate), 0);
 
