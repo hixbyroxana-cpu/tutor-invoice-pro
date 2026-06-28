@@ -143,7 +143,7 @@ export const createInvoiceCheckout = createServerFn({ method: "POST" })
     const totalPence = Math.round(Number(invoice.total) * 100);
     if (totalPence <= 0) throw new Error("Invoice total must be greater than zero.");
 
-    const origin = originFromRequest();
+    const origin = await originFromRequest();
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
