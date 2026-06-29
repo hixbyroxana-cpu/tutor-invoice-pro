@@ -17,14 +17,14 @@ export const Route = createFileRoute("/try")({
   component: TryPage,
   head: () => ({
     meta: [
-      { title: "Try TutorBook free — Create your first tutor invoice" },
+      { title: "Try LessonPaid free — Create your first tutor invoice" },
       { name: "description", content: "Build a professional tutoring invoice in seconds. No signup required to try — create a free account before sending your first invoice. Your tutor and student details are saved, so future invoices are just rate and dates." },
     ],
   }),
 });
 
-const STORAGE_KEY = "tutorbook.try.invoice";
-const PENDING_KEY = "tutorbook.try.pendingDownload";
+const STORAGE_KEY = "lessonpaid.try.invoice";
+const PENDING_KEY = "lessonpaid.try.pendingDownload";
 
 type TryLesson = { lesson_date: string; description: string; duration: number; hourly_rate: number };
 type TryState = {
@@ -151,7 +151,7 @@ function TryPage() {
       const inv = buildInvoice(state);
       const settings = buildSettings(state);
       generateInvoicePdf(inv, settings);
-      toast.success("Invoice downloaded — welcome to TutorBook!");
+      toast.success("Invoice downloaded — welcome to LessonPaid!");
     }
   }, [authed, ready, state]);
 
@@ -198,7 +198,7 @@ function TryPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
             <div className="h-7 w-7 rounded-md bg-primary text-primary-foreground grid place-items-center font-semibold">T</div>
-            <span className="font-semibold tracking-tight">TutorBook</span>
+            <span className="font-semibold tracking-tight">LessonPaid</span>
           </Link>
           <nav className="flex items-center gap-2">
             {authed ? (
@@ -216,7 +216,7 @@ function TryPage() {
         </Link>
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">Try TutorBook — build your first invoice</h1>
+            <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">Try LessonPaid — build your first invoice</h1>
             <p className="text-sm text-muted-foreground mt-1">
               Fill in the details and preview your invoice live. Create a free account before sending it.
             </p>

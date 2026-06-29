@@ -11,9 +11,9 @@ export const Route = createFileRoute("/features")({
   component: FeaturesPage,
   head: () => ({
     meta: [
-      { title: "Features — TutorBook" },
+      { title: "Features — LessonPaid" },
       { name: "description", content: "Student CRM, voice dictation, automatic totals, PDF export, earnings tracking and more — every feature designed for self-employed tutors." },
-      { property: "og:title", content: "Features — TutorBook" },
+      { property: "og:title", content: "Features — LessonPaid" },
       { property: "og:description", content: "Every feature designed for self-employed tutors." },
     ],
   }),
@@ -21,7 +21,7 @@ export const Route = createFileRoute("/features")({
 
 const features = [
   { icon: Users, title: "Student database", body: "Store each student's rate, default lesson length, and parent contact details — reuse them across every invoice." },
-  { icon: Mic, title: "Voice dictation", body: 'Say "Invoice John Smith for May 6 and May 13" and TutorBook drafts it for you.' },
+  { icon: Mic, title: "Voice dictation", body: 'Say "Invoice John Smith for May 6 and May 13" and LessonPaid drafts it for you.' },
   { icon: Calendar, title: "Quick-create from dates", body: "Type a name and lesson dates — invoice lines are generated automatically." },
   { icon: Calculator, title: "Automatic totals", body: "Hourly rate × duration, recalculated live as you edit. No spreadsheets." },
   { icon: FileText, title: "Live PDF preview", body: "See exactly what your client will receive before you send it." },

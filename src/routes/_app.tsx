@@ -52,7 +52,7 @@ function AppLayout() {
       <div className="flex min-h-screen flex-col md:flex-row">
         <aside className="md:w-60 md:shrink-0 border-b md:border-b-0 md:border-r bg-sidebar text-sidebar-foreground flex flex-col">
           <div className="px-5 py-5 border-b border-sidebar-border">
-            <h1 className="text-lg font-semibold tracking-tight">TutorBook</h1>
+            <h1 className="text-lg font-semibold tracking-tight">LessonPaid</h1>
             <p className="text-xs text-muted-foreground mt-0.5">Invoices made simple</p>
           </div>
           <nav className="p-2 flex md:flex-col gap-1 overflow-x-auto flex-1">

@@ -56,7 +56,7 @@ function LoginPage() {
     <div className="min-h-screen flex items-center justify-center p-6 bg-background">
       <Card className="w-full max-w-sm">
         <CardHeader>
-          <CardTitle>TutorBook</CardTitle>
+          <CardTitle>LessonPaid</CardTitle>
           <p className="text-sm text-muted-foreground">Sign in to manage your students and invoices.</p>
         </CardHeader>
         <CardContent>
