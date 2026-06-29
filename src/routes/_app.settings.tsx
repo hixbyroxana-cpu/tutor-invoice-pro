@@ -104,6 +104,22 @@ function SettingsPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const testKey = useServerFn(testStripeConnection);
+  const [testResult, setTestResult] = useState<{ ok: boolean; message: string } | null>(null);
+  const testConn = useMutation({
+    mutationFn: async () => testKey({ data: {} }),
+    onMutate: () => setTestResult(null),
+    onSuccess: (res) => {
+      setTestResult({ ok: res.ok, message: res.message });
+      if (res.ok) toast.success(res.message);
+      else toast.error(res.message);
+    },
+    onError: (e: Error) => {
+      setTestResult({ ok: false, message: e.message });
+      toast.error(e.message);
+    },
+  });
+
   const stripeConnected = Boolean(data?.stripe_account_id);
   const stripeReady = Boolean(data?.stripe_charges_enabled);
 
