@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { CreditCard, CheckCircle2, AlertCircle, ExternalLink, RefreshCw } from "lucide-react";
-import { createConnectOnboardingLink, refreshStripeStatus, getStripeMode } from "@/lib/stripe.functions";
+import { createConnectOnboardingLink, refreshStripeStatus, getStripeMode, testStripeConnection } from "@/lib/stripe.functions";
 
 export const Route = createFileRoute("/_app/settings")({
   component: SettingsPage,
@@ -104,6 +104,22 @@ function SettingsPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const testKey = useServerFn(testStripeConnection);
+  const [testResult, setTestResult] = useState<{ ok: boolean; message: string } | null>(null);
+  const testConn = useMutation({
+    mutationFn: async () => testKey({ data: {} }),
+    onMutate: () => setTestResult(null),
+    onSuccess: (res) => {
+      setTestResult({ ok: res.ok, message: res.message });
+      if (res.ok) toast.success(res.message);
+      else toast.error(res.message);
+    },
+    onError: (e: Error) => {
+      setTestResult({ ok: false, message: e.message });
+      toast.error(e.message);
+    },
+  });
+
   const stripeConnected = Boolean(data?.stripe_account_id);
   const stripeReady = Boolean(data?.stripe_charges_enabled);
 
@@ -167,6 +183,33 @@ function SettingsPage() {
               Stripe is not configured yet. Save a Stripe secret key first.
             </div>
           )}
+          <div className="flex flex-wrap items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => testConn.mutate()}
+              disabled={testConn.isPending || modeData?.mode === "unset"}
+            >
+              {testConn.isPending ? "Testing…" : "Test Stripe connection"}
+            </Button>
+            {testResult && (
+              <span
+                className={
+                  "inline-flex items-center gap-1.5 text-sm rounded-md border px-2.5 py-1 " +
+                  (testResult.ok
+                    ? "border-green-200 bg-green-50 text-green-900"
+                    : "border-red-200 bg-red-50 text-red-900")
+                }
+              >
+                {testResult.ok ? (
+                  <CheckCircle2 className="h-3.5 w-3.5" />
+                ) : (
+                  <AlertCircle className="h-3.5 w-3.5" />
+                )}
+                {testResult.message}
+              </span>
+            )}
+          </div>
           {!stripeConnected && (
             <Button onClick={() => startOnboarding.mutate()} disabled={startOnboarding.isPending}>
               {startOnboarding.isPending ? "Opening Stripe…" : "Connect Stripe"}
