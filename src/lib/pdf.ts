@@ -8,11 +8,8 @@ export type Settings = {
   address: string | null;
   email: string | null;
   phone: string | null;
-  bank_name: string | null;
-  account_holder: string | null;
-  sort_code: string | null;
-  account_number: string | null;
 };
+
 
 export type InvoiceForPdf = {
   invoice_number: string;
