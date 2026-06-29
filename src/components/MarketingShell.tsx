@@ -44,8 +44,10 @@ export function MarketingShell({ children }: { children: ReactNode }) {
             { label: "Create account", to: "/login" },
           ]} />
           <div className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} TutorBook.
-            <br />Made for tutors.
+            <div className="font-semibold text-foreground/80 mb-1">Support</div>
+            <a href="mailto:support@tutorbook.app" className="hover:text-foreground">support@tutorbook.app</a>
+            <div className="mt-3">© {new Date().getFullYear()} TutorBook.</div>
+            <div>Made for tutors.</div>
           </div>
         </div>
       </footer>
