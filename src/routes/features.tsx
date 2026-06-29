@@ -30,7 +30,7 @@ const features = [
   { icon: BarChart3, title: "Earnings dashboard", body: "Monthly line chart, per-student breakdown, and filterable date ranges." },
   { icon: PoundSterling, title: "Multi-currency ready", body: "Set your symbol once — works for £, €, $ and beyond." },
   { icon: Clock, title: "Fast on mobile", body: "Log a lesson the moment it ends, from your phone." },
-  { icon: ShieldCheck, title: "Private by default", body: "Each tutor only sees their own students, invoices and bank details." },
+  { icon: ShieldCheck, title: "Private by default", body: "Each tutor only sees their own students, invoices and settings." },
 ];
 
 function FeaturesPage() {
