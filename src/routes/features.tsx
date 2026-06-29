@@ -3,9 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MarketingShell } from "@/components/MarketingShell";
 import {
-  Users, Mic, FileText, PoundSterling, Clock, ShieldCheck,
+  Users, FileText, PoundSterling, Clock, ShieldCheck,
   Calendar, Calculator, Download, Repeat, BarChart3, CheckCircle2, ArrowRight,
 } from "lucide-react";
+
 
 export const Route = createFileRoute("/features")({
   component: FeaturesPage,
