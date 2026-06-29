@@ -117,7 +117,7 @@ function Landing() {
           <div className="grid gap-4 md:grid-cols-3">
             {[
               { n: "1", title: "Add your students", body: "Save names, rates, and parent contact details once." },
-              { n: "2", title: "Log lessons", body: "Type or dictate dates — totals calculate automatically." },
+              { n: "2", title: "Log lessons", body: "Type student names and dates — totals calculate automatically." },
               { n: "3", title: "Send the PDF", body: "Email a clean branded invoice and track when it's paid." },
             ].map((s) => (
               <div key={s.n} className="rounded-xl border border-border bg-card p-5">
