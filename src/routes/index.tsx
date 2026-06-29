@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
-  Sparkles, Users, FileText, PoundSterling, Clock, ShieldCheck,
+  Sparkles, Users, FileText, PoundSterling, Clock, Mail,
   Mic, CheckCircle2, ArrowRight,
 } from "lucide-react";
 import { MarketingShell } from "@/components/MarketingShell";
@@ -39,12 +39,14 @@ function Landing() {
               100% free for tutors — no subscriptions
             </div>
             <h1 className="mt-5 text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.05]">
-              The free invoice app<br />
-              <span className="text-primary">built for tutors.</span>
+              Stop chasing payments.<br />
+              <span className="text-primary">Start getting paid.</span>
             </h1>
             <p className="mt-5 text-lg text-muted-foreground max-w-2xl">
-              Manage students, log lessons by voice, and send clean PDF invoices
-              that parents actually pay on time.
+              Manage students, log lessons by voice, and send clean PDF invoices.
+            </p>
+            <p className="mt-3 text-xl font-medium text-foreground max-w-2xl">
+              So parents actually pay on time.
             </p>
 
             <div className="mt-7 flex flex-wrap items-center gap-3">
@@ -75,17 +77,17 @@ function Landing() {
         <div className="mb-8">
           <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Everything you need, nothing you don't</h2>
           <p className="text-muted-foreground mt-2 max-w-2xl">
-            TutorBook is purpose-built for self-employed tutors — not generic accounting software.
+            Most tutors spend hours every month on invoices and chasing payments. TutorBook fixes that in 60 seconds.
           </p>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {[
-            { icon: Users, title: "Student CRM", body: "Keep rates, contacts and notes for every student in one tidy place." },
-            { icon: Mic, title: "Voice dictation", body: "Speak a lesson list and TutorBook drafts the invoice for you." },
+            { icon: Users, title: "Student records", body: "Keep names, rates, and parent contacts organised in one place — no spreadsheets needed." },
+            { icon: Mic, title: "Voice dictation", body: "Just say \"I taught Emily on Monday and Wednesday, one hour each at £45\" — TutorBook logs it and builds the invoice automatically." },
             { icon: FileText, title: "Polished PDFs", body: "Branded, itemised invoices your clients can pay without friction." },
             { icon: PoundSterling, title: "Earnings tracker", body: "See monthly income per student with a clean line chart." },
             { icon: Clock, title: "Built for speed", body: "From lesson to sent invoice in under a minute. Really." },
-            { icon: ShieldCheck, title: "Private by default", body: "Your data is yours. Encrypted, isolated, never sold." },
+            { icon: Mail, title: "Send by email", body: "Email a professional PDF invoice directly to parents from inside TutorBook — no downloading and attaching needed." },
           ].map(({ icon: Icon, title, body }) => (
             <Card key={title} className="border-border/60">
               <CardContent className="p-5">
@@ -128,6 +130,18 @@ function Landing() {
             <Link to="/how-it-works" className="text-sm text-primary hover:underline inline-flex items-center gap-1">
               Walk through it in detail <ArrowRight className="h-3.5 w-3.5" />
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonial */}
+      <section className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-16">
+        <div className="rounded-2xl border border-border bg-gradient-to-br from-secondary/60 to-card p-8 sm:p-10">
+          <blockquote className="text-xl sm:text-2xl font-medium text-foreground leading-relaxed max-w-3xl">
+            "I used to spend Sunday evenings doing invoices. Now it takes me two minutes."
+          </blockquote>
+          <div className="mt-4 text-sm text-muted-foreground">
+            — Roxana S., maths tutor, London
           </div>
         </div>
       </section>
