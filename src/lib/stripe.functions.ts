@@ -204,3 +204,41 @@ export const getStripeMode = createServerFn({ method: "GET" })
     }
     return { mode, webhookConfigured: Boolean(webhook) };
   });
+
+/**
+ * Verify the configured Stripe secret key with a lightweight authenticated
+ * API call. Returns a clear success/error result for display in Settings.
+ */
+export const testStripeConnection = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => (d ?? {}) as Record<string, never>)
+  .handler(async () => {
+    const key = process.env.STRIPE_SECRET_KEY;
+    if (!key) {
+      return { ok: false as const, message: "No Stripe secret key is configured." };
+    }
+    const mode: "test" | "live" | "unknown" = key.startsWith("sk_test_")
+      ? "test"
+      : key.startsWith("sk_live_")
+        ? "live"
+        : "unknown";
+    try {
+      const { getStripe } = await import("./stripe.server");
+      const stripe = getStripe();
+      const account = await stripe.accounts.retrieve();
+      return {
+        ok: true as const,
+        mode,
+        accountId: account.id,
+        message: `Stripe key works (${mode} mode). Platform account: ${account.id}.`,
+      };
+    } catch (e) {
+      const err = e as { message?: string; code?: string; type?: string };
+      return {
+        ok: false as const,
+        mode,
+        message:
+          err?.message || err?.code || err?.type || "Stripe rejected the configured API key.",
+      };
+    }
+  });
