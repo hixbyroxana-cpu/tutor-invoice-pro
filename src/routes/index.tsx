@@ -84,7 +84,7 @@ function Landing() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {[
             { icon: Users, title: "Student records", body: "Keep names, rates, and parent contacts organised in one place — no spreadsheets needed." },
-            { icon: Mic, title: "Voice dictation", body: "Just say \"I taught Emily on Monday and Wednesday, one hour each at £45\" — LessonPaid logs it and builds the invoice automatically." },
+            { icon: Sparkles, title: "Quick create", body: "Type a student name and lesson dates — LessonPaid builds the invoice and totals automatically." },
             { icon: FileText, title: "Polished PDFs", body: "Branded, itemised invoices your clients can pay without friction." },
             { icon: PoundSterling, title: "Earnings tracker", body: "See monthly income per student with a clean line chart." },
             { icon: Clock, title: "Built for speed", body: "From lesson to sent invoice in under a minute. Really." },
