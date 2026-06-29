@@ -142,27 +142,6 @@ export function generateInvoicePdf(invoice: InvoiceForPdf, settings: Settings) {
   doc.text("No VAT charged — not VAT registered.", pageW - margin, y, { align: "right" });
   y += 24;
 
-  // Payment methods
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(11);
-  doc.setTextColor(30);
-  doc.text("Ways to pay", margin, y);
-  y += 14;
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(10);
-  doc.setTextColor(60);
-  const pay: string[] = [];
-  if (settings.bank_name || settings.account_holder || settings.sort_code || settings.account_number) {
-    pay.push("Bank transfer");
-  }
-  if (settings.bank_name) pay.push(`Bank: ${settings.bank_name}`);
-  if (settings.account_holder) pay.push(`Account holder: ${settings.account_holder}`);
-  if (settings.sort_code) pay.push(`Sort code / routing number: ${settings.sort_code}`);
-  if (settings.account_number) pay.push(`Account number / IBAN: ${settings.account_number}`);
-  if (pay.length === 0) pay.push("(Add payment methods in Settings)");
-  pay.forEach((l, i) => doc.text(l, margin, y + i * 12));
-  y += pay.length * 12 + 18;
-
   if (invoice.notes) {
     doc.setFont("helvetica", "bold");
     doc.setFontSize(11);
