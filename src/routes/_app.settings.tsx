@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { CreditCard, CheckCircle2, AlertCircle, ExternalLink, RefreshCw } from "lucide-react";
-import { createConnectOnboardingLink, refreshStripeStatus, getStripeMode, testStripeConnection } from "@/lib/stripe.functions";
+import { refreshStripeStatus, getStripeMode, testStripeConnection } from "@/lib/stripe.functions";
 
 export const Route = createFileRoute("/_app/settings")({
   component: SettingsPage,
@@ -91,9 +91,16 @@ function SettingsPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
-  const onboard = useServerFn(createConnectOnboardingLink);
   const startOnboarding = useMutation({
-    mutationFn: async () => onboard({ data: { action: "connect" } }),
+    mutationFn: async () => {
+      const { data, error } = await supabase.functions.invoke<{ url: string }>("createConnectOnboardingLink", {
+        method: "POST",
+        body: { action: "connect" },
+      });
+      if (error) throw new Error(error.message);
+      if (!data?.url) throw new Error("Stripe did not return an onboarding link.");
+      return data;
+    },
     onSuccess: (res) => { window.location.href = res.url; },
     onError: (e: Error) => toast.error(e.message),
   });
