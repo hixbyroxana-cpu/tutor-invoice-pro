@@ -13,7 +13,7 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "LessonPaid — Free invoice app for tutors" },
-      { name: "description", content: "LessonPaid is the free invoice app for tutors. Manage students, dictate lessons, and send professional PDF invoices in seconds. 100% free — no subscriptions." },
+      { name: "description", content: "LessonPaid is the free invoice app for tutors. Manage students, log lessons, and send professional PDF invoices in seconds. 100% free — no subscriptions." },
       { property: "og:title", content: "LessonPaid — Free invoice app for tutors" },
       { property: "og:description", content: "The free invoice app for tutors. Manage students, track earnings and send beautiful invoices. No subscriptions, ever." },
     ],
