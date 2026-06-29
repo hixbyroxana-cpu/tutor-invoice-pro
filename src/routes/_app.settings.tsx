@@ -93,13 +93,13 @@ function SettingsPage() {
 
   const onboard = useServerFn(createConnectOnboardingLink);
   const startOnboarding = useMutation({
-    mutationFn: async () => onboard(),
+    mutationFn: async () => onboard({ data: {} }),
     onSuccess: (res) => { window.location.href = res.url; },
     onError: (e: Error) => toast.error(e.message),
   });
 
   const refresh = useMutation({
-    mutationFn: async () => refreshStatus(),
+    mutationFn: async () => refreshStatus({ data: {} }),
     onSuccess: () => { qc.invalidateQueries({ queryKey: ["settings"] }); toast.success("Stripe status refreshed"); },
     onError: (e: Error) => toast.error(e.message),
   });
