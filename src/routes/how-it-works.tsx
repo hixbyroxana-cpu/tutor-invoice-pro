@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { MarketingShell } from "@/components/MarketingShell";
-import { UserPlus, ClipboardList, Mic, FileText, Send, CheckCircle2, ArrowRight } from "lucide-react";
+import { UserPlus, ClipboardList, FileText, Send, CheckCircle2, ArrowRight } from "lucide-react";
 
 export const Route = createFileRoute("/how-it-works")({
   component: HowItWorks,
