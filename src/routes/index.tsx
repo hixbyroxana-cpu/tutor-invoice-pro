@@ -170,7 +170,7 @@ function Landing() {
               <div className="mt-1 text-3xl font-semibold">£0<span className="text-base font-normal text-muted-foreground"> / forever</span></div>
               <ul className="mt-4 space-y-2 text-sm">
                 <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-success mt-0.5" /> Unlimited students &amp; invoices</li>
-                <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-success mt-0.5" /> Voice dictation &amp; quick-create</li>
+                <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-success mt-0.5" /> Quick-create from lesson dates</li>
                 <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-success mt-0.5" /> Branded PDF export</li>
                 <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-success mt-0.5" /> Earnings dashboard</li>
                 <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-success mt-0.5" /> Card payments via Stripe (1% platform fee)</li>
