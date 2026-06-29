@@ -3,8 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Sparkles, Users, FileText, PoundSterling, Clock, Mail,
-  Mic, CheckCircle2, ArrowRight,
+  CheckCircle2, ArrowRight,
 } from "lucide-react";
+
 import { MarketingShell } from "@/components/MarketingShell";
 
 export const Route = createFileRoute("/")({
