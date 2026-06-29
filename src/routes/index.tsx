@@ -44,7 +44,7 @@ function Landing() {
               <span className="text-primary">Start getting paid.</span>
             </h1>
             <p className="mt-5 text-lg text-muted-foreground max-w-2xl">
-              Manage students, log lessons by voice, and send clean PDF invoices.
+              Manage students, log lessons in seconds, and send clean PDF invoices.
             </p>
             <p className="mt-3 text-xl font-medium text-foreground max-w-2xl">
               So parents actually pay on time.
