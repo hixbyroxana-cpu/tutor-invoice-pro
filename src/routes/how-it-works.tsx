@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { MarketingShell } from "@/components/MarketingShell";
-import { UserPlus, ClipboardList, Mic, FileText, Send, CheckCircle2, ArrowRight } from "lucide-react";
+import { UserPlus, ClipboardList, FileText, Send, CheckCircle2, ArrowRight } from "lucide-react";
 
 export const Route = createFileRoute("/how-it-works")({
   component: HowItWorks,
@@ -18,11 +18,11 @@ export const Route = createFileRoute("/how-it-works")({
 const steps = [
   { icon: UserPlus, title: "1. Add your students", body: "Store each student's name, parent contact, hourly rate, and default lesson length once. You'll never type them again." },
   { icon: ClipboardList, title: "2. Log lessons", body: "Pick a student and tap the dates you taught. LessonPaid fills in description, hours, and rate automatically." },
-  { icon: Mic, title: "3. Or just dictate it", body: 'Tap the mic and say "Invoice Sarah for June 6, 13 and 20." LessonPaid builds the invoice from your voice.' },
-  { icon: FileText, title: "4. Review the live preview", body: "Edit any line, add notes, and watch the total update in real time. What you see is what your client gets." },
-  { icon: Send, title: "5. Send the PDF", body: "Download a branded PDF or email it straight from the invoice page. Mark it as Sent in one click." },
-  { icon: CheckCircle2, title: "6. Track what's paid", body: "Update statuses to Paid or Overdue. Your dashboard always shows what's outstanding and what you've earned." },
+  { icon: FileText, title: "3. Review the live preview", body: "Edit any line, add notes, and watch the total update in real time. What you see is what your client gets." },
+  { icon: Send, title: "4. Send the PDF", body: "Download a branded PDF or email it straight from the invoice page. Mark it as Sent in one click." },
+  { icon: CheckCircle2, title: "5. Track what's paid", body: "Update statuses to Paid or Overdue. Your dashboard always shows what's outstanding and what you've earned." },
 ];
+
 
 function HowItWorks() {
   return (

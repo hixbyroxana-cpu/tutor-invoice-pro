@@ -3,8 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Sparkles, Users, FileText, PoundSterling, Clock, Mail,
-  Mic, CheckCircle2, ArrowRight,
+  CheckCircle2, ArrowRight,
 } from "lucide-react";
+
 import { MarketingShell } from "@/components/MarketingShell";
 
 export const Route = createFileRoute("/")({
@@ -12,7 +13,7 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "LessonPaid — Free invoice app for tutors" },
-      { name: "description", content: "LessonPaid is the free invoice app for tutors. Manage students, dictate lessons, and send professional PDF invoices in seconds. 100% free — no subscriptions." },
+      { name: "description", content: "LessonPaid is the free invoice app for tutors. Manage students, log lessons, and send professional PDF invoices in seconds. 100% free — no subscriptions." },
       { property: "og:title", content: "LessonPaid — Free invoice app for tutors" },
       { property: "og:description", content: "The free invoice app for tutors. Manage students, track earnings and send beautiful invoices. No subscriptions, ever." },
     ],
@@ -43,7 +44,7 @@ function Landing() {
               <span className="text-primary">Start getting paid.</span>
             </h1>
             <p className="mt-5 text-lg text-muted-foreground max-w-2xl">
-              Manage students, log lessons by voice, and send clean PDF invoices.
+              Manage students, log lessons in seconds, and send clean PDF invoices.
             </p>
             <p className="mt-3 text-xl font-medium text-foreground max-w-2xl">
               So parents actually pay on time.
@@ -83,7 +84,7 @@ function Landing() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {[
             { icon: Users, title: "Student records", body: "Keep names, rates, and parent contacts organised in one place — no spreadsheets needed." },
-            { icon: Mic, title: "Voice dictation", body: "Just say \"I taught Emily on Monday and Wednesday, one hour each at £45\" — LessonPaid logs it and builds the invoice automatically." },
+            { icon: Sparkles, title: "Quick create", body: "Type a student name and lesson dates — LessonPaid builds the invoice and totals automatically." },
             { icon: FileText, title: "Polished PDFs", body: "Branded, itemised invoices your clients can pay without friction." },
             { icon: PoundSterling, title: "Earnings tracker", body: "See monthly income per student with a clean line chart." },
             { icon: Clock, title: "Built for speed", body: "From lesson to sent invoice in under a minute. Really." },
@@ -116,7 +117,7 @@ function Landing() {
           <div className="grid gap-4 md:grid-cols-3">
             {[
               { n: "1", title: "Add your students", body: "Save names, rates, and parent contact details once." },
-              { n: "2", title: "Log lessons", body: "Type or dictate dates — totals calculate automatically." },
+              { n: "2", title: "Log lessons", body: "Type student names and dates — totals calculate automatically." },
               { n: "3", title: "Send the PDF", body: "Email a clean branded invoice and track when it's paid." },
             ].map((s) => (
               <div key={s.n} className="rounded-xl border border-border bg-card p-5">
@@ -169,7 +170,7 @@ function Landing() {
               <div className="mt-1 text-3xl font-semibold">£0<span className="text-base font-normal text-muted-foreground"> / forever</span></div>
               <ul className="mt-4 space-y-2 text-sm">
                 <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-success mt-0.5" /> Unlimited students &amp; invoices</li>
-                <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-success mt-0.5" /> Voice dictation &amp; quick-create</li>
+                <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-success mt-0.5" /> Quick-create from lesson dates</li>
                 <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-success mt-0.5" /> Branded PDF export</li>
                 <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-success mt-0.5" /> Earnings dashboard</li>
                 <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-success mt-0.5" /> Card payments via Stripe (1% platform fee)</li>
