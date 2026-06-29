@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -9,12 +9,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, Trash2, Sparkles, Mic, MicOff, Loader2 } from "lucide-react";
+import { Plus, Trash2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
-import { fmtMoney, fmtDate } from "@/lib/format";
+import { fmtMoney } from "@/lib/format";
 import { createInvoice, type LessonInput } from "@/lib/invoiceService";
 import { parseQuickInvoice } from "@/lib/parseQuickInvoice";
-import { useSpeechRecognition } from "@/hooks/useSpeechRecognition";
+
 
 export const Route = createFileRoute("/_app/invoices/new")({
   component: NewInvoicePage,
