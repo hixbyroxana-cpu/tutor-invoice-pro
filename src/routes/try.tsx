@@ -123,10 +123,19 @@ function TryPage() {
   useEffect(() => {
     setState(loadState());
     setReady(true);
-    supabase.auth.getSession().then(({ data }) => setAuthed(!!data.session));
+    supabase.auth.getSession().then(({ data }) => {
+      const has = !!data.session;
+      setAuthed(has);
+      // If already signed in, the /try guest flow shouldn't be a shortcut to
+      // PDF export — send them straight to the real invoice creator unless
+      // they just completed signup to finish a pending download.
+      if (has && window.sessionStorage.getItem(PENDING_KEY) !== "1") {
+        navigate({ to: "/invoices/new" });
+      }
+    });
     const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => setAuthed(!!session));
     return () => sub.subscription.unsubscribe();
-  }, []);
+  }, [navigate]);
 
   // Persist
   useEffect(() => {
