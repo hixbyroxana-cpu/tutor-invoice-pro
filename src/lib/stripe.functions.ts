@@ -211,7 +211,7 @@ export const getStripeMode = createServerFn({ method: "GET" })
  */
 export const testStripeConnection = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => (d ?? {}) as Record<string, never>)
+  .inputValidator((d) => z.object({}).passthrough().parse(d ?? {}))
   .handler(async () => {
     const key = process.env.STRIPE_SECRET_KEY;
     if (!key) {
