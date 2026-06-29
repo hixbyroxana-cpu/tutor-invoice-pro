@@ -25,12 +25,12 @@ const features = [
   { icon: Calendar, title: "Quick-create from dates", body: "Type a name and lesson dates — invoice lines are generated automatically." },
   { icon: Calculator, title: "Automatic totals", body: "Hourly rate × duration, recalculated live as you edit. No spreadsheets." },
   { icon: FileText, title: "Live PDF preview", body: "See exactly what your client will receive before you send it." },
-  { icon: Download, title: "Branded PDF export", body: "Your business name, address, and bank details on every invoice." },
+  { icon: Download, title: "Branded PDF export", body: "Your business name, address and contact details on every invoice — with a Pay Now link for card payments." },
   { icon: Repeat, title: "Status tracking", body: "Mark invoices Draft, Sent, Paid or Overdue — and see what's outstanding at a glance." },
   { icon: BarChart3, title: "Earnings dashboard", body: "Monthly line chart, per-student breakdown, and filterable date ranges." },
   { icon: PoundSterling, title: "Multi-currency ready", body: "Set your symbol once — works for £, €, $ and beyond." },
   { icon: Clock, title: "Fast on mobile", body: "Log a lesson the moment it ends, from your phone." },
-  { icon: ShieldCheck, title: "Private by default", body: "Each tutor only sees their own students, invoices and bank details." },
+  { icon: ShieldCheck, title: "Private by default", body: "Each tutor only sees their own students, invoices and settings." },
 ];
 
 function FeaturesPage() {
