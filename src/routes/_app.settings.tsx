@@ -58,7 +58,7 @@ function SettingsPage() {
   useEffect(() => {
     const url = new URL(window.location.href);
     if (url.searchParams.get("stripe") === "return" || url.searchParams.get("stripe") === "refresh") {
-      refreshStatus().then(() => {
+      refreshStatus({ data: {} }).then(() => {
         qc.invalidateQueries({ queryKey: ["settings"] });
         url.searchParams.delete("stripe");
         window.history.replaceState({}, "", url.pathname + url.search);
