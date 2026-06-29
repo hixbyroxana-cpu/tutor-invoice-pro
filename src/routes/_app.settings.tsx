@@ -24,10 +24,6 @@ type Settings = {
   address: string | null;
   email: string | null;
   phone: string | null;
-  bank_name: string | null;
-  account_holder: string | null;
-  sort_code: string | null;
-  account_number: string | null;
   invoice_prefix: string;
   stripe_account_id: string | null;
   stripe_charges_enabled: boolean;
@@ -77,10 +73,6 @@ function SettingsPage() {
         address: form.address ?? null,
         email: form.email ?? null,
         phone: form.phone ?? null,
-        bank_name: form.bank_name ?? null,
-        account_holder: form.account_holder ?? null,
-        sort_code: form.sort_code ?? null,
-        account_number: form.account_number ?? null,
         invoice_prefix: (form.invoice_prefix || "ROX").toUpperCase().slice(0, 6),
       };
       const { error } = await supabase.from("business_settings")
@@ -273,24 +265,6 @@ function SettingsPage() {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Bank transfer details</CardTitle>
-          <p className="text-sm text-muted-foreground">
-            Shown on the invoice as an alternative to card payment.
-          </p>
-        </CardHeader>
-        <CardContent className="grid gap-3">
-          <div className="grid sm:grid-cols-2 gap-3">
-            <Field label="Bank name"><Input value={form.bank_name ?? ""} onChange={(e) => setForm({ ...form, bank_name: e.target.value })} /></Field>
-            <Field label="Account holder"><Input value={form.account_holder ?? ""} onChange={(e) => setForm({ ...form, account_holder: e.target.value })} /></Field>
-          </div>
-          <div className="grid sm:grid-cols-2 gap-3">
-            <Field label="Sort code / routing number"><Input value={form.sort_code ?? ""} onChange={(e) => setForm({ ...form, sort_code: e.target.value })} /></Field>
-            <Field label="Account number / IBAN"><Input value={form.account_number ?? ""} onChange={(e) => setForm({ ...form, account_number: e.target.value })} /></Field>
-          </div>
-        </CardContent>
-      </Card>
 
       <div className="flex justify-end">
         <Button onClick={() => save.mutate()} disabled={save.isPending}>Save settings</Button>

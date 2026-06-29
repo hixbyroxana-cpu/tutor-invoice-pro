@@ -33,10 +33,6 @@ type TryState = {
   address: string;
   email: string;
   phone: string;
-  bank_name: string;
-  account_holder: string;
-  sort_code: string;
-  account_number: string;
   client_name: string;
   client_parent_name: string;
   client_email: string;
@@ -58,10 +54,6 @@ const DEFAULT_STATE: TryState = {
   address: "",
   email: "",
   phone: "",
-  bank_name: "",
-  account_holder: "",
-  sort_code: "",
-  account_number: "",
   client_name: "",
   client_parent_name: "",
   client_email: "",
@@ -119,10 +111,6 @@ function buildSettings(s: TryState): Settings {
     address: s.address || null,
     email: s.email || null,
     phone: s.phone || null,
-    bank_name: s.bank_name || null,
-    account_holder: s.account_holder || null,
-    sort_code: s.sort_code || null,
-    account_number: s.account_number || null,
   };
 }
 
@@ -292,13 +280,9 @@ function TryPage() {
             </Card>
 
             <Card>
-              <CardHeader className="pb-3"><CardTitle className="text-base">Payment details (optional)</CardTitle></CardHeader>
-              <CardContent className="grid sm:grid-cols-2 gap-3">
-                <Field label="Bank name"><Input value={state.bank_name} onChange={(e) => patch({ bank_name: e.target.value })} /></Field>
-                <Field label="Account holder"><Input value={state.account_holder} onChange={(e) => patch({ account_holder: e.target.value })} /></Field>
-                <Field label="Sort code / routing"><Input value={state.sort_code} onChange={(e) => patch({ sort_code: e.target.value })} /></Field>
-                <Field label="Account no. / IBAN"><Input value={state.account_number} onChange={(e) => patch({ account_number: e.target.value })} /></Field>
-                <div className="sm:col-span-2"><Field label="Invoice notes"><Textarea rows={2} value={state.notes} onChange={(e) => patch({ notes: e.target.value })} /></Field></div>
+              <CardHeader className="pb-3"><CardTitle className="text-base">Invoice notes</CardTitle></CardHeader>
+              <CardContent>
+                <Field label="Notes (optional)"><Textarea rows={2} value={state.notes} onChange={(e) => patch({ notes: e.target.value })} /></Field>
               </CardContent>
             </Card>
 
