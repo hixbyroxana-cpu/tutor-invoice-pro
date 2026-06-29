@@ -134,6 +134,18 @@ function Landing() {
         </div>
       </section>
 
+      {/* Testimonial */}
+      <section className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-16">
+        <div className="rounded-2xl border border-border bg-gradient-to-br from-secondary/60 to-card p-8 sm:p-10">
+          <blockquote className="text-xl sm:text-2xl font-medium text-foreground leading-relaxed max-w-3xl">
+            "I used to spend Sunday evenings doing invoices. Now it takes me two minutes."
+          </blockquote>
+          <div className="mt-4 text-sm text-muted-foreground">
+            — Roxana S., maths tutor, London
+          </div>
+        </div>
+      </section>
+
       {/* Free forever */}
       <section className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid md:grid-cols-2 gap-6 items-center">
