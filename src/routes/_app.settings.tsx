@@ -183,6 +183,33 @@ function SettingsPage() {
               Stripe is not configured yet. Save a Stripe secret key first.
             </div>
           )}
+          <div className="flex flex-wrap items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => testConn.mutate()}
+              disabled={testConn.isPending || modeData?.mode === "unset"}
+            >
+              {testConn.isPending ? "Testing…" : "Test Stripe connection"}
+            </Button>
+            {testResult && (
+              <span
+                className={
+                  "inline-flex items-center gap-1.5 text-sm rounded-md border px-2.5 py-1 " +
+                  (testResult.ok
+                    ? "border-green-200 bg-green-50 text-green-900"
+                    : "border-red-200 bg-red-50 text-red-900")
+                }
+              >
+                {testResult.ok ? (
+                  <CheckCircle2 className="h-3.5 w-3.5" />
+                ) : (
+                  <AlertCircle className="h-3.5 w-3.5" />
+                )}
+                {testResult.message}
+              </span>
+            )}
+          </div>
           {!stripeConnected && (
             <Button onClick={() => startOnboarding.mutate()} disabled={startOnboarding.isPending}>
               {startOnboarding.isPending ? "Opening Stripe…" : "Connect Stripe"}
