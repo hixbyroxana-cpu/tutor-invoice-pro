@@ -257,3 +257,34 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
     </div>
   );
 }
+
+function StripeStatusBadge({
+  connected,
+  ready,
+}: {
+  connected: boolean;
+  ready: boolean;
+}) {
+  if (!connected) {
+    return (
+      <Badge variant="outline" className="gap-1.5">
+        <span className="h-2 w-2 rounded-full bg-red-500" />
+        Not connected
+      </Badge>
+    );
+  }
+  if (!ready) {
+    return (
+      <Badge variant="outline" className="gap-1.5 border-amber-300 bg-amber-50 text-amber-900">
+        <span className="h-2 w-2 rounded-full bg-amber-500" />
+        Pending
+      </Badge>
+    );
+  }
+  return (
+    <Badge variant="outline" className="gap-1.5 border-green-300 bg-green-50 text-green-900">
+      <CheckCircle2 className="h-3.5 w-3.5 text-green-600" />
+      Connected
+    </Badge>
+  );
+}
