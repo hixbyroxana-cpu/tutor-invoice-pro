@@ -58,7 +58,7 @@ function SettingsPage() {
   useEffect(() => {
     const url = new URL(window.location.href);
     if (url.searchParams.get("stripe") === "return" || url.searchParams.get("stripe") === "refresh") {
-      refreshStatus({ data: {} }).then(() => {
+      refreshStatus({ data: { action: "refresh" } }).then(() => {
         qc.invalidateQueries({ queryKey: ["settings"] });
         url.searchParams.delete("stripe");
         window.history.replaceState({}, "", url.pathname + url.search);
@@ -93,13 +93,13 @@ function SettingsPage() {
 
   const onboard = useServerFn(createConnectOnboardingLink);
   const startOnboarding = useMutation({
-    mutationFn: async () => onboard({ data: {} }),
+    mutationFn: async () => onboard({ data: { action: "connect" } }),
     onSuccess: (res) => { window.location.href = res.url; },
     onError: (e: Error) => toast.error(e.message),
   });
 
   const refresh = useMutation({
-    mutationFn: async () => refreshStatus({ data: {} }),
+    mutationFn: async () => refreshStatus({ data: { action: "refresh" } }),
     onSuccess: () => { qc.invalidateQueries({ queryKey: ["settings"] }); toast.success("Stripe status refreshed"); },
     onError: (e: Error) => toast.error(e.message),
   });
@@ -107,7 +107,7 @@ function SettingsPage() {
   const testKey = useServerFn(testStripeConnection);
   const [testResult, setTestResult] = useState<{ ok: boolean; message: string } | null>(null);
   const testConn = useMutation({
-    mutationFn: async () => testKey({ data: {} }),
+    mutationFn: async () => testKey({ data: { action: "test" } }),
     onMutate: () => setTestResult(null),
     onSuccess: (res) => {
       setTestResult({ ok: res.ok, message: res.message });
