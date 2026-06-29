@@ -11,9 +11,9 @@ export const Route = createFileRoute("/")({
   component: Landing,
   head: () => ({
     meta: [
-      { title: "TutorBook — Free invoice app for tutors" },
-      { name: "description", content: "TutorBook is the free invoice app for tutors. Manage students, dictate lessons, and send professional PDF invoices in seconds. 100% free — no subscriptions." },
-      { property: "og:title", content: "TutorBook — Free invoice app for tutors" },
+      { title: "LessonPaid — Free invoice app for tutors" },
+      { name: "description", content: "LessonPaid is the free invoice app for tutors. Manage students, dictate lessons, and send professional PDF invoices in seconds. 100% free — no subscriptions." },
+      { property: "og:title", content: "LessonPaid — Free invoice app for tutors" },
       { property: "og:description", content: "The free invoice app for tutors. Manage students, track earnings and send beautiful invoices. No subscriptions, ever." },
     ],
   }),
@@ -77,17 +77,17 @@ function Landing() {
         <div className="mb-8">
           <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Everything you need, nothing you don't</h2>
           <p className="text-muted-foreground mt-2 max-w-2xl">
-            Most tutors spend hours every month on invoices and chasing payments. TutorBook fixes that in 60 seconds.
+            Most tutors spend hours every month on invoices and chasing payments. LessonPaid fixes that in 60 seconds.
           </p>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {[
             { icon: Users, title: "Student records", body: "Keep names, rates, and parent contacts organised in one place — no spreadsheets needed." },
-            { icon: Mic, title: "Voice dictation", body: "Just say \"I taught Emily on Monday and Wednesday, one hour each at £45\" — TutorBook logs it and builds the invoice automatically." },
+            { icon: Mic, title: "Voice dictation", body: "Just say \"I taught Emily on Monday and Wednesday, one hour each at £45\" — LessonPaid logs it and builds the invoice automatically." },
             { icon: FileText, title: "Polished PDFs", body: "Branded, itemised invoices your clients can pay without friction." },
             { icon: PoundSterling, title: "Earnings tracker", body: "See monthly income per student with a clean line chart." },
             { icon: Clock, title: "Built for speed", body: "From lesson to sent invoice in under a minute. Really." },
-            { icon: Mail, title: "Send by email", body: "Email a professional PDF invoice directly to parents from inside TutorBook — no downloading and attaching needed." },
+            { icon: Mail, title: "Send by email", body: "Email a professional PDF invoice directly to parents from inside LessonPaid — no downloading and attaching needed." },
           ].map(({ icon: Icon, title, body }) => (
             <Card key={title} className="border-border/60">
               <CardContent className="p-5">
@@ -152,7 +152,7 @@ function Landing() {
           <div>
             <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">Free for tutors. Forever.</h2>
             <p className="text-muted-foreground mt-2">
-              No subscriptions, no per-invoice fees, no hidden charges. TutorBook stays
+              No subscriptions, no per-invoice fees, no hidden charges. LessonPaid stays
               free because we take a small 1% platform fee only when parents choose to
               pay an invoice by card — handled automatically through Stripe.
             </p>
@@ -165,7 +165,7 @@ function Landing() {
           </div>
           <Card className="border-border/60">
             <CardContent className="p-6">
-              <div className="text-sm text-muted-foreground">TutorBook</div>
+              <div className="text-sm text-muted-foreground">LessonPaid</div>
               <div className="mt-1 text-3xl font-semibold">£0<span className="text-base font-normal text-muted-foreground"> / forever</span></div>
               <ul className="mt-4 space-y-2 text-sm">
                 <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-success mt-0.5" /> Unlimited students &amp; invoices</li>

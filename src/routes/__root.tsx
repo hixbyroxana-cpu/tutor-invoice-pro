@@ -9,10 +9,10 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "TutorBook — Tutoring Invoice Generator" },
+      { title: "LessonPaid — Tutoring Invoice Generator" },
       { name: "description", content: "Manage students and generate professional tutoring invoices in seconds." },
-      { property: "og:title", content: "TutorBook — Tutoring Invoice Generator" },
-      { name: "twitter:title", content: "TutorBook — Tutoring Invoice Generator" },
+      { property: "og:title", content: "LessonPaid — Tutoring Invoice Generator" },
+      { name: "twitter:title", content: "LessonPaid — Tutoring Invoice Generator" },
       { property: "og:description", content: "Manage students and generate professional tutoring invoices in seconds." },
       { name: "twitter:description", content: "Manage students and generate professional tutoring invoices in seconds." },
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/e4596179-da44-472f-a668-3c4a8896378f/id-preview-9f8f27fa--28fc16b1-ef79-47a7-aa38-0d757a4ffa0f.lovable.app-1778327181563.png" },
