@@ -22,6 +22,7 @@ async function originFromRequest(): Promise<string> {
  */
 export const createConnectOnboardingLink = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => (d ?? {}) as Record<string, never>)
   .handler(async ({ context }) => {
     const { getStripe } = await import("./stripe.server");
     const stripe = getStripe();
