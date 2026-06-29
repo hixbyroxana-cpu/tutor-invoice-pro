@@ -225,12 +225,13 @@ export const testStripeConnection = createServerFn({ method: "POST" })
     try {
       const { getStripe } = await import("./stripe.server");
       const stripe = getStripe();
-      const account = await stripe.accounts.retrieve();
+      // Lightweight authenticated call — succeeds only with a valid secret key.
+      const balance = await stripe.balance.retrieve();
       return {
         ok: true as const,
         mode,
-        accountId: account.id,
-        message: `Stripe key works (${mode} mode). Platform account: ${account.id}.`,
+        livemode: balance.livemode,
+        message: `Stripe key works (${mode} mode).`,
       };
     } catch (e) {
       const err = e as { message?: string; code?: string; type?: string };
