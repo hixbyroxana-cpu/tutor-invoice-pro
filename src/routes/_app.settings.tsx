@@ -120,11 +120,29 @@ function SettingsPage() {
             <CardTitle className="text-base flex items-center gap-2">
               <CreditCard className="h-4 w-4" /> Card payments (Stripe)
             </CardTitle>
-            {modeData && (
-              <Badge variant={modeData.mode === "test" ? "secondary" : modeData.mode === "live" ? "destructive" : "outline"}>
-                {modeData.mode === "test" ? "Test mode" : modeData.mode === "live" ? "Live mode" : "Not configured"}
-              </Badge>
-            )}
+            <div className="flex items-center gap-2">
+              <StripeStatusBadge
+                connected={stripeConnected}
+                ready={stripeReady}
+              />
+              {modeData && (
+                <Badge
+                  variant={
+                    modeData.mode === "test"
+                      ? "secondary"
+                      : modeData.mode === "live"
+                        ? "destructive"
+                        : "outline"
+                  }
+                >
+                  {modeData.mode === "test"
+                    ? "Test mode"
+                    : modeData.mode === "live"
+                      ? "Live mode"
+                      : "Not configured"}
+                </Badge>
+              )}
+            </div>
           </div>
           <p className="text-sm text-muted-foreground">
             Connect Stripe so parents can pay invoices by card. A 1% platform fee is applied automatically; the rest goes straight to your bank.
@@ -157,9 +175,9 @@ function SettingsPage() {
           )}
           {stripeConnected && stripeReady && (
             <div className="flex flex-wrap items-center gap-3">
-              <Badge variant="secondary" className="gap-1.5">
-                <CheckCircle2 className="h-3.5 w-3.5 text-green-600" /> Connected & ready
-              </Badge>
+              <div className="text-sm text-muted-foreground">
+                You can now generate Pay Now links on invoices.
+              </div>
               <Button variant="outline" size="sm" onClick={() => refresh.mutate()} disabled={refresh.isPending}>
                 <RefreshCw className="h-3.5 w-3.5 mr-1.5" /> Refresh status
               </Button>
@@ -237,5 +255,36 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
       <Label className="text-xs">{label}</Label>
       {children}
     </div>
+  );
+}
+
+function StripeStatusBadge({
+  connected,
+  ready,
+}: {
+  connected: boolean;
+  ready: boolean;
+}) {
+  if (!connected) {
+    return (
+      <Badge variant="outline" className="gap-1.5">
+        <span className="h-2 w-2 rounded-full bg-red-500" />
+        Not connected
+      </Badge>
+    );
+  }
+  if (!ready) {
+    return (
+      <Badge variant="outline" className="gap-1.5 border-amber-300 bg-amber-50 text-amber-900">
+        <span className="h-2 w-2 rounded-full bg-amber-500" />
+        Pending
+      </Badge>
+    );
+  }
+  return (
+    <Badge variant="outline" className="gap-1.5 border-green-300 bg-green-50 text-green-900">
+      <CheckCircle2 className="h-3.5 w-3.5 text-green-600" />
+      Connected
+    </Badge>
   );
 }
