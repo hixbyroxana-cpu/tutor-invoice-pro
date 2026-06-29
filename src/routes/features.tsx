@@ -13,7 +13,7 @@ export const Route = createFileRoute("/features")({
   head: () => ({
     meta: [
       { title: "Features — LessonPaid" },
-      { name: "description", content: "Student CRM, voice dictation, automatic totals, PDF export, earnings tracking and more — every feature designed for self-employed tutors." },
+      { name: "description", content: "Student CRM, automatic totals, PDF export, earnings tracking and more — every feature designed for self-employed tutors." },
       { property: "og:title", content: "Features — LessonPaid" },
       { property: "og:description", content: "Every feature designed for self-employed tutors." },
     ],
