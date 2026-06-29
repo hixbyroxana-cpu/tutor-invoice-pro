@@ -77,7 +77,7 @@ export const createConnectOnboardingLink = createServerFn({ method: "POST" })
  */
 export const refreshStripeStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => (d ?? {}) as Record<string, never>)
+  .inputValidator((d) => z.object({}).passthrough().parse(d ?? {}))
   .handler(async ({ context }) => {
     const { getStripe } = await import("./stripe.server");
     const stripe = getStripe();
