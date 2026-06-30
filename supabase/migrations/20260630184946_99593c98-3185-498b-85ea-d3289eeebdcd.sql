@@ -1,0 +1,1 @@
+UPDATE public.business_settings SET stripe_charges_enabled = true, stripe_onboarded_at = COALESCE(stripe_onboarded_at, now()) WHERE stripe_account_id = 'acct_1TnZZ2I4iQSSjH2z';
