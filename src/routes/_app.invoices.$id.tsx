@@ -203,10 +203,19 @@ function InvoiceEditPage() {
     mutationFn: async () => checkoutFn({ data: { invoiceId: id } }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["invoice", id] });
-      toast.success("Pay Now link ready");
     },
     onError: (e: Error) => toast.error(e.message),
   });
+
+  // Auto-generate a Pay Now link once, if the invoice doesn't have one yet.
+  useEffect(() => {
+    if (!data?.invoice) return;
+    const inv = data.invoice as { stripe_checkout_url: string | null };
+    if (!inv.stripe_checkout_url && !generatePayLink.isPending) {
+      generatePayLink.mutate();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data?.invoice]);
 
   const markSent = useMutation({
     mutationFn: async () => {
@@ -222,8 +231,10 @@ function InvoiceEditPage() {
 
 
 
+
   async function exportPdf() {
     const i = inv as Record<string, unknown>;
+    const payOriginNow = typeof window !== "undefined" ? window.location.origin : "";
     generateInvoicePdf({
       invoice_number: String(i.invoice_number),
       invoice_title: String(i.invoice_title),
@@ -236,6 +247,7 @@ function InvoiceEditPage() {
       client_address: (i.client_address as string) || null,
       notes: (i.notes as string) || null,
       total: +items.reduce((s, it) => s + Number(it.duration) * Number(it.hourly_rate), 0).toFixed(2),
+      pay_url: `${payOriginNow}/pay/${id}`,
       items: items.map(it => ({
         lesson_date: it.lesson_date,
         description: it.description,
@@ -246,6 +258,7 @@ function InvoiceEditPage() {
     }, (data?.settings ?? {}) as Parameters<typeof generateInvoicePdf>[1]);
 
   }
+
 
 
   if (isLoading || !inv) return <p className="text-sm text-muted-foreground">Loading…</p>;
@@ -374,22 +387,30 @@ function InvoiceEditPage() {
       <Card>
         <CardHeader>
           <CardTitle className="text-base flex items-center gap-2">
-            <CreditCard className="h-4 w-4" /> Card payment & send to parent
+            <CreditCard className="h-4 w-4" /> Pay Now link & send to parent
           </CardTitle>
           <p className="text-sm text-muted-foreground">
-            Generate a Pay Now link, then email the invoice to the parent. They pay by card; 1% goes to the platform, the rest reaches you.
+            A Pay Now button is embedded in the invoice PDF and preview automatically. Share it with the parent — they pay by card; 1% goes to the platform, the rest reaches you.
           </p>
         </CardHeader>
         <CardContent className="space-y-3">
           {i.status === "paid" && (
             <Badge variant="secondary" className="gap-1.5">Paid{i.paid_at ? ` on ${new Date(i.paid_at).toLocaleDateString()}` : ""}</Badge>
           )}
-          {!i.stripe_checkout_url ? (
-            <Button onClick={() => generatePayLink.mutate()} disabled={generatePayLink.isPending}>
-              <CreditCard className="h-4 w-4 mr-2" />
-              {generatePayLink.isPending ? "Generating…" : "Generate Pay Now link"}
-            </Button>
-          ) : (
+          {!i.stripe_checkout_url && generatePayLink.isPending && (
+            <p className="text-xs text-muted-foreground">Generating Pay Now link…</p>
+          )}
+          {!i.stripe_checkout_url && !generatePayLink.isPending && (
+            <div className="space-y-2">
+              <p className="text-xs text-amber-700">
+                Pay Now link not available. Connect Stripe in Settings to enable card payments.
+              </p>
+              <Button variant="outline" size="sm" onClick={() => generatePayLink.mutate()}>
+                <RefreshCw className="h-3.5 w-3.5 mr-1.5" />Try again
+              </Button>
+            </div>
+          )}
+          {i.stripe_checkout_url && (
             <div className="space-y-3">
               <div className="flex gap-2 items-center">
                 <Input readOnly value={payUrl} className="font-mono text-xs" />
@@ -436,6 +457,7 @@ function InvoiceEditPage() {
 
 
 
+
       {showPreview && (
         <Card>
           <CardHeader>
@@ -465,7 +487,9 @@ function InvoiceEditPage() {
                 })),
               }}
               settings={(data?.settings ?? {}) as Partial<Parameters<typeof generateInvoicePdf>[1]>}
+              payUrl={i.stripe_checkout_url ? payUrl : null}
             />
+
           </CardContent>
         </Card>
       )}

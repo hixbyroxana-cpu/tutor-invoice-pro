@@ -4,11 +4,14 @@ import type { Settings, InvoiceForPdf } from "@/lib/pdf";
 export function InvoicePreview({
   invoice,
   settings,
+  payUrl,
 }: {
   invoice: InvoiceForPdf;
   settings: Partial<Settings>;
+  payUrl?: string | null;
 }) {
   const s = settings || {};
+
   return (
     <div className="bg-white text-slate-900 rounded-md border shadow-sm mx-auto w-full max-w-[800px] p-8 sm:p-10 text-sm font-sans">
       {/* Header */}
@@ -102,6 +105,22 @@ export function InvoicePreview({
           <div className="text-xs text-slate-600 whitespace-pre-wrap">{invoice.notes}</div>
         </div>
       )}
+
+      {payUrl && (
+        <div className="mt-8 flex flex-col items-center gap-2 pt-6 border-t">
+          <a
+            href={payUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center rounded-md px-8 py-3 text-white font-semibold text-base shadow-sm hover:opacity-90"
+            style={{ backgroundColor: "rgb(70,90,160)" }}
+          >
+            Pay Now
+          </a>
+          <div className="text-[11px] text-slate-500">Pay securely by card via Stripe</div>
+        </div>
+      )}
     </div>
   );
 }
+
