@@ -74,8 +74,18 @@ export async function createInvoice(opts: {
   );
   if (itErr) throw itErr;
 
+  // Auto-generate Stripe Pay Now link so it can be embedded in the PDF/email.
+  // Silently ignore if Stripe isn't connected yet — the tutor can connect later
+  // and regenerate from the invoice page.
+  try {
+    await createInvoiceCheckout({ data: { invoiceId: inv.id } });
+  } catch {
+    /* Stripe not connected or temporarily unavailable — continue. */
+  }
+
   return inv;
 }
+
 
 export async function recalculateInvoiceTotal(invoiceId: string) {
   const { data: items, error } = await supabase
