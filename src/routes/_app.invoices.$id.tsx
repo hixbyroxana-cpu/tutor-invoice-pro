@@ -203,10 +203,19 @@ function InvoiceEditPage() {
     mutationFn: async () => checkoutFn({ data: { invoiceId: id } }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["invoice", id] });
-      toast.success("Pay Now link ready");
     },
     onError: (e: Error) => toast.error(e.message),
   });
+
+  // Auto-generate a Pay Now link once, if the invoice doesn't have one yet.
+  useEffect(() => {
+    if (!data?.invoice) return;
+    const inv = data.invoice as { stripe_checkout_url: string | null };
+    if (!inv.stripe_checkout_url && !generatePayLink.isPending) {
+      generatePayLink.mutate();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data?.invoice]);
 
   const markSent = useMutation({
     mutationFn: async () => {
@@ -219,6 +228,7 @@ function InvoiceEditPage() {
     onSuccess: () => { qc.invalidateQueries({ queryKey: ["invoice", id] }); toast.success("Marked as sent"); },
     onError: (e: Error) => toast.error(e.message),
   });
+
 
 
 
