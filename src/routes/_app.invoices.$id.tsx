@@ -234,6 +234,7 @@ function InvoiceEditPage() {
 
   async function exportPdf() {
     const i = inv as Record<string, unknown>;
+    const payOriginNow = typeof window !== "undefined" ? window.location.origin : "";
     generateInvoicePdf({
       invoice_number: String(i.invoice_number),
       invoice_title: String(i.invoice_title),
@@ -246,6 +247,7 @@ function InvoiceEditPage() {
       client_address: (i.client_address as string) || null,
       notes: (i.notes as string) || null,
       total: +items.reduce((s, it) => s + Number(it.duration) * Number(it.hourly_rate), 0).toFixed(2),
+      pay_url: `${payOriginNow}/pay/${id}`,
       items: items.map(it => ({
         lesson_date: it.lesson_date,
         description: it.description,
@@ -256,6 +258,7 @@ function InvoiceEditPage() {
     }, (data?.settings ?? {}) as Parameters<typeof generateInvoicePdf>[1]);
 
   }
+
 
 
   if (isLoading || !inv) return <p className="text-sm text-muted-foreground">Loading…</p>;
