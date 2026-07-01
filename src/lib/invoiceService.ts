@@ -1,6 +1,8 @@
 import { supabase } from "@/integrations/supabase/client";
 import { padNum, slug } from "./format";
 import { requireUserId } from "./auth";
+import { createInvoiceCheckout } from "./stripe.functions";
+
 
 export type LessonInput = {
   lesson_date: string; // YYYY-MM-DD
