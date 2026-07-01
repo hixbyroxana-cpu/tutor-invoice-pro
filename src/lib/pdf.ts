@@ -23,6 +23,7 @@ export type InvoiceForPdf = {
   client_address: string | null;
   notes: string | null;
   total: number;
+  pay_url?: string | null;
   items: {
     lesson_date: string;
     description: string;
@@ -31,6 +32,7 @@ export type InvoiceForPdf = {
     amount: number;
   }[];
 };
+
 
 export function generateInvoicePdf(invoice: InvoiceForPdf, settings: Settings) {
   const doc = new jsPDF({ unit: "pt", format: "a4" });
