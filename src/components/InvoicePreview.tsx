@@ -4,11 +4,14 @@ import type { Settings, InvoiceForPdf } from "@/lib/pdf";
 export function InvoicePreview({
   invoice,
   settings,
+  payUrl,
 }: {
   invoice: InvoiceForPdf;
   settings: Partial<Settings>;
+  payUrl?: string | null;
 }) {
   const s = settings || {};
+
   return (
     <div className="bg-white text-slate-900 rounded-md border shadow-sm mx-auto w-full max-w-[800px] p-8 sm:p-10 text-sm font-sans">
       {/* Header */}
