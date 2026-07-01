@@ -155,7 +155,41 @@ export function generateInvoicePdf(invoice: InvoiceForPdf, settings: Settings) {
     doc.setTextColor(60);
     const wrapped = doc.splitTextToSize(invoice.notes, pageW - margin * 2);
     doc.text(wrapped, margin, y);
+    y += wrapped.length * 12 + 12;
+  }
+
+  // Pay Now button — always show at the bottom if a pay URL exists.
+  if (invoice.pay_url) {
+    const pageH = doc.internal.pageSize.getHeight();
+    // Push near the bottom, but not overlapping content
+    const btnH = 40;
+    const btnW = 200;
+    const btnX = (pageW - btnW) / 2;
+    let btnY = Math.max(y + 20, pageH - margin - btnH - 40);
+    if (btnY + btnH > pageH - margin) {
+      doc.addPage();
+      btnY = margin + 40;
+    }
+
+    doc.setFillColor(70, 90, 160);
+    doc.roundedRect(btnX, btnY, btnW, btnH, 6, 6, "F");
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(14);
+    doc.setTextColor(255, 255, 255);
+    doc.text("Pay Now", pageW / 2, btnY + btnH / 2 + 5, { align: "center" });
+    doc.link(btnX, btnY, btnW, btnH, { url: invoice.pay_url });
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9);
+    doc.setTextColor(120);
+    doc.text("Pay securely by card via Stripe", pageW / 2, btnY + btnH + 14, { align: "center" });
+    doc.setTextColor(90, 110, 180);
+    doc.textWithLink(invoice.pay_url, pageW / 2, btnY + btnH + 26, {
+      align: "center",
+      url: invoice.pay_url,
+    });
   }
 
   doc.save(`${invoice.invoice_title}.pdf`);
 }
+
