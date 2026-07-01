@@ -487,7 +487,9 @@ function InvoiceEditPage() {
                 })),
               }}
               settings={(data?.settings ?? {}) as Partial<Parameters<typeof generateInvoicePdf>[1]>}
+              payUrl={i.stripe_checkout_url ? payUrl : null}
             />
+
           </CardContent>
         </Card>
       )}
