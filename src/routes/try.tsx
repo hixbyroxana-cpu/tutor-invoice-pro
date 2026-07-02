@@ -183,7 +183,7 @@ function TryPage() {
     }
     if (!authed) {
       window.sessionStorage.setItem(PENDING_KEY, "1");
-      toast.message("Create a free account to send your first invoice.", {
+      toast.message("Create an account to send your first invoice.", {
         description: "Your details are saved — after signup you'll only need to pick the rate and dates.",
       });
       navigate({ to: "/login" });
