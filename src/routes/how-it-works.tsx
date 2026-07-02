@@ -49,8 +49,11 @@ function HowItWorks() {
           ))}
         </ol>
 
-        <div className="mt-10 flex flex-wrap items-center gap-3">
-          <Link to="/try"><Button size="lg" className="gap-2">Try it free <ArrowRight className="h-4 w-4" /></Button></Link>
+        <p className="mt-10 text-xs text-muted-foreground max-w-2xl">
+          Free to join and send invoices. A 1% platform fee applies only when parents pay by card through LessonPaid. Bank transfer invoices are always free.
+        </p>
+        <div className="mt-6 flex flex-wrap items-center gap-3">
+          <Link to="/try"><Button size="lg" className="gap-2">Get started free <ArrowRight className="h-4 w-4" /></Button></Link>
           <Link to="/features"><Button size="lg" variant="outline">See features</Button></Link>
         </div>
       </section>
