@@ -37,7 +37,7 @@ function Landing() {
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-3 py-1 text-xs font-medium text-muted-foreground">
               <Sparkles className="h-3.5 w-3.5 text-primary" />
-              100% free for tutors — no subscriptions
+              No subscription — 1% fee only when parents pay by card
             </div>
             <h1 className="mt-5 text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.05]">
               Stop chasing payments.<br />
