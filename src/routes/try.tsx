@@ -218,7 +218,7 @@ function TryPage() {
           <div>
             <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">Try LessonPaid — build your first invoice</h1>
             <p className="text-sm text-muted-foreground mt-1">
-              Fill in the details and preview your invoice live. Create a free account before sending it.
+              Fill in the details and preview your invoice live. Create an account before sending it.
             </p>
           </div>
           <Button onClick={handleDownload} className="gap-2">
