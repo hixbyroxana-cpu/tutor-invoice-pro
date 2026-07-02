@@ -12,10 +12,10 @@ export const Route = createFileRoute("/")({
   component: Landing,
   head: () => ({
     meta: [
-      { title: "LessonPaid — Free invoice app for tutors" },
-      { name: "description", content: "LessonPaid is the free invoice app for tutors. Manage students, log lessons, and send professional PDF invoices in seconds. 100% free — no subscriptions." },
-      { property: "og:title", content: "LessonPaid — Free invoice app for tutors" },
-      { property: "og:description", content: "The free invoice app for tutors. Manage students, track earnings and send beautiful invoices. No subscriptions, ever." },
+      { title: "LessonPaid — Invoice app for tutors" },
+      { name: "description", content: "LessonPaid is the invoice app for tutors. No subscription — free to join and send invoices. A 1% platform fee applies only when parents pay by card through LessonPaid. Bank transfer invoices are always free." },
+      { property: "og:title", content: "LessonPaid — Invoice app for tutors" },
+      { property: "og:description", content: "No subscription. Free to send invoices. A small 1% fee only when parents pay by card." },
     ],
   }),
 });
