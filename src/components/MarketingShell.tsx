@@ -14,7 +14,7 @@ export function MarketingShell({ children }: { children: ReactNode }) {
           <nav className="hidden md:flex items-center gap-1 text-sm">
             <Link to="/features" className="px-3 py-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent/60">Features</Link>
             <Link to="/how-it-works" className="px-3 py-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent/60">How it works</Link>
-            <Link to="/try" className="px-3 py-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent/60">Try it free</Link>
+            <Link to="/try" className="px-3 py-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent/60">Get started free</Link>
           </nav>
           <div className="flex items-center gap-2">
             <Link to="/login"><Button variant="ghost" size="sm">Sign in</Button></Link>
@@ -37,7 +37,7 @@ export function MarketingShell({ children }: { children: ReactNode }) {
           <FooterCol title="Product" items={[
             { label: "Features", to: "/features" },
             { label: "How it works", to: "/how-it-works" },
-            { label: "Try free", to: "/try" },
+            { label: "Get started free", to: "/try" },
           ]} />
           <FooterCol title="Account" items={[
             { label: "Sign in", to: "/login" },

@@ -61,13 +61,16 @@ function FeaturesPage() {
 
         <div className="mt-10 rounded-2xl border border-border bg-secondary/40 p-6 sm:p-8 text-center">
           <h2 className="text-xl sm:text-2xl font-semibold tracking-tight">Try the invoice builder — no account needed</h2>
-          <p className="text-sm text-muted-foreground mt-2">Create a free account before sending your first invoice.</p>
+          <p className="text-sm text-muted-foreground mt-2">Create an account before sending your first invoice.</p>
+          <p className="text-xs text-muted-foreground mt-3 max-w-xl mx-auto">
+            Free to join and send invoices. A 1% platform fee applies only when parents pay by card through LessonPaid. Bank transfer invoices are always free.
+          </p>
           <ul className="mt-4 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
             <li className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-success" /> No credit card</li>
-            <li className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-success" /> Free forever</li>
+            <li className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-success" /> No subscription</li>
           </ul>
           <div className="mt-5">
-            <Link to="/try"><Button className="gap-2">Try it free <ArrowRight className="h-4 w-4" /></Button></Link>
+            <Link to="/try"><Button className="gap-2">Get started free <ArrowRight className="h-4 w-4" /></Button></Link>
           </div>
         </div>
       </section>

@@ -183,7 +183,7 @@ function TryPage() {
     }
     if (!authed) {
       window.sessionStorage.setItem(PENDING_KEY, "1");
-      toast.message("Create a free account to send your first invoice.", {
+      toast.message("Create an account to send your first invoice.", {
         description: "Your details are saved — after signup you'll only need to pick the rate and dates.",
       });
       navigate({ to: "/login" });
@@ -218,7 +218,7 @@ function TryPage() {
           <div>
             <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">Try LessonPaid — build your first invoice</h1>
             <p className="text-sm text-muted-foreground mt-1">
-              Fill in the details and preview your invoice live. Create a free account before sending it.
+              Fill in the details and preview your invoice live. Create an account before sending it.
             </p>
           </div>
           <Button onClick={handleDownload} className="gap-2">
@@ -298,9 +298,9 @@ function TryPage() {
             <div className="rounded-lg border bg-accent/40 p-4 text-sm flex items-start gap-3">
               <Lock className="h-4 w-4 mt-0.5 text-primary shrink-0" />
               <div>
-                <p className="font-medium">Free to try — create an account to send.</p>
+                <p className="font-medium">No subscription — create an account to send.</p>
                 <p className="text-muted-foreground text-xs mt-0.5">
-                  Your invoice details are saved in your account. After your first invoice, you'll only need to enter the hourly rate and the lesson dates.
+                  Free to join and send invoices. A 1% platform fee applies only when parents pay by card through LessonPaid. Bank transfer invoices are always free.
                 </p>
               </div>
             </div>
