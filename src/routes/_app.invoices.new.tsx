@@ -6,14 +6,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, Trash2, Sparkles } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { fmtMoney } from "@/lib/format";
 import { createInvoice, type LessonInput } from "@/lib/invoiceService";
-import { parseQuickInvoice } from "@/lib/parseQuickInvoice";
 
 
 export const Route = createFileRoute("/_app/invoices/new")({
@@ -44,7 +42,7 @@ function NewInvoicePage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">New invoice</h1>
-        <p className="text-sm text-muted-foreground mt-1">Generate an invoice in seconds. Your student details are saved, so just pick a student and the lesson dates.</p>
+        <p className="text-sm text-muted-foreground mt-1">Build your invoice manually. Pick a student and add each lesson date.</p>
       </div>
 
       {students.length === 0 ? (
@@ -52,18 +50,7 @@ function NewInvoicePage() {
           Add a student first. <Link to="/students" className="underline">Go to Students</Link>.
         </CardContent></Card>
       ) : (
-        <Tabs defaultValue="quick">
-          <TabsList>
-            <TabsTrigger value="quick"><Sparkles className="h-3.5 w-3.5 mr-1" />Quick create</TabsTrigger>
-            <TabsTrigger value="manual">Manual entry</TabsTrigger>
-          </TabsList>
-          <TabsContent value="quick" className="mt-4">
-            <QuickForm students={students} onCreated={(id) => navigate({ to: "/invoices/$id", params: { id } })} />
-          </TabsContent>
-          <TabsContent value="manual" className="mt-4">
-            <ManualForm students={students} onCreated={(id) => navigate({ to: "/invoices/$id", params: { id } })} />
-          </TabsContent>
-        </Tabs>
+        <ManualForm students={students} onCreated={(id) => navigate({ to: "/invoices/$id", params: { id } })} />
       )}
     </div>
   );
@@ -174,61 +161,4 @@ function ManualForm({ students, onCreated }: { students: Student[]; onCreated: (
   );
 }
 
-function QuickForm({ students, onCreated }: { students: Student[]; onCreated: (id: string) => void }) {
-  const [text, setText] = useState("");
-  const [preview, setPreview] = useState<{ student: Student; dates: Date[] } | null>(null);
-  const [error, setError] = useState("");
-
-  function check() {
-    setError("");
-    setPreview(null);
-    const parsed = parseQuickInvoice(text);
-    if (!parsed) return setError("Couldn't parse — use format: \"Name: 6 May, 13 May, 20 May\"");
-    const lower = parsed.name.toLowerCase();
-    const student = students.find(s => s.full_name.toLowerCase() === lower)
-      || students.find(s => s.full_name.toLowerCase().includes(lower));
-    if (!student) return setError(`No student matching "${parsed.name}"`);
-    setPreview({ student, dates: parsed.dates });
-  }
-
-  const create = useMutation({
-    mutationFn: async () => {
-      if (!preview) throw new Error("Preview first");
-      const lessons: LessonInput[] = preview.dates.map((d) => ({
-        lesson_date: d.toISOString().slice(0, 10),
-        duration: Number(preview.student.default_duration),
-        hourly_rate: Number(preview.student.hourly_fee),
-        description: "Tutoring lesson",
-      }));
-      const inv = await createInvoice({ studentId: preview.student.id, lessons, paymentDeadlineDays: 14 });
-      return inv.id as string;
-    },
-    onSuccess: (id) => { toast.success("Invoice created"); onCreated(id); },
-    onError: (e: Error) => toast.error(e.message),
-  });
-
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-base">Quick create</CardTitle>
-        <p className="text-xs text-muted-foreground">Type one line: <code className="bg-muted px-1.5 py-0.5 rounded">John Smith: 6 May, 13 May, 20 May</code></p>
-      </CardHeader>
-      <CardContent className="grid gap-3">
-        <Textarea rows={2} value={text} onChange={(e) => setText(e.target.value)} placeholder="John Smith: 6 May, 13 May, 20 May, 27 May" />
-        {error && <p className="text-sm text-destructive">{error}</p>}
-        {preview && (
-          <div className="rounded-md border p-3 text-sm space-y-1">
-            <div><span className="text-muted-foreground">Student:</span> <span className="font-medium">{preview.student.full_name}</span></div>
-            <div><span className="text-muted-foreground">Lessons:</span> {preview.dates.length} × {Number(preview.student.default_duration)}h @ {fmtMoney(Number(preview.student.hourly_fee))}/h</div>
-            <div><span className="text-muted-foreground">Total:</span> <span className="font-semibold">{fmtMoney(preview.dates.length * Number(preview.student.default_duration) * Number(preview.student.hourly_fee))}</span></div>
-          </div>
-        )}
-        <div className="flex justify-end gap-2">
-          <Button variant="outline" onClick={check}>Preview</Button>
-          <Button onClick={() => create.mutate()} disabled={!preview || create.isPending}>Create invoice</Button>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
 
