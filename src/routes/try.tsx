@@ -298,9 +298,9 @@ function TryPage() {
             <div className="rounded-lg border bg-accent/40 p-4 text-sm flex items-start gap-3">
               <Lock className="h-4 w-4 mt-0.5 text-primary shrink-0" />
               <div>
-                <p className="font-medium">Free to try — create an account to send.</p>
+                <p className="font-medium">No subscription — create an account to send.</p>
                 <p className="text-muted-foreground text-xs mt-0.5">
-                  Your invoice details are saved in your account. After your first invoice, you'll only need to enter the hourly rate and the lesson dates.
+                  Free to join and send invoices. A 1% platform fee applies only when parents pay by card through LessonPaid. Bank transfer invoices are always free.
                 </p>
               </div>
             </div>
