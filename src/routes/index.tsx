@@ -53,16 +53,18 @@ function Landing() {
             <div className="mt-7 flex flex-wrap items-center gap-3">
               <Link to="/try">
                 <Button size="lg" className="gap-2">
-                  Try it free <ArrowRight className="h-4 w-4" />
+                  Get started free <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
               <Link to="/how-it-works">
                 <Button size="lg" variant="outline">See how it works</Button>
               </Link>
             </div>
-            <p className="mt-3 text-xs text-muted-foreground">Free to sign up. Free to send invoices. No card required.</p>
             <p className="mt-3 text-xs text-muted-foreground max-w-xl">
-              Create a free account before sending your first invoice. Once signed up, your tutor and student details are saved — so every invoice after that is just the hourly rate and the tutoring dates.
+              Free to join and send invoices. A 1% platform fee applies only when parents pay by card through LessonPaid. Bank transfer invoices are always free.
+            </p>
+            <p className="mt-3 text-xs text-muted-foreground max-w-xl">
+              Create an account before sending your first invoice. Once signed up, your tutor and student details are saved — so every invoice after that is just the hourly rate and the tutoring dates.
             </p>
             <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
               <li className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-success" /> No subscription</li>
