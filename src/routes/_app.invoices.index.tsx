@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, FilePlus, Download, Copy, CheckCircle2, Trash2 } from "lucide-react";
+import { Search, FilePlus, Download, Copy, Trash2 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { fmtDate, fmtMoney } from "@/lib/format";
 import { StatusBadge } from "./_app.dashboard";
@@ -41,13 +41,8 @@ function InvoicesPage() {
     return true;
   });
 
-  const markPaid = useMutation({
-    mutationFn: async (id: string) => {
-      const { error } = await supabase.from("invoices").update({ status: "paid" }).eq("id", id);
-      if (error) throw error;
-    },
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ["invoices"] }); toast.success("Marked as paid"); },
-  });
+
+
 
   const del = useMutation({
     mutationFn: async (id: string) => {
@@ -151,9 +146,6 @@ function InvoicesPage() {
                         <div className="flex justify-end gap-1">
                           <Button size="icon" variant="ghost" title="Export PDF" onClick={() => exportPdf(i.id)}><Download className="h-4 w-4" /></Button>
                           <Button size="icon" variant="ghost" title="Duplicate" onClick={() => dup.mutate(i.id)}><Copy className="h-4 w-4" /></Button>
-                          {i.status !== "paid" && (
-                            <Button size="icon" variant="ghost" title="Mark paid" onClick={() => markPaid.mutate(i.id)}><CheckCircle2 className="h-4 w-4 text-success" /></Button>
-                          )}
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
                               <Button size="icon" variant="ghost" title="Delete"><Trash2 className="h-4 w-4 text-destructive" /></Button>
