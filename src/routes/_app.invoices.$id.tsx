@@ -308,16 +308,20 @@ function InvoiceEditPage() {
           <div className="grid sm:grid-cols-2 gap-3">
             <Field label="Invoice title"><Input disabled={locked} value={i.invoice_title} onChange={(e) => setField("invoice_title", e.target.value)} /></Field>
             <Field label="Status">
-              <Select value={i.status} onValueChange={(v) => setField("status", v)}>
+              <Select value={i.status} onValueChange={(v) => setField("status", v)} disabled={i.status === "paid"}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="draft">Draft</SelectItem>
                   <SelectItem value="sent">Sent</SelectItem>
-                  <SelectItem value="paid">Paid</SelectItem>
                   <SelectItem value="overdue">Overdue</SelectItem>
+                  {i.status === "paid" && <SelectItem value="paid">Paid</SelectItem>}
                 </SelectContent>
               </Select>
+              {i.status !== "paid" && (
+                <p className="text-xs text-muted-foreground mt-1">Paid status is set automatically when the client pays via the invoice's Pay Now link.</p>
+              )}
             </Field>
+
           </div>
           <div className="grid sm:grid-cols-3 gap-3">
             <Field label="Invoice date"><Input disabled={locked} type="date" value={i.invoice_date} onChange={(e) => setField("invoice_date", e.target.value)} /></Field>
