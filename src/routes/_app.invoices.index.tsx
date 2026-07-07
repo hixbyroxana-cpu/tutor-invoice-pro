@@ -5,13 +5,15 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, FilePlus, Download, Copy, Trash2 } from "lucide-react";
+import { Search, FilePlus, Download, Copy, Trash2, Eye } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { fmtDate, fmtMoney } from "@/lib/format";
 import { StatusBadge } from "./_app.dashboard";
 import { toast } from "sonner";
 import { generateInvoicePdf } from "@/lib/pdf";
 import { createInvoice } from "@/lib/invoiceService";
+import { InvoicePreview } from "@/components/InvoicePreview";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
@@ -25,6 +27,30 @@ function InvoicesPage() {
   const qc = useQueryClient();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState<string>("all");
+  const [previewId, setPreviewId] = useState<string | null>(null);
+
+  const { data: previewData } = useQuery({
+    queryKey: ["invoice-preview", previewId],
+    enabled: !!previewId,
+    queryFn: async () => {
+      const [invRes, itemsRes, settingsRes] = await Promise.all([
+        supabase.from("invoices").select("*").eq("id", previewId!).single(),
+        supabase.from("invoice_items").select("*").eq("invoice_id", previewId!).order("position"),
+        supabase.from("business_settings").select("*").limit(1).maybeSingle(),
+      ]);
+      if (invRes.error) throw invRes.error;
+      return {
+        invoice: invRes.data,
+        items: (itemsRes.data || []).map((it) => ({
+          ...it,
+          duration: Number(it.duration),
+          hourly_rate: Number(it.hourly_rate),
+          amount: Number(it.amount),
+        })),
+        settings: settingsRes.data || {},
+      };
+    },
+  });
 
   const { data: invoices = [] } = useQuery({
     queryKey: ["invoices"],
@@ -144,6 +170,7 @@ function InvoicesPage() {
                       <td className="px-4 py-3"><StatusBadge status={i.status} /></td>
                       <td className="px-4 py-3">
                         <div className="flex justify-end gap-1">
+                          <Button size="icon" variant="ghost" title="View" onClick={() => setPreviewId(i.id)}><Eye className="h-4 w-4" /></Button>
                           <Button size="icon" variant="ghost" title="Export PDF" onClick={() => exportPdf(i.id)}><Download className="h-4 w-4" /></Button>
                           <Button size="icon" variant="ghost" title="Duplicate" onClick={() => dup.mutate(i.id)}><Copy className="h-4 w-4" /></Button>
                           <AlertDialog>
@@ -171,6 +198,34 @@ function InvoicesPage() {
           )}
         </CardContent>
       </Card>
+
+      <Dialog open={!!previewId} onOpenChange={(o) => !o && setPreviewId(null)}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Invoice preview</DialogTitle>
+          </DialogHeader>
+          {previewData?.invoice ? (
+            <>
+              <InvoicePreview
+                invoice={{
+                  ...(previewData.invoice as Record<string, unknown>),
+                  items: previewData.items,
+                } as unknown as Parameters<typeof InvoicePreview>[0]["invoice"]}
+                settings={previewData.settings as Parameters<typeof InvoicePreview>[0]["settings"]}
+                payUrl={(previewData.invoice as { stripe_checkout_url: string | null }).stripe_checkout_url ?? `${typeof window !== "undefined" ? window.location.origin : ""}/pay/${previewId}`}
+              />
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setPreviewId(null)}>Close</Button>
+                <Button onClick={() => previewId && exportPdf(previewId)}>
+                  <Download className="h-4 w-4 mr-2" />Download PDF
+                </Button>
+              </DialogFooter>
+            </>
+          ) : (
+            <p className="text-sm text-muted-foreground p-8 text-center">Loading…</p>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
