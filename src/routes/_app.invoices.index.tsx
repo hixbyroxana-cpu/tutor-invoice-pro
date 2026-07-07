@@ -210,7 +210,7 @@ function InvoicesPage() {
                 invoice={{
                   ...(previewData.invoice as Record<string, unknown>),
                   items: previewData.items,
-                } as Parameters<typeof InvoicePreview>[0]["invoice"]}
+                } as unknown as Parameters<typeof InvoicePreview>[0]["invoice"]}
                 settings={previewData.settings as Parameters<typeof InvoicePreview>[0]["settings"]}
                 payUrl={(previewData.invoice as { stripe_checkout_url: string | null }).stripe_checkout_url ?? `${typeof window !== "undefined" ? window.location.origin : ""}/pay/${previewId}`}
               />
