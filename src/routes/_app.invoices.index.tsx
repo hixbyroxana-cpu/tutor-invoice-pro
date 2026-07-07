@@ -170,6 +170,7 @@ function InvoicesPage() {
                       <td className="px-4 py-3"><StatusBadge status={i.status} /></td>
                       <td className="px-4 py-3">
                         <div className="flex justify-end gap-1">
+                          <Button size="icon" variant="ghost" title="View" onClick={() => setPreviewId(i.id)}><Eye className="h-4 w-4" /></Button>
                           <Button size="icon" variant="ghost" title="Export PDF" onClick={() => exportPdf(i.id)}><Download className="h-4 w-4" /></Button>
                           <Button size="icon" variant="ghost" title="Duplicate" onClick={() => dup.mutate(i.id)}><Copy className="h-4 w-4" /></Button>
                           <AlertDialog>
