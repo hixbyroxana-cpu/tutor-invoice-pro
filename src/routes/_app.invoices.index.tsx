@@ -27,6 +27,30 @@ function InvoicesPage() {
   const qc = useQueryClient();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState<string>("all");
+  const [previewId, setPreviewId] = useState<string | null>(null);
+
+  const { data: previewData } = useQuery({
+    queryKey: ["invoice-preview", previewId],
+    enabled: !!previewId,
+    queryFn: async () => {
+      const [invRes, itemsRes, settingsRes] = await Promise.all([
+        supabase.from("invoices").select("*").eq("id", previewId!).single(),
+        supabase.from("invoice_items").select("*").eq("invoice_id", previewId!).order("position"),
+        supabase.from("business_settings").select("*").limit(1).maybeSingle(),
+      ]);
+      if (invRes.error) throw invRes.error;
+      return {
+        invoice: invRes.data,
+        items: (itemsRes.data || []).map((it) => ({
+          ...it,
+          duration: Number(it.duration),
+          hourly_rate: Number(it.hourly_rate),
+          amount: Number(it.amount),
+        })),
+        settings: settingsRes.data || {},
+      };
+    },
+  });
 
   const { data: invoices = [] } = useQuery({
     queryKey: ["invoices"],
