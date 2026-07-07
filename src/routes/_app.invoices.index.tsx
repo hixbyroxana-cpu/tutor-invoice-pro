@@ -198,6 +198,34 @@ function InvoicesPage() {
           )}
         </CardContent>
       </Card>
+
+      <Dialog open={!!previewId} onOpenChange={(o) => !o && setPreviewId(null)}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Invoice preview</DialogTitle>
+          </DialogHeader>
+          {previewData?.invoice ? (
+            <>
+              <InvoicePreview
+                invoice={{
+                  ...(previewData.invoice as Record<string, unknown>),
+                  items: previewData.items,
+                } as Parameters<typeof InvoicePreview>[0]["invoice"]}
+                settings={previewData.settings as Parameters<typeof InvoicePreview>[0]["settings"]}
+                payUrl={(previewData.invoice as { stripe_checkout_url: string | null }).stripe_checkout_url ?? `${typeof window !== "undefined" ? window.location.origin : ""}/pay/${previewId}`}
+              />
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setPreviewId(null)}>Close</Button>
+                <Button onClick={() => previewId && exportPdf(previewId)}>
+                  <Download className="h-4 w-4 mr-2" />Download PDF
+                </Button>
+              </DialogFooter>
+            </>
+          ) : (
+            <p className="text-sm text-muted-foreground p-8 text-center">Loading…</p>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
