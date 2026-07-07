@@ -5,13 +5,15 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, FilePlus, Download, Copy, Trash2 } from "lucide-react";
+import { Search, FilePlus, Download, Copy, Trash2, Eye } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { fmtDate, fmtMoney } from "@/lib/format";
 import { StatusBadge } from "./_app.dashboard";
 import { toast } from "sonner";
 import { generateInvoicePdf } from "@/lib/pdf";
 import { createInvoice } from "@/lib/invoiceService";
+import { InvoicePreview } from "@/components/InvoicePreview";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
