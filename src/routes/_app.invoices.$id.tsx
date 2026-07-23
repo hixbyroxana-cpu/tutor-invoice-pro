@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, Trash2, Download, ArrowLeft, Save, Eye, EyeOff, Copy, CreditCard, Send, ExternalLink, RefreshCw } from "lucide-react";
+import { Plus, Trash2, Download, ArrowLeft, Save, Eye, EyeOff, Copy, Check, CreditCard, Send, ExternalLink, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import { fmtMoney } from "@/lib/format";
 import { generateInvoicePdf } from "@/lib/pdf";
@@ -54,6 +54,7 @@ function InvoiceEditPage() {
   const [inv, setInv] = useState<Record<string, unknown> | null>(null);
   const [items, setItems] = useState<Item[]>([]);
   const [showPreview, setShowPreview] = useState(true);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     if (data) {
@@ -418,15 +419,28 @@ function InvoiceEditPage() {
             <div className="space-y-3">
               <div className="flex gap-2 items-center">
                 <Input readOnly value={payUrl} className="font-mono text-xs" />
-                <Button variant="outline" size="icon" onClick={() => { navigator.clipboard.writeText(payUrl); toast.success("Link copied"); }}>
-                  <Copy className="h-4 w-4" />
-                </Button>
                 <Button variant="outline" size="icon" asChild>
                   <a href={payUrl} target="_blank" rel="noopener noreferrer"><ExternalLink className="h-4 w-4" /></a>
                 </Button>
               </div>
               <div className="flex gap-2 flex-wrap">
                 <Button
+                  onClick={async () => {
+                    try {
+                      await navigator.clipboard.writeText(payUrl);
+                      setCopied(true);
+                      toast.success("Pay Now link copied!");
+                      setTimeout(() => setCopied(false), 2000);
+                    } catch {
+                      toast.error("Couldn't copy — please copy manually.");
+                    }
+                  }}
+                >
+                  {copied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
+                  {copied ? "Copied!" : "Copy link"}
+                </Button>
+                <Button
+                  variant="outline"
                   onClick={() => {
                     if (!i.client_email) { toast.error("Add the parent's email on this invoice first."); return; }
                     const subject = encodeURIComponent(`Invoice ${i.invoice_number} from ${(data?.settings as { tutor_name?: string } | null)?.tutor_name || "your tutor"}`);
@@ -441,14 +455,14 @@ function InvoiceEditPage() {
                   }}
                   disabled={!i.client_email}
                 >
-                  <Send className="h-4 w-4 mr-2" />Send to parent
+                  <Send className="h-4 w-4 mr-2" />Send by email
                 </Button>
                 <Button variant="outline" onClick={() => generatePayLink.mutate()} disabled={generatePayLink.isPending}>
                   <RefreshCw className="h-3.5 w-3.5 mr-1.5" />Regenerate link
                 </Button>
               </div>
               {!i.client_email && (
-                <p className="text-xs text-amber-700">Add the parent's email above to enable "Send to parent".</p>
+                <p className="text-xs text-muted-foreground">Tip: share the copied link via WhatsApp, SMS, or however you prefer. Add a parent email to enable "Send by email".</p>
               )}
               {i.sent_to_parent_at && (
                 <p className="text-xs text-muted-foreground">Last sent {new Date(i.sent_to_parent_at).toLocaleString()}</p>
