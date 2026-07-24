@@ -1,5 +1,5 @@
 import { Link, Outlet, createFileRoute, useNavigate } from "@tanstack/react-router";
-import { LayoutDashboard, Users, FilePlus, Receipt, Settings, LogOut } from "lucide-react";
+import { LayoutDashboard, Users, FilePlus, Receipt, Settings, LogOut, BookOpen } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
