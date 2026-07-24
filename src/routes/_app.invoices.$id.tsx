@@ -485,6 +485,7 @@ function InvoiceEditPage() {
                   }}
                 >
                   <Share2 className="h-4 w-4 mr-2" />Share
+                </Button>
                 <Button variant="outline" onClick={() => generatePayLink.mutate()} disabled={generatePayLink.isPending}>
                   <RefreshCw className="h-3.5 w-3.5 mr-1.5" />Regenerate link
                 </Button>
