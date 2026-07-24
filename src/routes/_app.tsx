@@ -1,5 +1,5 @@
 import { Link, Outlet, createFileRoute, useNavigate } from "@tanstack/react-router";
-import { LayoutDashboard, Users, FilePlus, Receipt, Settings, LogOut } from "lucide-react";
+import { LayoutDashboard, Users, FilePlus, Receipt, Settings, LogOut, BookOpen } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -14,6 +14,7 @@ const navItems = [
   { to: "/students" as const, label: "Students", icon: Users, exact: false },
   { to: "/invoices/new" as const, label: "New Invoice", icon: FilePlus, exact: false },
   { to: "/invoices" as const, label: "Invoices", icon: Receipt, exact: true },
+  { to: "/bookkeeping" as const, label: "Bookkeeping", icon: BookOpen, exact: false },
   { to: "/settings" as const, label: "Settings", icon: Settings, exact: false },
 ];
 
