@@ -14,6 +14,7 @@ const navItems = [
   { to: "/students" as const, label: "Students", icon: Users, exact: false },
   { to: "/invoices/new" as const, label: "New Invoice", icon: FilePlus, exact: false },
   { to: "/invoices" as const, label: "Invoices", icon: Receipt, exact: true },
+  { to: "/bookkeeping" as const, label: "Bookkeeping", icon: BookOpen, exact: false },
   { to: "/settings" as const, label: "Settings", icon: Settings, exact: false },
 ];
 
