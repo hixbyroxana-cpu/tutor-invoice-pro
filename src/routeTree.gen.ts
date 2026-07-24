@@ -20,6 +20,7 @@ import { Route as PayInvoiceIdRouteImport } from './routes/pay.$invoiceId'
 import { Route as AppStudentsRouteImport } from './routes/_app.students'
 import { Route as AppSettingsRouteImport } from './routes/_app.settings'
 import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
+import { Route as AppBookkeepingRouteImport } from './routes/_app.bookkeeping'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as AppInvoicesIndexRouteImport } from './routes/_app.invoices.index'
@@ -84,6 +85,11 @@ const AppDashboardRoute = AppDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AppRoute,
 } as any)
+const AppBookkeepingRoute = AppBookkeepingRouteImport.update({
+  id: '/bookkeeping',
+  path: '/bookkeeping',
+  getParentRoute: () => AppRoute,
+} as any)
 const Char91DotwellKnownChar93OauthProtectedResourceRoute =
   Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
     id: '/.well-known/oauth-protected-resource',
@@ -143,6 +149,7 @@ export interface FileRoutesByFullPath {
   '/try': typeof TryRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/bookkeeping': typeof AppBookkeepingRoute
   '/dashboard': typeof AppDashboardRoute
   '/settings': typeof AppSettingsRoute
   '/students': typeof AppStudentsRoute
@@ -164,6 +171,7 @@ export interface FileRoutesByTo {
   '/try': typeof TryRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/bookkeeping': typeof AppBookkeepingRoute
   '/dashboard': typeof AppDashboardRoute
   '/settings': typeof AppSettingsRoute
   '/students': typeof AppStudentsRoute
@@ -187,6 +195,7 @@ export interface FileRoutesById {
   '/try': typeof TryRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  '/_app/bookkeeping': typeof AppBookkeepingRoute
   '/_app/dashboard': typeof AppDashboardRoute
   '/_app/settings': typeof AppSettingsRoute
   '/_app/students': typeof AppStudentsRoute
@@ -210,6 +219,7 @@ export interface FileRouteTypes {
     | '/try'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
+    | '/bookkeeping'
     | '/dashboard'
     | '/settings'
     | '/students'
@@ -231,6 +241,7 @@ export interface FileRouteTypes {
     | '/try'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
+    | '/bookkeeping'
     | '/dashboard'
     | '/settings'
     | '/students'
@@ -253,6 +264,7 @@ export interface FileRouteTypes {
     | '/try'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
+    | '/_app/bookkeeping'
     | '/_app/dashboard'
     | '/_app/settings'
     | '/_app/students'
@@ -362,6 +374,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppDashboardRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/bookkeeping': {
+      id: '/_app/bookkeeping'
+      path: '/bookkeeping'
+      fullPath: '/bookkeeping'
+      preLoaderRoute: typeof AppBookkeepingRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/.well-known/oauth-protected-resource': {
       id: '/.well-known/oauth-protected-resource'
       path: '/.well-known/oauth-protected-resource'
@@ -429,6 +448,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AppRouteChildren {
+  AppBookkeepingRoute: typeof AppBookkeepingRoute
   AppDashboardRoute: typeof AppDashboardRoute
   AppSettingsRoute: typeof AppSettingsRoute
   AppStudentsRoute: typeof AppStudentsRoute
@@ -438,6 +458,7 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppBookkeepingRoute: AppBookkeepingRoute,
   AppDashboardRoute: AppDashboardRoute,
   AppSettingsRoute: AppSettingsRoute,
   AppStudentsRoute: AppStudentsRoute,
