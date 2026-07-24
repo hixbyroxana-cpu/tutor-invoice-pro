@@ -457,6 +457,34 @@ function InvoiceEditPage() {
                 >
                   <Send className="h-4 w-4 mr-2" />Send by email
                 </Button>
+                <Button
+                  variant="outline"
+                  onClick={async () => {
+                    const shareData = {
+                      title: `Invoice ${i.invoice_number}`,
+                      text: `Pay invoice ${i.invoice_number} — ${fmtMoney(total)}`,
+                      url: payUrl,
+                    };
+                    if (typeof navigator !== "undefined" && typeof navigator.share === "function") {
+                      try {
+                        await navigator.share(shareData);
+                        return;
+                      } catch (err) {
+                        if ((err as DOMException)?.name === "AbortError") return;
+                        // fall through to clipboard fallback
+                      }
+                    }
+                    try {
+                      await navigator.clipboard.writeText(payUrl);
+                      setCopied(true);
+                      toast.success("Sharing not supported — link copied instead!");
+                      setTimeout(() => setCopied(false), 2000);
+                    } catch {
+                      toast.error("Couldn't share or copy — please copy manually.");
+                    }
+                  }}
+                >
+                  <Share2 className="h-4 w-4 mr-2" />Share
                 <Button variant="outline" onClick={() => generatePayLink.mutate()} disabled={generatePayLink.isPending}>
                   <RefreshCw className="h-3.5 w-3.5 mr-1.5" />Regenerate link
                 </Button>
