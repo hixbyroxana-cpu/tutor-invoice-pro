@@ -32,17 +32,27 @@ type Settings = {
 
 function SettingsPage() {
   const qc = useQueryClient();
+  const webhookUrl =
+    typeof window === "undefined"
+      ? "/api/public/webhooks/stripe"
+      : `${window.location.origin}/api/public/webhooks/stripe`;
   const { data } = useQuery({
     queryKey: ["settings"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("business_settings").select("*").limit(1).maybeSingle();
+      const { data, error } = await supabase
+        .from("business_settings")
+        .select("*")
+        .limit(1)
+        .maybeSingle();
       if (error) throw error;
       return data as Settings;
     },
   });
 
   const [form, setForm] = useState<Partial<Settings>>({});
-  useEffect(() => { if (data) setForm(data); }, [data]);
+  useEffect(() => {
+    if (data) setForm(data);
+  }, [data]);
 
   // Auto-refresh Stripe status when returning from onboarding
   const refreshStatus = useServerFn(refreshStripeStatus);
@@ -53,12 +63,19 @@ function SettingsPage() {
   });
   useEffect(() => {
     const url = new URL(window.location.href);
-    if (url.searchParams.get("stripe") === "return" || url.searchParams.get("stripe") === "refresh") {
-      refreshStatus({ data: { action: "refresh" } }).then(() => {
-        qc.invalidateQueries({ queryKey: ["settings"] });
-        url.searchParams.delete("stripe");
-        window.history.replaceState({}, "", url.pathname + url.search);
-      }).catch(() => {/* ignore */});
+    if (
+      url.searchParams.get("stripe") === "return" ||
+      url.searchParams.get("stripe") === "refresh"
+    ) {
+      refreshStatus({ data: { action: "refresh" } })
+        .then(() => {
+          qc.invalidateQueries({ queryKey: ["settings"] });
+          url.searchParams.delete("stripe");
+          window.history.replaceState({}, "", url.pathname + url.search);
+        })
+        .catch(() => {
+          /* ignore */
+        });
     }
   }, [refreshStatus, qc]);
 
@@ -75,31 +92,43 @@ function SettingsPage() {
         phone: form.phone ?? null,
         invoice_prefix: (form.invoice_prefix || "ROX").toUpperCase().slice(0, 6),
       };
-      const { error } = await supabase.from("business_settings")
+      const { error } = await supabase
+        .from("business_settings")
         .upsert(payload, { onConflict: "user_id" });
       if (error) throw error;
     },
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ["settings"] }); toast.success("Settings saved"); },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["settings"] });
+      toast.success("Settings saved");
+    },
     onError: (e: Error) => toast.error(e.message),
   });
 
   const startOnboarding = useMutation({
     mutationFn: async () => {
-      const { data, error } = await supabase.functions.invoke<{ url: string }>("createConnectOnboardingLink", {
-        method: "POST",
-        body: { action: "connect" },
-      });
+      const { data, error } = await supabase.functions.invoke<{ url: string }>(
+        "createConnectOnboardingLink",
+        {
+          method: "POST",
+          body: { action: "connect" },
+        },
+      );
       if (error) throw new Error(error.message);
       if (!data?.url) throw new Error("Stripe did not return an onboarding link.");
       return data;
     },
-    onSuccess: (res) => { window.location.href = res.url; },
+    onSuccess: (res) => {
+      window.location.href = res.url;
+    },
     onError: (e: Error) => toast.error(e.message),
   });
 
   const refresh = useMutation({
     mutationFn: async () => refreshStatus({ data: { action: "refresh" } }),
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ["settings"] }); toast.success("Stripe status refreshed"); },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["settings"] });
+      toast.success("Stripe status refreshed");
+    },
     onError: (e: Error) => toast.error(e.message),
   });
 
@@ -126,7 +155,9 @@ function SettingsPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Settings</h1>
-        <p className="text-sm text-muted-foreground mt-1">Your details appear automatically on every invoice.</p>
+        <p className="text-sm text-muted-foreground mt-1">
+          Your details appear automatically on every invoice.
+        </p>
       </div>
 
       <Card>
@@ -136,10 +167,7 @@ function SettingsPage() {
               <CreditCard className="h-4 w-4" /> Card payments (Stripe)
             </CardTitle>
             <div className="flex items-center gap-2">
-              <StripeStatusBadge
-                connected={stripeConnected}
-                ready={stripeReady}
-              />
+              <StripeStatusBadge connected={stripeConnected} ready={stripeReady} />
               {modeData && (
                 <Badge
                   variant={
@@ -160,7 +188,8 @@ function SettingsPage() {
             </div>
           </div>
           <p className="text-sm text-muted-foreground">
-            Connect Stripe so parents can pay invoices by card. A 1% platform fee is applied automatically; the rest goes straight to your bank.
+            Connect Stripe so parents can pay invoices by card. A 1% platform fee is applied
+            automatically; the rest goes straight to your bank.
           </p>
         </CardHeader>
         <CardContent className="space-y-3">
@@ -168,8 +197,12 @@ function SettingsPage() {
             <div className="text-sm rounded-md border border-green-200 bg-green-50 text-green-900 p-3 space-y-1">
               <p className="font-medium">Test mode is on</p>
               <p>All onboarding and payments are simulated — no real money moves.</p>
-              <p className="text-xs text-muted-foreground">Webhook URL for Stripe test dashboard:</p>
-              <code className="block bg-white/60 rounded px-2 py-1 break-all text-xs">https://tutor-invoice-pro.lovable.app/api/public/webhooks/stripe</code>
+              <p className="text-xs text-muted-foreground">
+                Webhook URL for Stripe test dashboard:
+              </p>
+              <code className="block bg-white/60 rounded px-2 py-1 break-all text-xs">
+                {webhookUrl}
+              </code>
             </div>
           )}
           {modeData?.mode === "live" && (
@@ -220,10 +253,20 @@ function SettingsPage() {
               <div className="text-sm text-muted-foreground">
                 You can now generate Pay Now links on invoices.
               </div>
-              <Button variant="outline" size="sm" onClick={() => refresh.mutate()} disabled={refresh.isPending}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => refresh.mutate()}
+                disabled={refresh.isPending}
+              >
                 <RefreshCw className="h-3.5 w-3.5 mr-1.5" /> Refresh status
               </Button>
-              <Button variant="outline" size="sm" onClick={() => startOnboarding.mutate()} disabled={startOnboarding.isPending}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => startOnboarding.mutate()}
+                disabled={startOnboarding.isPending}
+              >
                 Manage on Stripe <ExternalLink className="h-3.5 w-3.5 ml-1.5" />
               </Button>
             </div>
@@ -232,13 +275,23 @@ function SettingsPage() {
             <div className="space-y-3">
               <div className="flex items-start gap-2 text-sm rounded-md border border-amber-200 bg-amber-50 text-amber-900 p-3">
                 <AlertCircle className="h-4 w-4 mt-0.5" />
-                <span>Onboarding not complete. Finish providing your details on Stripe to start accepting payments.</span>
+                <span>
+                  Onboarding not complete. Finish providing your details on Stripe to start
+                  accepting payments.
+                </span>
               </div>
               <div className="flex gap-2">
-                <Button onClick={() => startOnboarding.mutate()} disabled={startOnboarding.isPending}>
+                <Button
+                  onClick={() => startOnboarding.mutate()}
+                  disabled={startOnboarding.isPending}
+                >
                   Continue onboarding <ExternalLink className="h-4 w-4 ml-2" />
                 </Button>
-                <Button variant="outline" onClick={() => refresh.mutate()} disabled={refresh.isPending}>
+                <Button
+                  variant="outline"
+                  onClick={() => refresh.mutate()}
+                  disabled={refresh.isPending}
+                >
                   <RefreshCw className="h-3.5 w-3.5 mr-1.5" /> Refresh status
                 </Button>
               </div>
@@ -248,26 +301,60 @@ function SettingsPage() {
       </Card>
 
       <Card>
-        <CardHeader><CardTitle className="text-base">Business details</CardTitle></CardHeader>
+        <CardHeader>
+          <CardTitle className="text-base">Business details</CardTitle>
+        </CardHeader>
         <CardContent className="grid gap-3">
           <div className="grid sm:grid-cols-2 gap-3">
-            <Field label="Tutor name"><Input value={form.tutor_name ?? ""} onChange={(e) => setForm({ ...form, tutor_name: e.target.value })} /></Field>
-            <Field label="Business name (optional)"><Input value={form.business_name ?? ""} onChange={(e) => setForm({ ...form, business_name: e.target.value })} /></Field>
+            <Field label="Tutor name">
+              <Input
+                value={form.tutor_name ?? ""}
+                onChange={(e) => setForm({ ...form, tutor_name: e.target.value })}
+              />
+            </Field>
+            <Field label="Business name (optional)">
+              <Input
+                value={form.business_name ?? ""}
+                onChange={(e) => setForm({ ...form, business_name: e.target.value })}
+              />
+            </Field>
           </div>
-          <Field label="Address"><Textarea rows={2} value={form.address ?? ""} onChange={(e) => setForm({ ...form, address: e.target.value })} /></Field>
+          <Field label="Address">
+            <Textarea
+              rows={2}
+              value={form.address ?? ""}
+              onChange={(e) => setForm({ ...form, address: e.target.value })}
+            />
+          </Field>
           <div className="grid sm:grid-cols-2 gap-3">
-            <Field label="Email"><Input type="email" value={form.email ?? ""} onChange={(e) => setForm({ ...form, email: e.target.value })} /></Field>
-            <Field label="Phone"><Input value={form.phone ?? ""} onChange={(e) => setForm({ ...form, phone: e.target.value })} /></Field>
+            <Field label="Email">
+              <Input
+                type="email"
+                value={form.email ?? ""}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+              />
+            </Field>
+            <Field label="Phone">
+              <Input
+                value={form.phone ?? ""}
+                onChange={(e) => setForm({ ...form, phone: e.target.value })}
+              />
+            </Field>
           </div>
           <Field label="Invoice prefix (e.g. ROX)">
-            <Input value={form.invoice_prefix ?? ""} onChange={(e) => setForm({ ...form, invoice_prefix: e.target.value })} className="max-w-32" />
+            <Input
+              value={form.invoice_prefix ?? ""}
+              onChange={(e) => setForm({ ...form, invoice_prefix: e.target.value })}
+              className="max-w-32"
+            />
           </Field>
         </CardContent>
       </Card>
 
-
       <div className="flex justify-end">
-        <Button onClick={() => save.mutate()} disabled={save.isPending}>Save settings</Button>
+        <Button onClick={() => save.mutate()} disabled={save.isPending}>
+          Save settings
+        </Button>
       </div>
     </div>
   );
@@ -282,13 +369,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   );
 }
 
-function StripeStatusBadge({
-  connected,
-  ready,
-}: {
-  connected: boolean;
-  ready: boolean;
-}) {
+function StripeStatusBadge({ connected, ready }: { connected: boolean; ready: boolean }) {
   if (!connected) {
     return (
       <Badge variant="outline" className="gap-1.5">

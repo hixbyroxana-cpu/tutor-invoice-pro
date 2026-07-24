@@ -3,6 +3,9 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 async function originFromRequest(): Promise<string> {
+  const configuredOrigin = process.env.APP_ORIGIN;
+  if (configuredOrigin) return configuredOrigin.replace(/\/$/, "");
+
   // Build a return URL from the incoming request headers.
   // Falls back to the published URL when not in a request.
   try {
@@ -15,7 +18,6 @@ async function originFromRequest(): Promise<string> {
   }
   return "https://tutor-invoice-pro.lovable.app";
 }
-
 
 /**
  * Create (or reuse) a Stripe Connect Express account for the tutor and return an onboarding link.
@@ -54,10 +56,7 @@ export const createConnectOnboardingLink = createServerFn({ method: "POST" })
       accountId = account.id;
       const { error: uErr } = await supabase
         .from("business_settings")
-        .upsert(
-          { user_id: userId, stripe_account_id: accountId },
-          { onConflict: "user_id" },
-        );
+        .upsert({ user_id: userId, stripe_account_id: accountId }, { onConflict: "user_id" });
       if (uErr) throw new Error(uErr.message);
     }
 
@@ -139,7 +138,9 @@ export const createInvoiceCheckout = createServerFn({ method: "POST" })
     const accountId = settings?.stripe_account_id as string | null;
     if (!accountId) throw new Error("Connect your Stripe account in Settings first.");
     if (!settings?.stripe_charges_enabled) {
-      throw new Error("Your Stripe account is not ready to accept payments yet. Complete Stripe onboarding.");
+      throw new Error(
+        "Your Stripe account is not ready to accept payments yet. Complete Stripe onboarding.",
+      );
     }
 
     const totalPence = Math.round(Number(invoice.total) * 100);

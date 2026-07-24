@@ -4,9 +4,12 @@ export const Route = createFileRoute("/api/public/webhooks/stripe")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const secret = process.env.STRIPE_WEBHOOK_SECRET;
+        const secrets = (process.env.STRIPE_WEBHOOK_SECRET ?? "")
+          .split(",")
+          .map((value) => value.trim())
+          .filter(Boolean);
         const apiKey = process.env.STRIPE_SECRET_KEY;
-        if (!secret || !apiKey) {
+        if (!secrets.length || !apiKey) {
           return new Response("Server not configured", { status: 500 });
         }
 
@@ -17,9 +20,18 @@ export const Route = createFileRoute("/api/public/webhooks/stripe")({
         const Stripe = (await import("stripe")).default;
         const stripe = new Stripe(apiKey);
 
-        let event: import("stripe").Stripe.Event;
+        let event: import("stripe").Stripe.Event | undefined;
+        let verificationError: unknown;
         try {
-          event = await stripe.webhooks.constructEventAsync(rawBody, sig, secret);
+          for (const secret of secrets) {
+            try {
+              event = await stripe.webhooks.constructEventAsync(rawBody, sig, secret);
+              break;
+            } catch (err) {
+              verificationError = err;
+            }
+          }
+          if (!event) throw verificationError;
         } catch (err) {
           const msg = err instanceof Error ? err.message : "Invalid payload";
           return new Response(`Webhook Error: ${msg}`, { status: 400 });
